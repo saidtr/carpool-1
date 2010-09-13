@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Carpool\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-04 23:02+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Itay Pk <itaypk@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: /home/itay/php/workspace/Carpool\n"
+"X-Poedit-SearchPath-0: public\n"
+"X-Poedit-SearchPath-1: app\n"
+
+#: public/index.php:25
+msgid "Lookin' for a ride?"
+msgstr "Lookin' for a ride?"
+

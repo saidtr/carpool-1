@@ -1,0 +1,320 @@
+
+#bd {
+	margin-top: 10px;	
+}
+
+h1 {
+	font-size: xx-large;
+	font-weight: bold;	
+	display: block;
+}
+
+h2 {
+	font-size: large;
+	font-weight: bold;
+}
+
+#header {
+	margin: 10px 0;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	padding-right: 30px;
+	padding-left: 30px;
+}
+
+#navbar {
+	margin: 0 30px;
+}
+
+#navbar li {
+	float: left;
+	margin-left: 10px;
+}
+
+#navbar li:FIRST-CHILD {
+	margin-left: 0;
+}
+
+#navbar li a {
+	color: blue;
+}
+
+#navbar li a:VISITED {
+	color: blue;
+}
+
+#navbar .selected {
+	font-weight: bold;	
+}
+
+#langHolder {
+	float: right;
+}
+
+#langHolder select {
+	border: 0;
+}
+
+#content {
+	margin: 0 30px;
+}
+
+/* Global helper classes */
+
+.clearFloat {
+	clear: both;
+}
+
+.hidden {
+	display: none;
+}
+
+.roundCorner {
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+}
+
+/* Forms */
+
+label {
+	display: block;
+}
+
+input[type="text"], textarea {
+	border: 1px solid #c0c0c0;
+	padding: 4px;
+	background: none;
+}
+
+input.textInput, textarea {
+	width: 200px;	
+}
+
+select {
+	border: 1px solid #c0c0c0;
+	background: none;
+	padding: 3px;	
+}
+
+input[type="text"]:focus, textarea:focus {
+	border: 1px solid gray;
+}
+
+form dd {
+	float: left;
+	margin: 5px 5px 5px 0;
+}
+
+form dl.noFloat dd {
+	float: none;
+}
+
+.description {
+	display: block;
+	font-size: x-small;
+}
+
+.mandatoryMark {
+	color: red;
+	font-weight: bold;
+	padding: 0 3px;
+}
+
+/* Global message */
+
+#globalMessage {
+	margin: 10px 30px;
+	padding: 10px;
+	border: 1px solid #9BCD9B;
+	background: #C1FFC1;	
+	display: none;
+}
+
+#globalMessage.error {
+	border: 1px solid #8B0000;
+	background: #E9967A;
+}
+
+#closeMessage {
+	font-size: x-small;
+	float: right;	
+	cursor: pointer;
+}
+
+/* Search page */
+
+#searchFormHolder {
+
+}
+
+#searchForm label {
+	display: inline;
+}
+
+#results {
+
+}
+
+p#loadingNotice {
+	padding: 2px 6px;
+}
+
+#resultsTable {
+	width: 100%;
+}
+
+#resultsTable tr {
+	border-bottom: 3px solid black;	
+}
+
+#resultsTable th {
+	font-weight: bold;
+	padding: 5px 3px;
+}
+
+#resultsFrom {
+	width: 12%;
+	min-width: 12%;
+}
+
+#resultsIn {
+	width: 7%;
+	min-width: 7%;
+}
+
+#resultsOut {
+	width: 7%;
+	min-width: 7%;
+}
+
+#resultsTo {
+	width: 12%;
+	min-width: 12%;
+}
+
+#resultsContact {
+	width: 15%;
+	min-width: 15%;
+}
+
+#resultsEmail {
+	width: 16%;	
+	min-width: 16%;
+}
+
+#resultsPhone {
+	width: 10%;
+	min-width: 10%;
+}
+
+#resultsComment {
+	width: 20%;
+	min-width: 20%;
+	max-width: 20%;
+	max-width: 20%;
+}
+
+#resultsTable td {
+	padding: 3px;
+}
+
+#resultsMessage {
+	font-size: large;
+	font-weight: bold;
+	margin: 5px 10px;	
+}
+
+/* Join page */
+
+#addRideForm {
+
+}
+
+#addRideForm fieldset:FIRST-CHILD {
+	margin-top: 10px;	
+}
+
+#addRideForm fieldset {
+}
+
+#addRideForm legend {
+	padding-right: 15px;
+	display: none;
+	/*font-size: large;*/
+}
+
+/* Thank you page */
+
+#authLink {
+	margin: 6px 10px;	
+}
+
+#authLink a {
+	color: black;
+	font-weight: bold;
+	background: #DDD;
+}
+
+#contactDetails {
+	padding: 6px 0;	
+}
+
+#contactDetails li {
+	padding: 6px 0;
+	border-top: 1px solid #DDD;	
+}
+
+#contactDetails li:FIRST-CHILD {
+	border: 0;	
+}
+
+#contactDetails li span:FIRST-CHILD {
+	font-weight: bold;
+	width: 6em;
+	display: block;
+	float: left;	
+}
+	
+/* Help page */
+
+#questionsHolder p span {
+	font-weight: bold;
+	padding-right: 5px;
+	color: blue;
+}
+
+#questionsHolder .q {
+	font-weight: bold;
+}
+
+#questionsHolder .q span {
+	
+}
+
+#questionsHolder .a span {
+	
+}
+
+#questionsHolder li {
+	margin-bottom: 10px;	
+	padding-top: 10px;
+	border-top: 1px solid gray;
+}
+
+#questionsHolder li:FIRST-CHILD {
+	padding-top: 0;
+	border-top: 0;
+}
+
+#questionsHolder li p {
+	margin-bottom: 4px;	
+	
+}
+
+/* Feedback page */
+
+#feedbackForm fieldset {
+	margin: 10px 0;	
+}
+
+
