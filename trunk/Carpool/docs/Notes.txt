@@ -1,0 +1,3 @@
+- On linux, it is required to set write permissions for both the SQLite database file and the directory where is resides.
+- On linux, it was required to create the relevant locale (locale-gen) before it was possible to use it.
+  It might have been already there, in /usr/share/i18n/SUPPORTED - need to check the list
