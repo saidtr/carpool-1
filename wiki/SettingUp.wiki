@@ -5,13 +5,11 @@
 Installing the carpool application is pretty simple, but requires some work. The basic requirements are a web server that supports PHP (nothing other than Apache 2 tested yet, though), with SQLite and gettext extensions installed.
 
 = Details =
-# Check out all the files from the SVN. You should have the following folders:
+ # Check out all the files from the SVN. You should have the following folders:
   * public - This folder contains all the public data - web pages, JS, CSS, etc.
   * app - This folder contains the main application files. This includes all non-public source files.
   * data - This folder contains the SQLite database file.
   * lang - This folder contains the gettext files required for translations.
-# Put the files on your web server. The "public" folder should be publicly accessible; the rest shouldn't.
-
-# Use any text editor to open "env.php" (in the public folder) and point the various paths to their corresponding path on the disk. 
-
-# On Linux environment, make sure that both SQLite database file and the "data" folder have "write" permissions.
+ # Put the files on your web server. The "public" folder should be publicly accessible; the rest shouldn't.
+ # Use any text editor to open "env.php" (in the public folder) and point the various paths to their corresponding path on the disk. 
+ # On Linux environment, make sure that both SQLite database file and the "data" folder have "write" permissions.
