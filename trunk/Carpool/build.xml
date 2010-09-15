@@ -4,8 +4,8 @@
 	<property name="conf.dir" value="conf" />
 	<property name="data.dir" value="data" />
 	<property name="dev.dist.dir" value="dist" />
-	<property file="{conf.dir}/ftp.properties"/>
-	<property file="{conf.dir}/ant.properties"/>
+	<property file="${conf.dir}/ftp.properties"/>
+	<property file="${conf.dir}/ant.properties"/>
 	
 	<path id="sqlite.classpath">
 		<pathelement location="${sqlite.jdbc.path}" />
