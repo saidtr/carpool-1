@@ -270,7 +270,7 @@ p#loadingNotice {
 
 #contactDetails li span:FIRST-CHILD {
 	font-weight: bold;
-	width: 6em;
+	width: 9em;
 	display: block;
 	float: left;	
 }

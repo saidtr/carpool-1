@@ -64,6 +64,13 @@ form dd {
 	display: none;
 }
 
+/* Thank you page */
+
+#contactDetails li span:FIRST-CHILD {
+	float: right;	
+}
+
+
 /* Help page */
 
 #questionsHolder p span {
