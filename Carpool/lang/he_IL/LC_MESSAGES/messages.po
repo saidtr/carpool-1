@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Carpool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-11 22:56+0200\n"
+"POT-Creation-Date: 2010-09-15 19:19+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Itay Pk <itaypk@gmail.com>\n"
 "Language-Team: \n"
@@ -66,13 +66,13 @@ msgstr "שם"
 #: public/join.php:111
 #: public/index.php:80
 #: public/feedback.php:62
-#: public/thanks.php:37
+#: public/thanks.php:38
 msgid "Email"
 msgstr "דואר אלקטרוני"
 
 #: public/join.php:115
 #: public/index.php:81
-#: public/thanks.php:38
+#: public/thanks.php:41
 msgid "Phone"
 msgstr "טלפון"
 
@@ -238,19 +238,23 @@ msgstr "פרטי ההתקשרות שסיפקת"
 msgid "Edit"
 msgstr "עריכה"
 
-#: public/thanks.php:41
+#: public/thanks.php:45
 msgid "Confirmation mail was sent to your email."
 msgstr "דוא\"ל אימות נשלח לתיבת הדוא\"ל שלך."
 
-#: public/thanks.php:43
-msgid "You can always update or delete your account by browsing to"
-msgstr "תוכלו לערוך או למחוק את חשבונכם בכל רגע באמצעות גלישה אל"
+#: public/thanks.php:47
+msgid "You can always update or delete your account by browsing to the following link"
+msgstr "תוכלו לערוך או למחוק את חשבונכם בכל רגע באמצעות גלישה אל הקישור הבא"
 
-#: public/thanks.php:45
+#: public/thanks.php:49
+msgid "To use it, just paste the exact link to your browser address bar and hit \"Enter\"."
+msgstr "על מנת להשתמש בו, פשוט הדביקו את הקישור בחלונית הכתובת של הדפדפן ולחצו על \"Enter\"."
+
+#: public/thanks.php:52
 msgid "Don't worry - you got it in the mail."
 msgstr "אל דאגה - הקישור נשלח אל כתובת הדוא\"ל שסיפקת."
 
-#: public/thanks.php:47
+#: public/thanks.php:54
 msgid "You should keep this link - this is the only way to modify or delete your account in the future."
 msgstr "אנא שמרו את הקישור הזה - זוהי הדרך היחידה לערוך או לשנות את חשבונכם בעתיד."
 
@@ -286,375 +290,375 @@ msgstr "הנסיעה חזרה להיות פעילה. חזרת לעניינים!"
 msgid "Ride deleted. Happy now?"
 msgstr "הנסיעה נמחקה. מרוצה?"
 
-#: app/StringDummies.php:6
+#: app/StringDummies.php:12
 msgid "Acre"
 msgstr "עכו"
 
-#: app/StringDummies.php:7
+#: app/StringDummies.php:13
 msgid "Afula"
 msgstr "עפולה"
 
-#: app/StringDummies.php:8
+#: app/StringDummies.php:14
 msgid "Arad"
 msgstr "ערד"
 
-#: app/StringDummies.php:9
+#: app/StringDummies.php:15
 msgid "Ariel"
 msgstr "אריאל"
 
-#: app/StringDummies.php:10
+#: app/StringDummies.php:16
 msgid "Ashdod"
 msgstr "אשדוד"
 
-#: app/StringDummies.php:11
+#: app/StringDummies.php:17
 msgid "Ashkelon"
 msgstr "אשקלון"
 
-#: app/StringDummies.php:12
+#: app/StringDummies.php:18
 msgid "Baqa-Jatt"
 msgstr "בקע-ג'ת"
 
-#: app/StringDummies.php:13
+#: app/StringDummies.php:19
 msgid "Bat Yam"
 msgstr "בת ים"
 
-#: app/StringDummies.php:14
+#: app/StringDummies.php:20
 msgid "Beersheva"
 msgstr "באר שבע"
 
-#: app/StringDummies.php:15
+#: app/StringDummies.php:21
 msgid "Beit She'an"
 msgstr "בית שאן"
 
-#: app/StringDummies.php:16
+#: app/StringDummies.php:22
 msgid "Beit Shemesh"
 msgstr "בית שמש"
 
-#: app/StringDummies.php:17
+#: app/StringDummies.php:23
 msgid "Beitar Illit"
 msgstr "ביתר עלית"
 
-#: app/StringDummies.php:18
+#: app/StringDummies.php:24
 msgid "Bnei Brakh"
 msgstr "בני ברק"
 
-#: app/StringDummies.php:19
+#: app/StringDummies.php:25
 msgid "Dimona"
 msgstr "דימונה"
 
-#: app/StringDummies.php:20
+#: app/StringDummies.php:26
 msgid "Eilat"
 msgstr "אילת"
 
-#: app/StringDummies.php:21
+#: app/StringDummies.php:27
 msgid "El'ad"
 msgstr "אלעד"
 
-#: app/StringDummies.php:22
+#: app/StringDummies.php:28
 msgid "Giv'atayim"
 msgstr "גבעתיים"
 
-#: app/StringDummies.php:23
+#: app/StringDummies.php:29
 msgid "Giv'at Shmuel"
 msgstr "גבעת שמואל"
 
-#: app/StringDummies.php:24
+#: app/StringDummies.php:30
 msgid "Hadera"
 msgstr "חדרה"
 
-#: app/StringDummies.php:25
+#: app/StringDummies.php:31
 msgid "Haifa"
 msgstr "חיפה"
 
-#: app/StringDummies.php:26
+#: app/StringDummies.php:32
 msgid "Herzliya"
 msgstr "הרצליה"
 
-#: app/StringDummies.php:27
+#: app/StringDummies.php:33
 msgid "Hod HaSharon"
 msgstr "הוד השרון"
 
-#: app/StringDummies.php:28
+#: app/StringDummies.php:34
 msgid "Holon"
 msgstr "חולון"
 
-#: app/StringDummies.php:29
+#: app/StringDummies.php:35
 msgid "Jerusalem"
 msgstr "ירושלים"
 
-#: app/StringDummies.php:30
+#: app/StringDummies.php:36
 msgid "Karmiel"
 msgstr "כרמיאל"
 
-#: app/StringDummies.php:31
+#: app/StringDummies.php:37
 msgid "Kafr Qasim"
 msgstr "כפר קאסם"
 
-#: app/StringDummies.php:32
+#: app/StringDummies.php:38
 msgid "Kfar Saba"
 msgstr "כפר סבא"
 
-#: app/StringDummies.php:33
+#: app/StringDummies.php:39
 msgid "Kiryat Ata"
 msgstr "קרית אתא"
 
-#: app/StringDummies.php:34
+#: app/StringDummies.php:40
 msgid "Kiryat Bialik"
 msgstr "קרית ביאליק"
 
-#: app/StringDummies.php:35
+#: app/StringDummies.php:41
 msgid "Kiryat Gat"
 msgstr "קרית גת"
 
-#: app/StringDummies.php:36
+#: app/StringDummies.php:42
 msgid "Kiryat Malakhi"
 msgstr "קרית מלאכי"
 
-#: app/StringDummies.php:37
+#: app/StringDummies.php:43
 msgid "Kiryat Motzkin"
 msgstr "קרית מוצקין"
 
-#: app/StringDummies.php:38
+#: app/StringDummies.php:44
 msgid "Kiryat Onou"
 msgstr "קרית אונו"
 
-#: app/StringDummies.php:39
+#: app/StringDummies.php:45
 msgid "Kiryat Shmona"
 msgstr "קרית שמונה"
 
-#: app/StringDummies.php:40
+#: app/StringDummies.php:46
 msgid "Kiryat Yam"
 msgstr "קרית ים"
 
-#: app/StringDummies.php:41
+#: app/StringDummies.php:47
 msgid "Lod"
 msgstr "לוד"
 
-#: app/StringDummies.php:42
+#: app/StringDummies.php:48
 msgid "Ma'ale Adumim"
 msgstr "מעלה אדומים"
 
-#: app/StringDummies.php:43
+#: app/StringDummies.php:49
 msgid "Ma'alot-Tarshiha"
 msgstr "מעלות-תרשיחה"
 
-#: app/StringDummies.php:44
+#: app/StringDummies.php:50
 msgid "Migdal HaEmek"
 msgstr "מגדל העמק"
 
-#: app/StringDummies.php:45
+#: app/StringDummies.php:51
 msgid "Modi'in Illit"
 msgstr "מודיעין עלית"
 
-#: app/StringDummies.php:46
+#: app/StringDummies.php:52
 msgid "Modi'in"
 msgstr "מודיעין"
 
-#: app/StringDummies.php:47
+#: app/StringDummies.php:53
 msgid "Maccabim-Reut"
 msgstr "מכבים-רעות"
 
-#: app/StringDummies.php:48
+#: app/StringDummies.php:54
 msgid "Nahariya"
 msgstr "נהריה"
 
-#: app/StringDummies.php:49
+#: app/StringDummies.php:55
 msgid "Nazareth"
 msgstr "נצרת"
 
-#: app/StringDummies.php:50
+#: app/StringDummies.php:56
 msgid "Nazareth Illit"
 msgstr "נצרת עלית"
 
-#: app/StringDummies.php:51
+#: app/StringDummies.php:57
 msgid "Nesher"
 msgstr "נשר"
 
-#: app/StringDummies.php:52
+#: app/StringDummies.php:58
 msgid "Ness Ziona"
 msgstr "נס ציונה"
 
-#: app/StringDummies.php:53
+#: app/StringDummies.php:59
 msgid "Netanya"
 msgstr "נתניה"
 
-#: app/StringDummies.php:54
+#: app/StringDummies.php:60
 msgid "Netivot"
 msgstr "נתיבות"
 
-#: app/StringDummies.php:55
+#: app/StringDummies.php:61
 msgid "Ofakim"
 msgstr "אופקים"
 
-#: app/StringDummies.php:56
+#: app/StringDummies.php:62
 msgid "Or Akiva"
 msgstr "אור עקיבה"
 
-#: app/StringDummies.php:57
+#: app/StringDummies.php:63
 msgid "Or Yehuda"
 msgstr "אור יהודה"
 
-#: app/StringDummies.php:58
+#: app/StringDummies.php:64
 msgid "Petach Tikva"
 msgstr "פתח תקווה"
 
-#: app/StringDummies.php:59
+#: app/StringDummies.php:65
 msgid "Qalansawe"
 msgstr "קלאנסווה"
 
-#: app/StringDummies.php:60
+#: app/StringDummies.php:66
 msgid "Ra'anana"
 msgstr "רעננה"
 
-#: app/StringDummies.php:61
+#: app/StringDummies.php:67
 msgid "Rahat"
 msgstr "רהט"
 
-#: app/StringDummies.php:62
+#: app/StringDummies.php:68
 msgid "Ramat Gan"
 msgstr "רמת גן"
 
-#: app/StringDummies.php:63
+#: app/StringDummies.php:69
 msgid "Ramat HaSharon"
 msgstr "רמת השרון"
 
-#: app/StringDummies.php:64
+#: app/StringDummies.php:70
 msgid "Ramla"
 msgstr "רמלה"
 
-#: app/StringDummies.php:65
+#: app/StringDummies.php:71
 msgid "Rehovot"
 msgstr "רחובות"
 
-#: app/StringDummies.php:66
+#: app/StringDummies.php:72
 msgid "Rishon LeZion"
 msgstr "ראשון לציון"
 
-#: app/StringDummies.php:67
+#: app/StringDummies.php:73
 msgid "Rosh HaAyin"
 msgstr "ראש העין"
 
-#: app/StringDummies.php:68
+#: app/StringDummies.php:74
 msgid "Safed"
 msgstr "צפת"
 
-#: app/StringDummies.php:69
+#: app/StringDummies.php:75
 msgid "Sakhnin"
 msgstr "סחנין"
 
-#: app/StringDummies.php:70
+#: app/StringDummies.php:76
 msgid "Sderot"
 msgstr "שדרות"
 
-#: app/StringDummies.php:71
+#: app/StringDummies.php:77
 msgid "Shaghur"
 msgstr "שגור"
 
-#: app/StringDummies.php:72
+#: app/StringDummies.php:78
 msgid "Shfar'am"
 msgstr "שפרעם"
 
-#: app/StringDummies.php:73
+#: app/StringDummies.php:79
 msgid "Tamra"
 msgstr "תמרה"
 
-#: app/StringDummies.php:74
+#: app/StringDummies.php:80
 msgid "Tayibe"
 msgstr "טייבה"
 
-#: app/StringDummies.php:75
+#: app/StringDummies.php:81
 msgid "Tel Aviv"
 msgstr "תל אביב"
 
-#: app/StringDummies.php:76
+#: app/StringDummies.php:82
 msgid "Tiberias"
 msgstr "טבריה"
 
-#: app/StringDummies.php:77
+#: app/StringDummies.php:83
 msgid "Tira"
 msgstr "טירה"
 
-#: app/StringDummies.php:78
+#: app/StringDummies.php:84
 msgid "Tirat HaCarmel"
 msgstr "טירת הכרמל"
 
-#: app/StringDummies.php:79
+#: app/StringDummies.php:85
 msgid "Umm al-Fahm"
 msgstr "אום אל-פחם"
 
-#: app/StringDummies.php:80
+#: app/StringDummies.php:86
 msgid "Yavne"
 msgstr "יבנה"
 
-#: app/StringDummies.php:81
+#: app/StringDummies.php:87
 msgid "Yehud-Monosson"
 msgstr "יהוד-קרית מונסון"
 
-#: app/StringDummies.php:82
+#: app/StringDummies.php:88
 msgid "Yokneam"
 msgstr "יקנעם"
 
-#: app/StringDummies.php:85
+#: app/StringDummies.php:91
 msgid "English"
 msgstr "אנגלית"
 
-#: app/StringDummies.php:86
+#: app/StringDummies.php:92
 msgid "Hebrew"
 msgstr "עברית"
 
-#: app/StringDummies.php:89
+#: app/StringDummies.php:95
 msgid "Join"
 msgstr "הצטרפות"
 
-#: app/StringDummies.php:90
+#: app/StringDummies.php:96
 msgid "Search"
 msgstr "חיפוש"
 
-#: app/StringDummies.php:91
+#: app/StringDummies.php:97
 msgid "Help"
 msgstr "עזרה"
 
-#: app/StringDummies.php:92
+#: app/StringDummies.php:98
 msgid "Feedback"
 msgstr "פידבק"
 
-#: app/StringDummies.php:93
+#: app/StringDummies.php:99
 msgid "Logout"
 msgstr "יציאה מהמערכת"
 
-#: app/StringDummies.php:94
+#: app/StringDummies.php:100
 msgid "My Profile"
 msgstr "הפרופיל שלי"
 
-#: app/StringDummies.php:97
+#: app/StringDummies.php:103
 msgid "Loading..."
 msgstr "טוען..."
 
-#: app/StringDummies.php:98
+#: app/StringDummies.php:104
 msgid "Sorry, something went wrong. Request could not be completed."
 msgstr "משהו השתבש. לא ניתן להשלים את הבקשה."
 
-#: app/StringDummies.php:99
+#: app/StringDummies.php:105
 msgid "Are you sure you want to completely, fully, eternally delete your ride?"
 msgstr "חשבונכם ימחק לעולמי עד בלי שום אפשרות לשחזור. בטוחים?"
 
-#: app/StringDummies.php:100
+#: app/StringDummies.php:106
 msgid "An error occured."
 msgstr "התרחשה שגיאה."
 
-#: app/StringDummies.php:101
+#: app/StringDummies.php:107
 msgid "Could not add ride"
 msgstr "לא ניתן להוסיף את הנסיעה"
 
-#: app/StringDummies.php:102
+#: app/StringDummies.php:108
 msgid "Could not update ride"
 msgstr "לא ניתן לעדכן את הנסיעה"
 
-#: app/StringDummies.php:103
+#: app/StringDummies.php:109
 msgid "Sorry, something went wrong."
 msgstr "משהו השתבש. לא ניתן להשלים את הבקשה."
 
-#: app/StringDummies.php:104
+#: app/StringDummies.php:110
 msgid "Congrats! You broke everything!"
 msgstr "עכשיו הרסתם הכל. תתביישו."
 
