@@ -133,7 +133,7 @@ class Utils {
 	
 	public static function buildEmail($mail) {
 	    if (!strpos($mail, '@')) {
-	        return $mail . '@' . DEFAULT_DOMAIN;
+	        return $mail . '@' . getConfiguration('default.domain');
 	    }
 	    return $mail;
 	}
