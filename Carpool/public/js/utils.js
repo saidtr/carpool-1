@@ -10,14 +10,6 @@ function htmlEnc(str) {
 	return str;
 }
 
-function mailTo(str) {
-	var addr = str;
-	if (addr.indexOf('@') == -1) {
-		addr += '@' + Constants.DEFAULT_DOMAIN;
-	}
-	return '<a href="mailto:' + addr + '?subject=Carpool">' + str + '</a>';
-}
-
 function cell(str, escape) {
 	if ((typeof escape == 'undefined') || escape == true) {
 		return '<td>' + htmlEnc(str) + '</td>';
