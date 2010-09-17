@@ -316,6 +316,13 @@ class DatabaseHelper {
         
     }
     
+    /**
+     * 
+     * Return ride information for a given contact
+     * 
+     * @param $contactId int Contact id
+     * @return array Ride details
+     */
     function getRideByContactId($contactId) {
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation  
                 FROM ride r 
