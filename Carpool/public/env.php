@@ -1,7 +1,5 @@
 <?php
 
-define('APP_NAME', 'carpool');
-
 define('ENV_DEVELOPMENT', 'dev');
 define('ENV_PRODUCTION', 'prod');
 
