@@ -101,7 +101,7 @@ if ($valid) {
             	throw new Exception("Could not add ride");
             }
             $mailBody = View_RegistrationMail::render($server->getContactById($contactId));
-            Utils::sendMail(Utils::buildEmail($email), $name, 'carpool@itay.pk', 'Carpool Support', 'Carpool registration', $mailBody);
+            Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);
         }
         
         echo json_encode(array('status' => 'ok', 'action' => $action));
