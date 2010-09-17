@@ -13,12 +13,12 @@ class View_RegistrationMail {
                 '#content p { font-size: large } ' .
                 '</style>' .
                 '<body>' .
-                '<h1>Thanks, ' .  htmlspecialchars($contact['Name']) . '!</h1>' .
+                '<h1>' . printf(_('Thanks, %s'), htmlspecialchars($contact['Name'])) . '!</h1>' .
                 '<div id="content">' .
-                '<p>You sucssfully joined the carpool.</p>' .
-				'<p>You can always update or delete your account by browsing to <a href="' . htmlspecialchars($authUrl) . '">' . htmlspecialchars($authUrl) . '</a>.</p>' .
-        		'<p>Unless you ask for it, you will never get any more emails from this site.</p>' .
-                '<p>Thanks,<br/>The ' . constant('APP_NAME') . ' team' .
+                '<p>' . _('You sucssfully joined the carpool.') . '</p>' .
+				'<p>' . printf(_('You can always update or delete your account by browsing to %s'), '<a href="' . htmlspecialchars($authUrl) . '">' . htmlspecialchars($authUrl) . '</a>') . '.</p>' .
+        		'<p>' . _('Unless you ask for it, you will never get any more emails from this site.') . '</p>' .
+                '<p>' . _('Thanks') . ',<br/>' . printf('The %s team', _(getConfiguration('app.name'))) .
 				'</div>' .
                 '</body>' .
                 '</html>';        

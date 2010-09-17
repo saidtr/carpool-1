@@ -44,7 +44,7 @@ class LocaleManager {
 		} else if (isset($_COOKIE['lang']) && array_key_exists($_COOKIE['lang'], self::$LOCALES)) {
 			$this->locale = self::$LOCALES[$_COOKIE['lang']];
 		} else {
-			$this->locale = self::$LOCALES[DEFAULT_LOCALE];
+			$this->locale = self::$LOCALES[getConfiguration('default.locale')];
 		}
 		Logger::info(__METHOD__ . ' locale selected: ' . $this->locale['name'] . ' (' . $this->locale['locale'] . ')');
 		setlocale(LC_ALL, $this->locale['locale']);

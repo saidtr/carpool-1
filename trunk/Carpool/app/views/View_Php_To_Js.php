@@ -4,7 +4,7 @@
  * 
  * Generic class for putting PHP data as JS variables 
  * 
- * @author Admin
+ * @author Itay
  *
  */
 class View_Php_To_Js {
@@ -20,8 +20,7 @@ class View_Php_To_Js {
         'LOCATION_NOT_FOUND' => LOCATION_NOT_FOUND,
         'LOCATION_DONT_CARE' => LOCATION_DONT_CARE,
         'TIME_IRRELAVANT' => TIME_IRRELEVANT,
-        'TIME_DIFFER' => TIME_DIFFERS,
-        'DEFAULT_DOMAIN' => DEFAULT_DOMAIN
+        'TIME_DIFFER' => TIME_DIFFERS
     );
     
     static $vars = array();
@@ -36,6 +35,10 @@ class View_Php_To_Js {
     
     public static function putVariable($name, $value) {
         self::$vars[$name] = $value;
+    }
+    
+    public static function putConstant($name, $value) {
+        self::$CONSTANTS[$name] = $value;
     }
     
     public static function render() {
