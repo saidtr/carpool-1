@@ -1,0 +1,9 @@
+[global]
+app.name           = Carpool
+default.domain     = 
+domain             = 
+default.locale     = en
+mail.addr          = 
+mail.display       = Carpool Support
+
+[database]
