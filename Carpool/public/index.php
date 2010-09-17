@@ -93,6 +93,8 @@ View_Php_To_Js::putTranslations(array(
 	'Loading...'
 ));
 View_Php_To_Js::putVariable('cities', $db->getCities());
+View_Php_To_Js::putConstant('DEFAULT_DOMAIN', getConfiguration('default.domain'));
+View_Php_To_Js::putConstant('APP_NAME', _(getConfiguration('app.name')));
 echo View_Php_To_Js::render();
 ?>
 <script type="text/javascript" src="js/utils.js"></script>
@@ -101,6 +103,15 @@ echo View_Php_To_Js::render();
 
 var citiesMapper = null;
 var searchResults = null;
+
+
+function mailTo(str) {
+	var addr = str;
+	if (addr.indexOf('@') == -1) {
+		addr += '@' + Constants.DEFAULT_DOMAIN;
+	}
+	return '<a href="mailto:' + addr + '?subject=' + Constants.APP_NAME + '">' + str + '</a>';
+}
 
 function formatTime(/* String */ hour) {
 	if (hour === null || hour == Constants.TIME_IRRELAVANT) {
