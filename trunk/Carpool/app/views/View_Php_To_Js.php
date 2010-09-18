@@ -11,10 +11,11 @@ class View_Php_To_Js {
 
     static $CONSTANTS = array (
         'xhr' => array(
-            'ADD_RIDE' => 'xhr/AddRideAll.php',
-            'DEL_RIDE' => 'xhr/DeleteRide.php',
-    		'GET_CITIES' => 'xhr/GetCities.php',
-    		'SEARCH_RIDES' => 'xhr/SearchRides.php',
+            'ADD_RIDE'        => 'xhr/AddRideAll.php',
+    		'SHOW_INTEREST'   => 'xhr/ShowInterest.php',
+            'DEL_RIDE'        => 'xhr/DeleteRide.php',
+    		'GET_CITIES'      => 'xhr/GetCities.php',
+    		'SEARCH_RIDES'    => 'xhr/SearchRides.php',
             'TOGGLE_ACTIVATE' => 'xhr/ActivateToggle.php'
     		),
         'LOCATION_NOT_FOUND' => LOCATION_NOT_FOUND,
