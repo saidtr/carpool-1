@@ -49,6 +49,14 @@ form dd {
 
 /* Search page */
 
+#showInterestClose {
+	float: left;
+}
+
+#showInterest label {
+	float: right;
+}
+
 #resultsTable {
 	direction: rtl;
 }

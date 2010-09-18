@@ -15,10 +15,6 @@ $content = array(
 		'a' => _('Because it\'s greener. Because it might save you some money. Because it\'s much more fun.')
 	),
 	array(
-		'q' => _('I want to help, but I don\'t feel comfortable putting my personal details here.'), 
-		'a' => _('This is a company-wide site. No outer people can reach this page. If you still insist, you can just use the search page without registering.')
-	),
-	array(
 	    'q' => _('How can I delete/modify my account?'),
 	    'a' => _('Use the authentication link to authenticate yourself. Then, under "My Profile", you can edit your settings, delete or de-activate your account.')
 	),

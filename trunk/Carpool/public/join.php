@@ -98,7 +98,8 @@ echo View_Header::render($header);
 					</select>
 				</dd>			
 			</dl>
-			<div class="clearFloat"></div>			
+			<div class="clearFloat"></div>	
+			<input type="hidden" name="wantTo" value="<?php echo STATUS_OFFERED ?>"/>		
 		</fieldset>
 		<fieldset>
 			<legend>Contact details</legend>
@@ -144,13 +145,13 @@ View_Php_To_Js::putTranslations(array(
 	'Sorry, something went wrong.',
 	'Congrats! You broke everything!'
 )); 
+View_Php_To_Js::putVariable('cities', $db->getCities());
 echo View_Php_To_Js::render();
 
 ?>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript">
 
-var cities = <?php echo json_encode($db->getCities())?>;
 var citiesMapper = null;
 var isWorking = false;
 
@@ -170,7 +171,7 @@ function deleteRide() {
 	} 
 }
 
-function initAutocomplete(/* JSON cities */) {
+function initAutocomplete() {
 	$("#srcCity, #destCity").autocomplete(cities, {
 		formatItem: function(item) {
 			return htmlEnc(item.Name);

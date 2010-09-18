@@ -33,11 +33,10 @@ Filter.prototype.filter = function (/* Array */ data) {
 	for (r in data) {		
 		var passedCriteria = true;
 		var record = data[r];
-		//document.write(record);
+		
 		for (k in this.criteria) {
 			var key = this.criteria[k].key; 
 			var val = this.criteria[k].value;
-			//document.write(key + ' ' + val + '<br>');
 			
 			if (typeof record[key] != 'undefined') {
 				if (!this.criteria[k].filterFunc(record[key], val)) {	

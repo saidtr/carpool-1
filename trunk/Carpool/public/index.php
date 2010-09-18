@@ -29,6 +29,7 @@ $availableSrcCities = $db->getAvailableCities('Src');
 	<div id="searchFormHolder">
 		<form id="searchForm" action="xhr/SearchRides.php">
 			<fieldset>
+			<legend></legend>
 			<dl>
 				<!-- 
 				<dd>
@@ -41,8 +42,8 @@ $availableSrcCities = $db->getAvailableCities('Src');
 				</dd>
 				 -->
 				<dd>
-					<label for="srcCityId"><?php echo _('Show me rides from')?>&nbsp;</label>
-					<select id="srcCityId" name="srcCityId">
+					<label for="srcCity"><?php echo _('Show me rides from')?>&nbsp;</label>
+					<select id="srcCity" name="srcCity">
 						<option value="<?php echo LOCATION_DONT_CARE ?>"><?php echo _('Everywhere')?></option> 
 						<?php foreach($availableSrcCities as $city):?>
 						<option value="<?php echo $city['id']?>"><?php echo htmlspecialchars($city['name'])?></option>
@@ -51,8 +52,8 @@ $availableSrcCities = $db->getAvailableCities('Src');
 				
 				</dd>
 				<dd>
-					<label for="destCityId"><?php echo _('To')?>&nbsp;</label>
-					<select id="destCityId" name="destCityId">
+					<label for="destCity"><?php echo _('To')?>&nbsp;</label>
+					<select id="destCity" name="destCity">
 						<option value="<?php echo LOCATION_DONT_CARE ?>"><?php echo _('Everywhere')?></option>
 						<?php foreach($availableDestCities as $city):?>
 						<option value="<?php echo $city['id']?>"><?php echo htmlspecialchars($city['name'])?></option>
@@ -64,10 +65,33 @@ $availableSrcCities = $db->getAvailableCities('Src');
 				</dd>	
 				<dd>
 					<p id="loadingNotice"></p>
+					<!-- 
+					<p id="showInterestHolder"></p>
+					 -->
 				</dd>		
 			</dl>
 			</fieldset>
 		</form>
+    	<div id="showInterest">
+    		<span><a href="javascript:displayShowInterestDialog(false)"><?php echo _('Show interest')?></a></span>
+    		<!-- <span id="showInterestClose">[X]</span> -->
+    		<form id="showInterestForm" method="post" action="xhr/ShowInterest.php">
+    			<dl class="noFloat">
+        			<dd class="mandatory">
+            			<label><?php echo _('Name')?></label>
+            			<input type="text" name="name" id="name" />
+        			</dd>
+        			<dd class="mandatory">
+            			<label><?php echo _('Email')?></label>
+            			<input type="text" name="email" id="email" />
+            		</dd>
+        			<dd>
+        				<input type="hidden" name="wantTo" value="<?php echo STATUS_LOOKING ?>"/>
+        				<input type="submit" value="<?php echo _('Go!')?>" />
+        			</dd>
+    			</dl>
+    		</form>
+    	</div>					
 	</div>
 	<div id="results">
 		<table id="resultsTable">
@@ -86,7 +110,6 @@ $availableSrcCities = $db->getAvailableCities('Src');
 	</div>
 </div>
 </div>
-<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
 <?php 
 View_Php_To_Js::putTranslations(array(
 	'Sorry, something went wrong. Request could not be completed.',
@@ -95,8 +118,19 @@ View_Php_To_Js::putTranslations(array(
 View_Php_To_Js::putVariable('cities', $db->getCities());
 View_Php_To_Js::putConstant('DEFAULT_DOMAIN', getConfiguration('default.domain'));
 View_Php_To_Js::putConstant('APP_NAME', _(getConfiguration('app.name')));
+View_Php_To_Js::putTranslations(
+    array(
+    	'Sorry, no results found.', 
+    	'Show interest in this ride',
+    	'Sorry, something went wrong. Request could not be completed.',
+        'N/A',
+        'Differs'
+    )
+);
 echo View_Php_To_Js::render();
 ?>
+<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="lib/form/jquery.form.min.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/filter.js"></script>
 <script type="text/javascript">
@@ -104,23 +138,63 @@ echo View_Php_To_Js::render();
 var citiesMapper = null;
 var searchResults = null;
 
+function cell(str, escape) {
+	if ((typeof escape == 'undefined') || escape == true) {
+		return '<td>' + htmlEnc(str) + '</td>';
+	} else {
+		return '<td>' + str + '</td>';
+	}
+}
 
+/**
+ * Build an HTML mailto element
+ *
+ * @param str Username or mail address of the recepient 
+ */
 function mailTo(str) {
 	var addr = str;
-	if (addr.indexOf('@') == -1) {
+
+	// If there's no domain in the mail, use the default one (john -> john@mycompany.com) 
+	if (addr.indexOf('@') === -1) {
 		addr += '@' + Constants.DEFAULT_DOMAIN;
 	}
 	return '<a href="mailto:' + addr + '?subject=' + Constants.APP_NAME + '">' + str + '</a>';
 }
 
+/**
+ * Translates an hour given as integer to two-digit string representation or
+ * description string
+ */
 function formatTime(/* String */ hour) {
 	if (hour === null || hour == Constants.TIME_IRRELAVANT) {
-		return 'N/A';
+		return _('N/A');
 	} else if (hour == Constants.TIME_DIFFER) {
-		return 'Differs';
+		return _('Differs');
 	} else {
 		return (hour.length == 1 ? '0' : '') + hour + ':00';
 	} 
+}
+
+function displayShowInterestDialog(/* Boolean */ show) {
+	if (show) {
+		positionShowInterest();
+    	$('#loadingNotice').html('');
+    	$('#showInterest').slideDown('fast');
+	} else {
+		$('#showInterest').slideUp('fast');
+		updateShowInterestText();
+	}
+}
+
+function updateShowInterestText() {
+	var srcId = $('#srcCity').val();
+	var destId = $('#destCity').val();
+	
+	if (srcId != Constants.LOCATION_DONT_CARE || destId != Constants.LOCATION_DONT_CARE)
+		$('#loadingNotice').html('<a href="javascript:displayShowInterestDialog(true)" title="' +  _('Get mail notifications about new suitable rides.') + '">' + _('Show interest') + '</a>');
+	else
+		$('#loadingNotice').html('');	
+	
 }
 
 function buildSearchResults(/* JSON */ data) {
@@ -156,18 +230,25 @@ function doFilter() {
 		return;
 
 	var filter = new Filter();
-	var srcId = $('#srcCityId').val();
+	var srcId = $('#srcCity').val();
 	if (srcId != Constants.LOCATION_DONT_CARE)
 		filter.addCriteria(new FilterCriteria('SrcCityId', srcId, filterEquals));
-	var destId = $('#destCityId').val();
+	var destId = $('#destCity').val();
 	if (destId != Constants.LOCATION_DONT_CARE)            	
 	    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
 
 	buildSearchResults(filter.filter(searchResults));
 	
-	if (srcId != Constants.LOCATION_DONT_CARE || destId != Constants.LOCATION_DONT_CARE)
-		$('#loadingNotice').html('<a href="#">Show interest in this ride</a>');
+	updateShowInterestText();
+}
+
+function positionShowInterest() {
+	var showInterestHolderOffset = $('#loadingNotice').offset();
+	if (isRtl()) {
+		showInterestHolderOffset.left -= ($('#showInterest').width() - $('#loadingNotice').width());
+	}
 	
+	$('#showInterest').offset({top : showInterestHolderOffset.top, left : showInterestHolderOffset.left });	
 }
 
 $(document).ready(function() {
@@ -185,11 +266,65 @@ $(document).ready(function() {
 		$('#loadingNotice').text('');
 		searchResults = xhr.results;
 		doFilter();
-		$("#destCityId").change(doFilter);
-		$("#srcCityId").change(doFilter);
+		$("#destCity").change(doFilter);
+		$("#srcCity").change(doFilter);
 	}, 'json');
+
+	// Ajax form
+	var showInterestFormOptions = { 
+		type         : 'POST', 
+		dataType     : 'json',
+		beforeSubmit : function(formData, jqForm, options) {
+			return true;
+		},
+		success      : function(xhr) {
+			status = xhr.status;
+			action = xhr.action;
+			showMessage('Well ok ' + xhr.status);
+			positionShowInterest();
+			/*
+			if (status === 'ok') {
+				if (action === 'add') {
+					redirect('thanks.php');
+				} else {
+					refresh();
+				}
+			} else if (status === 'invalid') {
+				var str = '';
+				for (msg in xhr.messages) {
+					str += '' + xhr.messages[msg] + '; ';
+				}
+				if (xhr.messages.length > 0) {
+					str = str.substring(0, str.length - 2) + '.';
+				} 
+				if (action === 'add')
+					showError(_('Could not add ride') + ': ' + str);
+				else if (action === 'update')
+					showError(_('Could not update ride') + ': ' + str);
+
+				disableButtons(false);
+			} else if (status === 'err') {
+				showError('Could not ' + action + ' ride: Internal error. ' + (status.msg ? status.msg : ""));
+				disableButtons(false);
+			} else {
+				showError(_('Congrats! You broke everything!'));
+				disableButtons(false);
+			}
+			*/
+		}
+	}; 
+
+	$('#showInterestForm').submit(function() {
+		showInterestFormOptions.data = { srcCityId : 1, destCityId : 1 };
+		$('#showInterestForm').ajaxSubmit(showInterestFormOptions);
+		return false;
+	});
+
+	positionShowInterest();
 	
-	//$("#wantTo").change(submitSearchForm);
+	$('#showInterestClose').click(function() {
+		displayShowInterestDialog(false);
+	});
 
 	// Register ajax error handler
 	$(document).ajaxError(function(evt, xhr, settings, exception) {

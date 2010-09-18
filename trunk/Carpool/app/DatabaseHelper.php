@@ -34,6 +34,20 @@ class DatabaseHelper {
         	Logger::logException($e);
         }
     }
+    
+    /**
+     * Returns the PDO object holding the DB connection. For testing purpose only 
+     * 
+     * @return PDO The PDO connection
+     */
+    public static function getConnection() {
+        if (ENV !== ENV_DEVELOPMENT) {
+            Logger::err(__METHOD__ . ': This method should not be called!');
+            return false;
+        }
+        
+        return self::getInstance()->_db;
+    }
 
     function addCity($name) {
     	Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($name)");
@@ -109,7 +123,7 @@ class DatabaseHelper {
     }
     
     function addContact($name, $phone, $email) {
-    	Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($name, $phone, $email)");
+    	Logger::debug(__METHOD__ . "($name, $phone, $email)");
     	
     	try {
     		
@@ -380,6 +394,31 @@ class DatabaseHelper {
             return false;
         }    	
     }
-
+    
+   function getContactByEmail($email) {
+        Logger::debug(__METHOD__ . "($email)");
+        try {
+            try {
+            $stmt = $this->_db->query('SELECT * FROM contacts');
+            if (!$stmt) {
+                Logger::debug('WTF?');
+            }
+            } catch (Exception $e) {
+                Logger::logException($e);
+            }
+            
+			$stmt->bindParam(':email', $email);
+			
+			if ($stmt->execute()) {
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } else {
+                // User not found - return false
+                return false;
+            }
+        } catch (PDOException $e) {
+            Logger::logException($e);
+            return false;
+        }    	
+    }
 
 }

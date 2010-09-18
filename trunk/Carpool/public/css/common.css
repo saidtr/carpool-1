@@ -143,6 +143,31 @@ form dl.noFloat dd {
 
 /* Search page */
 
+#showInterest {
+	position: absolute; 
+	border: 1px solid #c0c0c0; 
+	padding: 5px; 
+	background: white; 
+	display: none;
+}
+
+#showInterest label {
+	float: left;
+	width: 6em;
+}
+
+#showInterestClose {
+	float: right;
+	cursor: pointer;
+	font-size: x-small;
+	color: red;
+}
+
+#showInterestForm dl {
+	padding-top: 10px;	
+}
+
+
 #searchFormHolder {
 
 }

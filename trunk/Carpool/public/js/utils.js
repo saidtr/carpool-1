@@ -10,14 +10,6 @@ function htmlEnc(str) {
 	return str;
 }
 
-function cell(str, escape) {
-	if ((typeof escape == 'undefined') || escape == true) {
-		return '<td>' + htmlEnc(str) + '</td>';
-	} else {
-		return '<td>' + str + '</td>';
-	}
-}
-
 function refresh(timeout) {
 	if (typeof (timeout) !== 'undefined') {
 		setTimeout("refresh()", timeout);
@@ -36,6 +28,10 @@ function populateSelectBox(/* String */ selectBoxId, /* Array */ elems) {
     $.each(elems, function () {
     	sel.options[sel.options.length] = new Option(this.name, this.id);
     });
+}
+
+function isRtl() {
+	return $('body').css('direction') === 'rtl';
 }
 
 /** Global message */
