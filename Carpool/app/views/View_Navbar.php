@@ -19,7 +19,7 @@ class View_Navbar {
     
     static function buildLanguageSelector() {
     	$localeManager = LocaleManager::getInstance();
-    	$html = '<div id="langHolder"><form id="langSelectorForm" method="get" action="' . $_SERVER['PHP_SELF'] . '">';
+    	$html = '<div id="langHolder"><form id="langSelectorForm" method="get" action="' . $_SERVER['PHP_SELF'] . '"><p>';
     	$html .= '<select id="lang" name="lang">' . PHP_EOL;
     	foreach (LocaleManager::$LOCALES as $abbr => $lang) {
     		$html .= '<option value="' . $abbr . '"';
@@ -29,7 +29,7 @@ class View_Navbar {
     		
     		$html .= '>' . _($lang['name']) . '</option>';
     	}
-    	$html .= '</select><input type="submit" class="hidden" /></form></div>';
+    	$html .= '</select><input type="submit" class="hidden" /></p></form></div>';
     	return $html;
     }
 
