@@ -42,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php echo View_Header::render(_('So, what do you say?'))?>
 <div id="content">
 <form id="feedbackForm" action="feedback.php" method="post">
-	<fieldset>
 	<dl class="noFloat">
 	<dd class="mandatory">
 		<label for="wantTo"><?php echo _('I want to...')?></label>
@@ -67,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<input type="submit" value="<?php echo _('Submit')?>" />
 	</dd>
 	</dl>
-	</fieldset>
 </form>
 </div>
 </div>

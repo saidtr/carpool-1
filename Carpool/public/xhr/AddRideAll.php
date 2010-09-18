@@ -8,13 +8,10 @@ if (ENV !== ENV_DEVELOPMENT && (!Utils::IsXhrRequest() || !AuthHandler::isSessio
 }
 $messages = array();
 
-// Is the contents of this form valid?
+// Are the contents of this form valid?
 $valid = true;
 
 extract($_POST, EXTR_SKIP);
-
-// Always provide
-$wantTo = STATUS_OFFERED;
 
 // We need to know the contact name
 if (Utils::isEmptyString($name)) {
