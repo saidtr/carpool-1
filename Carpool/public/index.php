@@ -247,8 +247,9 @@ function positionShowInterest() {
 	if (isRtl()) {
 		showInterestHolderOffset.left -= ($('#showInterest').width() - $('#loadingNotice').width());
 	}
-	
-	$('#showInterest').offset({top : showInterestHolderOffset.top, left : showInterestHolderOffset.left });	
+
+	// Using $.offset cause problems with chrome
+	$('#showInterest').css({top: showInterestHolderOffset.top + 'px', left: showInterestHolderOffset.left + 'px'});		
 }
 
 $(document).ready(function() {
