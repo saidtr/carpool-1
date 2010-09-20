@@ -39,7 +39,7 @@ if ($valid) {
         $contact = $server->getContactByEmail($email);
         
         if ($contact) {
-            Logger::debug("$email already showed interest");
+            Logger::debug("$email is already registered");
             $contactId = $contact['Id'];
         } else {            
             // Register this contact
