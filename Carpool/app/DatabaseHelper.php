@@ -202,8 +202,8 @@ class DatabaseHelper {
 
         try {
             $stmt = $this->_db->prepare(
-            	'INSERT INTO Ride(srcCityId, srcLocation, destCityId, destLocation, timeMorning, timeEvening, contactId, comment, status) ' . 
-            	'VALUES (:srcCityId, :srcLocation, :destCityId, :destLocation, :timeMorning, :timeEvening, :contactId, :comment, :status)');
+            	'INSERT INTO Ride(srcCityId, srcLocation, destCityId, destLocation, timeMorning, timeEvening, contactId, comment, status, timeCreated, timeUpdated) ' . 
+            	'VALUES (:srcCityId, :srcLocation, :destCityId, :destLocation, :timeMorning, :timeEvening, :contactId, :comment, :status, :timeCreated, :timeUpdated)');
             $stmt->bindParam(':srcCityId', $srcCityId);
             $stmt->bindParam(':srcLocation', $srcLocation);
             $stmt->bindParam(':destCityId', $destCityId);
@@ -213,6 +213,8 @@ class DatabaseHelper {
             $stmt->bindParam(':contactId', $contactId);
             $stmt->bindParam(':comment', $comment);
             $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':timeCreated', time());
+            $stmt->bindParam(':timeUpdated', time());
             
             if ($stmt->execute()) {
                $inserted = $this->_db->lastInsertId();
@@ -234,7 +236,7 @@ class DatabaseHelper {
         Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $status)");
 
         try {
-            $stmt = $this->_db->prepare('UPDATE Ride SET srcCityId=:srcCityId, srcLocation=:srcLocation, destCityId=:destCityId, destLocation=:destLocation, timeMorning=:timeMorning, timeEvening=:timeEvening, comment=:comment, status=:status WHERE id=:rideId');
+            $stmt = $this->_db->prepare('UPDATE Ride SET srcCityId=:srcCityId, srcLocation=:srcLocation, destCityId=:destCityId, destLocation=:destLocation, timeMorning=:timeMorning, timeEvening=:timeEvening, comment=:comment, status=:status, timeUpdated=:timeUpdated WHERE id=:rideId');
             $stmt->bindParam(':srcCityId', $srcCityId);
             $stmt->bindParam(':srcLocation', $srcLocation);
             $stmt->bindParam(':destCityId', $destCityId);
@@ -243,6 +245,7 @@ class DatabaseHelper {
             $stmt->bindParam(':timeEvening', $timeEvening);           
             $stmt->bindParam(':comment', $comment);
             $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':timeUpdated', time());
             $stmt->bindParam(':rideId', $rideId);
             
             if ($stmt->execute()) {
@@ -282,9 +285,10 @@ class DatabaseHelper {
             if (!in_array($status, array(STATUS_LOOKING, STATUS_OFFERED, STATUS_OFFERED_HIDE))) {
                 return false;
             }
-            $stmt = $this->_db->prepare('UPDATE Ride SET status=:status WHERE id=:rideId');
+            $stmt = $this->_db->prepare('UPDATE Ride SET status=:status, timeUpdated=:timeUpdated WHERE id=:rideId');
             $stmt->bindParam(':rideId', $rideId);
             $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':timeUpdated', time());
             if ($stmt->execute()) {
                 Logger::log(Logger::LOG_INFO, "Status of ride $rideId successfully set to $status");
                 return true;
@@ -311,6 +315,9 @@ class DatabaseHelper {
             }
             if (isset($params['destCityId'])) {
                 $sql .= ' AND r.DestCityId = ' . $this->_db->quote($params['destCityId']);
+            }
+            if (isset($params['minTimeUpdated'])) {
+            	$sql .= ' AND r.timeUpdated >= ' . $this->_db->quote($params['minTimeUpdated']);
             }
         } 
         // Order - show newer first
@@ -398,14 +405,7 @@ class DatabaseHelper {
    function getContactByEmail($email) {
         Logger::debug(__METHOD__ . "($email)");
         try {
-            try {
-            $stmt = $this->_db->query('SELECT * FROM contacts');
-            if (!$stmt) {
-                Logger::debug('WTF?');
-            }
-            } catch (Exception $e) {
-                Logger::logException($e);
-            }
+            $stmt = $this->_db->query('SELECT Id, Name, Phone FROM contacts WHERE Email=:email');
             
 			$stmt->bindParam(':email', $email);
 			
@@ -419,6 +419,22 @@ class DatabaseHelper {
             Logger::logException($e);
             return false;
         }    	
+    }
+    
+    function getLastShowInterestNotifier() {
+         Logger::debug(__METHOD__ . "()");
+         try {
+         	$rs = $this->_db->query('SELECT LastRun FROM ShowInterestNotifier');
+			
+            if ($rs) {
+        		$res = $rs->fetch(PDO::FETCH_ASSOC);        		 
+        	} else {
+        		$res = false;
+        	}
+        } catch (PDOException $e) {
+            Logger::logException($e);
+            return false;
+        }    	   	
     }
 
 }
