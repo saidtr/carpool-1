@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Carpool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-15 19:19+0200\n"
+"POT-Creation-Date: 2010-09-16 09:14+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Itay Pk <itaypk@gmail.com>\n"
 "Language-Team: \n"
@@ -685,6 +685,29 @@ msgstr "אחר"
 #: app/views/View_Header.php:15
 msgid "Close"
 msgstr "סגירה"
+
+#: app/views/View_RegistrationMail.php:16
+#, php-format
+msgid "Thanks, %s"
+msgstr "תודה, %s"
+
+#: app/views/View_RegistrationMail.php:18
+msgid "You sucssfully joined the carpool."
+msgstr " הצטרפת בהצלחה."
+
+#: app/views/View_RegistrationMail.php:19
+#, fuzzy, php-format
+msgid "You can always update or delete your account by browsing to %s"
+msgstr "תוכלו לערוך או למחוק את חשבונכם בכל רגע באמצעות גלישה אל הקישור הבא"
+
+#: app/views/View_RegistrationMail.php:20
+msgid "Unless you ask for it, you will never get any more emails from this site."
+msgstr ""
+
+#: app/views/View_RegistrationMail.php:21
+#, fuzzy
+msgid "Thanks"
+msgstr "תודה"
 
 #~ msgid "Join the carpool. It's fun!"
 #~ msgstr "הצטרפו למאגר. זה כיף!"
