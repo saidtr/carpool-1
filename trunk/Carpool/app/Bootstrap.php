@@ -27,7 +27,7 @@ if (ENV === ENV_DEVELOPMENT) {
 //   View classes (name starts with View) - look in app/views
 //   Standard classes - look in app/
 function __autoload($className) {
-	if (strncmp($className, 'View', 4) === 0) {
+	if (strncmp($className, 'View_', 5) === 0) {
 		require_once APP_PATH . '/views/' . $className . '.php';
 	} else {
     	require_once APP_PATH . '/' . $className . '.php';
