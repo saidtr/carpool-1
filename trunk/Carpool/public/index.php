@@ -73,13 +73,8 @@ $availableSrcCities = $db->getCities();
 		</form>
     	<div id="showInterest">
     		<span><a href="javascript:displayShowInterestDialog(false)"><?php echo _('Show interest')?></a></span>
-    		<!-- <span id="showInterestClose">[X]</span> -->
     		<form id="showInterestForm" method="post" action="xhr/ShowInterest.php">
     			<dl class="noFloat">
-        			<dd class="mandatory">
-            			<label><?php echo _('Name')?></label>
-            			<input type="text" name="name" id="name" />
-        			</dd>
         			<dd class="mandatory">
             			<label><?php echo _('Email')?></label>
             			<input type="text" name="email" id="email" />
@@ -303,7 +298,7 @@ $(document).ready(function() {
 	}; 
 
 	$('#showInterestForm').submit(function() {
-		showInterestFormOptions.data = { srcCityId : 1, destCityId : 1 };
+		showInterestFormOptions.data = { srcCityId : $('#srcCity').val(), destCityId : $('#destCity').val() };
 		$('#showInterestForm').ajaxSubmit(showInterestFormOptions);
 		return false;
 	});
