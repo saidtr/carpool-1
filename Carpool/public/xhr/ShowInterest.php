@@ -13,12 +13,6 @@ $valid = true;
 
 extract($_POST, EXTR_SKIP);
 
-// We need to know the contact name
-if (Utils::isEmptyString($name)) {
-    $valid = false;
-    $messages[] = _("The name is mandatory");
-}
-
 // Make sure that locations are set
 if ($destCityId == LOCATION_NOT_FOUND && $srcCityId == LOCATION_NOT_FOUND) {
     $valid = false;
@@ -43,7 +37,7 @@ if ($valid) {
             $contactId = $contact['Id'];
         } else {            
             // Register this contact
-            $contactId = $server->addContact($name, null, $email);
+            $contactId = $server->addContact(null, null, $email);
             if (!$contactId) {
             	throw new Exception("Could not insert contact $name");
             }
