@@ -156,13 +156,6 @@ form dl.noFloat dd {
 	width: 6em;
 }
 
-#showInterestClose {
-	float: right;
-	cursor: pointer;
-	font-size: x-small;
-	color: red;
-}
-
 #showInterestForm dl {
 	padding-top: 10px;	
 }
