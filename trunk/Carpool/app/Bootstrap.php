@@ -18,9 +18,23 @@ define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
 
 // Error reporting
 if (ENV === ENV_DEVELOPMENT) {
-	error_reporting(0); 
-} else {
 	error_reporting(E_ALL | E_STRICT); 
+	
+	// Active assert and make it quiet
+    assert_options(ASSERT_ACTIVE, 1);
+    assert_options(ASSERT_WARNING, 0);
+    assert_options(ASSERT_QUIET_EVAL, 1);
+    
+    // Assert handler - log the failure
+    function loggerAssertHandler($file, $line, $code) {
+        Logger::err("Assertion Failed in $file, line $line, code $code");
+    }
+    
+    // Set up the callback
+    assert_options(ASSERT_CALLBACK, 'loggerAssertHandler');
+    
+} else {
+	error_reporting(0); 
 }
 
 // Simple auto loading:
@@ -29,6 +43,8 @@ if (ENV === ENV_DEVELOPMENT) {
 function __autoload($className) {
 	if (strncmp($className, 'View_', 5) === 0) {
 		require_once APP_PATH . '/views/' . $className . '.php';
+	} elseif (strncmp($className, 'Service_', 8) === 0) {
+		require_once APP_PATH . '/services/' . $className . '.php';
 	} else {
     	require_once APP_PATH . '/' . $className . '.php';
 	}
