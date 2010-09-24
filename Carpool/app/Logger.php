@@ -44,7 +44,7 @@ class Logger {
 	}
 		
 	public static function logException(Exception $e) {
-		self::getInstance()->doLog(LOG_ERR, 'Error in ' . $e->getFile() . ' line ' . $e->getLine() . ': ' . $e->getMessage());
+		self::getInstance()->doLog(self::LOG_ERR, 'Error in ' . $e->getFile() . ' line ' . $e->getLine() . ': ' . $e->getMessage());
 	}
 	
 	public function doLog($level, $str) {
