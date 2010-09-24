@@ -27,6 +27,8 @@ class DatabaseHelper {
     	Logger::info('Connecting to DB: ' . $dsn);
     	try {
             $this->_db = new PDO($dsn);
+            // Use exceptions as error handling
+            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if (!$this->_db) {
                 Logger::log(Logger::LOG_ERR, 'DB Connection failed: ' . Utils::errorInfoToString($this->_db->errorCode()));    
             }
