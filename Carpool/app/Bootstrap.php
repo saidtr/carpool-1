@@ -16,7 +16,7 @@ define('SESSION_KEY_AUTH_USER', 'user');
 define('SESSION_KEY_RUNNING', 'running');
 define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
 
-// Error reporting
+// Error reporting and assertions
 if (ENV === ENV_DEVELOPMENT) {
 	error_reporting(E_ALL | E_STRICT); 
 	
@@ -27,7 +27,7 @@ if (ENV === ENV_DEVELOPMENT) {
     
     // Assert handler - log the failure
     function loggerAssertHandler($file, $line, $code) {
-        Logger::err("Assertion Failed in $file, line $line, code $code");
+        Logger::err("Assertion Failed in $file, line $line");
     }
     
     // Set up the callback
