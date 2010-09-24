@@ -90,8 +90,11 @@ if ($valid) {
         
         // Add or update ride
         if ($isUpdate) {
-            $server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo);
-            GlobalMessage::setGlobalMessage(_("Ride successfully updated."));
+            if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo)) {
+                GlobalMessage::setGlobalMessage(_("Ride successfully updated."));
+            } else {
+                throw new Exception("Could not update ride");
+            }
         } else {
             $rideId = $server->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo);
             if (!$rideId) {
