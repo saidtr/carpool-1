@@ -10,25 +10,34 @@ class Service_ShowInterest {
     	Logger::debug(__METHOD__ . "($rideId, " . json_encode($potentialRideIds) . ")");
     }
     
-    public static function run() {
+    public static function run($rideId = null) {
         Logger::info('ShowInterestNotifier: started');
         
         $db = DatabaseHelper::getInstance();
         
-        $lastRun = $db->getLastShowInterestNotifier();
-        
         $searchParams = array();
         $searchParams['status'] = STATUS_OFFERED;
         
-        if ($lastRun['LastRun']) {
-        	Logger::info('Last run was at ' . $lastRun['LastRun']);
-        	$searchParams['minTimeUpdated'] = $lastRun['LastRun'];
+        $lastRun = $db->getLastShowInterestNotifier();
+        if ($lastRun !== false && $lastRun > 0) {
+        	Logger::info('Last run was at ' . $lastRun);
+        	$searchParams['minTimeCreated'] = $lastRun;
         } else {
         	Logger::info('No last run found, we go from the start');
         }
         
-        $allRides = $db->searchRides($searchParams);
+        if ($rideId == null) {
+            $allRides = $db->searchRides($searchParams);
+        } else {
+            $allRides = $db->getRideById($rideId);
+        }
         
+        // List all rides and create an index.
+        // For each ride from X to Y, we create the following pointer:
+        // X to Y -> Ride ID
+        // In addition, to support wildcard searches, we add 2 more pointers:
+        // X to * -> Ride ID
+        // * to Y -> Ride ID 
         $rideIdx = array();
         foreach ($allRides as $ride) {
         	$index = self::buildIndexStr($ride['SrcCityId'], $ride['DestCityId']);
@@ -49,8 +58,9 @@ class Service_ShowInterest {
         	$fromIdx[$indexWildCardTo] []= $ride['Id'];
         	
         }
-        var_dump($fromIdx);
         
+        // Now, use the index we created before to find matching rides
+        // for all users who showed interest in a specific ride.
         $results = array();
         $toNotifyRides = $db->searchRides(array('status' => STATUS_LOOKING));
         foreach ($toNotifyRides as $ride) {
@@ -58,19 +68,16 @@ class Service_ShowInterest {
         	if (isset($fromIdx[$index])) {
         	    if (!isset($results[$ride['Id']])) {
         	        $results[$ride['Id']] = array();
-        	    } 
-        	    $results[$ride['Id']] []= $fromIdx[$index];
+        	    }
+        	    $results[$ride['Id']] = array_merge($results[$ride['Id']], $fromIdx[$index]);
         	} 
         }
         
-        var_dump($results);
-        
-        foreach ($results as $result) {
-            
+        foreach ($results as $rideId => $potentialResults) {
+            self::notify($rideId, $potentialResults);            
         }
         
-        // TODO: Handle contact who wants more than a single ride
-        // TODO: Update last run
+        $db->updateLastShowInterestNotifier(time());
         
         Logger::info('ShowInterestNotifier: done');
     }
