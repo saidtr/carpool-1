@@ -29,7 +29,7 @@ class Service_ShowInterest {
         if ($rideId == null) {
             $allRides = $db->searchRides($searchParams);
         } else {
-            $allRides = $db->getRideById($rideId);
+            $allRides = array(0 => $db->getRideById($rideId));
         }
         
         // List all rides and create an index.
