@@ -22,3 +22,8 @@ echo '<h1>Contacts</h1>';
 foreach ($res as $contact) {
     var_dump($contact);
 }
+
+echo '<h1>ShowInterestNotifier</h1>';
+$rs = $db->query('SELECT * FROM ShowInterestNotifier');
+$res = $rs->fetchAll(PDO::FETCH_ASSOC);
+var_dump($res);
