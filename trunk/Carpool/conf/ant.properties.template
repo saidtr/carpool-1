@@ -1,0 +1,2 @@
+# Full path for the SQLite JDBC jar
+sqlite.jdbc.path = 
