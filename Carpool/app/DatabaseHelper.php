@@ -50,7 +50,7 @@ class DatabaseHelper {
         
         return self::getInstance()->_db;
     }
-
+    
     function addCity($name) {
     	Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($name)");
     	try {
@@ -215,8 +215,9 @@ class DatabaseHelper {
             $stmt->bindParam(':contactId', $contactId);
             $stmt->bindParam(':comment', $comment);
             $stmt->bindParam(':status', $status);
-            $stmt->bindParam(':timeCreated', time());
-            $stmt->bindParam(':timeUpdated', time());
+            $curTime = time();
+            $stmt->bindParam(':timeCreated', $curTime);
+            $stmt->bindParam(':timeUpdated', $curTime);
             
             if ($stmt->execute()) {
                $inserted = $this->_db->lastInsertId();
@@ -318,8 +319,8 @@ class DatabaseHelper {
             if (isset($params['destCityId'])) {
                 $sql .= ' AND r.DestCityId = ' . $this->_db->quote($params['destCityId']);
             }
-            if (isset($params['minTimeUpdated'])) {
-            	$sql .= ' AND r.timeUpdated >= ' . $this->_db->quote($params['minTimeUpdated']);
+            if (isset($params['minTimeCreated'])) {
+            	$sql .= ' AND r.timeCreated >= ' . $this->_db->quote($params['minTimeCreated']);
             }
         } 
         // Order - show newer first
@@ -354,6 +355,34 @@ class DatabaseHelper {
         try {
             $stmt = $this->_db->prepare($sql);
             $stmt->bindParam(':contactId', $contactId);
+            
+        	if ($stmt->execute()) {
+                return $stmt->fetch(PDO::FETCH_ASSOC);
+            } else {
+                // Ride not found - return false
+                return false;
+            }        
+        } catch (PDOException $e) {
+            Logger::logException($e);
+            return false;
+        }    
+    }
+    
+    /**
+     * 
+     * Return ride information identified by id
+     * 
+     * @param $rideId int Ride id
+     * @return array Ride details
+     */
+    function getRideById($rideId) {
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation  
+                FROM ride r 
+                WHERE r.Id = :id';        
+        Logger::debug(__METHOD__ . "($rideId)");
+        try {
+            $stmt = $this->_db->prepare($sql);
+            $stmt->bindParam(':rideId', $id);
             
         	if ($stmt->execute()) {
                 return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -427,12 +456,26 @@ class DatabaseHelper {
          Logger::debug(__METHOD__ . "()");
          try {
          	$rs = $this->_db->query('SELECT LastRun FROM ShowInterestNotifier');
-			
-            if ($rs) {
-        		$res = $rs->fetch(PDO::FETCH_ASSOC);        		 
-        	} else {
-        		$res = false;
-        	}
+            $res = $rs->fetch(PDO::FETCH_ASSOC);
+            if ($res) {
+                return $res['LastRun'];
+            } else {
+                return false;
+            }        		 
+        } catch (PDOException $e) {
+            Logger::logException($e);
+            return false;
+        }    	   	
+    }
+    
+    function updateLastShowInterestNotifier($time) {
+         Logger::debug(__METHOD__ . "($time)");
+         assert(is_integer($time) === true && $time > 0);
+         try {
+            $stmt = $this->_db->query('UPDATE ShowInterestNotifier SET LastRun=:time');
+			$stmt->bindParam(':time', $time);
+			$stmt->execute();
+			return true;
         } catch (PDOException $e) {
             Logger::logException($e);
             return false;
