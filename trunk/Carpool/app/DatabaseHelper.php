@@ -376,13 +376,13 @@ class DatabaseHelper {
      * @return array Ride details
      */
     function getRideById($rideId) {
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation  
-                FROM ride r 
-                WHERE r.Id = :id';        
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone 
+        		FROM ride r, contacts co 
+        		WHERE co.Id = r.ContactId AND r.Id = :rideId';        
         Logger::debug(__METHOD__ . "($rideId)");
         try {
             $stmt = $this->_db->prepare($sql);
-            $stmt->bindParam(':rideId', $id);
+            $stmt->bindParam(':rideId', $rideId);
             
         	if ($stmt->execute()) {
                 return $stmt->fetch(PDO::FETCH_ASSOC);
