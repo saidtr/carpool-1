@@ -5,7 +5,12 @@ include APP_PATH . '/Bootstrap.php';
 
 Logger::info('Show interest job started');
 
-Service_ShowInterest::run();
+$rideId = null;
+if (isset($_GET['rideId'])) {
+    $rideId = (int) $_GET['rideId'];
+} 
+
+Service_ShowInterest::run($rideId);
 
 Logger::info('Show interest job terminated');
 
