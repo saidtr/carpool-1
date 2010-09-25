@@ -102,6 +102,11 @@ if ($valid) {
             }
             $mailBody = View_RegistrationMail::render($server->getContactById($contactId));
             Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);
+            
+            if (getConfiguration('notify.immediate') == 1) {
+                Service_ShowInterest::run($rideId);
+            }
+            
         }
         
         echo json_encode(array('status' => 'ok', 'action' => $action));

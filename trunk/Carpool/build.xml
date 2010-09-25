@@ -115,6 +115,7 @@
 	</target>
 	
 	<target name="clean.db" depends="ftp.read.pass, dist.init">
+		<!-- Overwrites the database on the remote site -->
 		<input message="All data is going to be deleted from DB. continue (yes/no)?"
 			validargs="yes,no" addproperty="do.clean.db" />
 		<condition property="do.abort">

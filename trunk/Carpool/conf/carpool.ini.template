@@ -5,5 +5,10 @@ domain             =
 default.locale     = en
 mail.addr          = 
 mail.display       = Carpool Support
+; Log level: 0 - very verbose, 4 - no logging. Recommend for production: 3
+log.level          = 0
 
 [database]
+
+[settings]
+notify.immediate   = 1

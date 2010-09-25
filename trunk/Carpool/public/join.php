@@ -15,9 +15,13 @@ $isActive = true;
 if ($contact) {
 	extract($contact, EXTR_PREFIX_ALL, 'contact');
 	$rideData = $db->getRideByContactId($contact_Id);
-	extract($rideData, EXTR_PREFIX_ALL, 'ride');
-	$isLogged = true;
-	$isActive = ($ride_Status == STATUS_OFFERED);
+	
+	// Assume that we don't have logged-in contacts without a ride
+	assert($rideData !== false); 
+	
+    extract($rideData, EXTR_PREFIX_ALL, 'ride');
+    $isLogged = true;
+    $isActive = ($ride_Status == STATUS_OFFERED);
 }
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">

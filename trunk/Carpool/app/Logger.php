@@ -57,8 +57,11 @@ class Logger {
 	}
 	
 	public function __construct() {
-		$this->_writer = fopen(BASE_PATH . '/Carpool.log', 'a');
-		$this->_logLevel = self::LOG_DEBUG;
+	    $this->_logLevel = getConfiguration('log.level');
+	    if ($this->_logLevel < self::LOG_NONE) {
+		    $this->_writer = fopen(BASE_PATH . '/Carpool.log', 'a');
+	    }
+		
 	}
 	
 	public function __destruct() {
