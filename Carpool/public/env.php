@@ -18,3 +18,5 @@ define('APP_PATH', BASE_PATH . '/app');
 define('CONF_PATH', BASE_PATH . '/conf');
 define('DATA_PATH', BASE_PATH . '/data');
 define('LOCALE_PATH', BASE_PATH . '/lang');
+
+ini_set('date.timezone', 'Asia/Jerusalem');
