@@ -63,7 +63,6 @@ $GLOBALS['conf'] = $globalConf;
 function getConfiguration($key) {
 	$globalConf = $GLOBALS['conf'];
 	if (!isset($globalConf) || !isset($globalConf[$key])) {
-		Logger::err(__METHOD__ . ": Configuration not set or configuration is not available for $key");
 		return false;
 	}
 	return $globalConf[$key];
