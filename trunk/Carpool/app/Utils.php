@@ -25,7 +25,13 @@ class Utils {
     }
     
     static function FormatTime($hour) {
-        return sprintf("%02d:00", $hour);
+    	if ($hour > 0) {
+        	return sprintf("%02d:00", $hour);
+    	} elseif ($hour == TIME_DIFFERS) {
+    		return _("Differs");
+    	} else {
+    		return _("N/A");
+    	}
     }
     
     static function getRunningScript() {
