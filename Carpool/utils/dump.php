@@ -1,4 +1,10 @@
-<?php 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Dump</title>
+</head>
+<body><?php 
 
 // Just dump the contents of the ride and the contact tables
 
@@ -27,3 +33,5 @@ echo '<h1>ShowInterestNotifier</h1>';
 $rs = $db->query('SELECT * FROM ShowInterestNotifier');
 $res = $rs->fetchAll(PDO::FETCH_ASSOC);
 var_dump($res);
+
+?></body></html>
