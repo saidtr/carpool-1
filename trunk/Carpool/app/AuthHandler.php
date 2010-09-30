@@ -76,7 +76,9 @@ class AuthHandler {
     
     public static function logout() {
         Logger::debug(__METHOD__);
-        unset($_SESSION[SESSION_KEY_AUTH_USER]);
+        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
+            unset($_SESSION[SESSION_KEY_AUTH_USER]);
+        }
     }
 
 }

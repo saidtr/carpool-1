@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * The bootstrap class handles all basic initializations
+ * and auto-loading of classes.
+ * 
+ * This class should usually included in the beginning of
+ * each public script or a job 
+ * 
+ * @author itay
+ * 
+ */
+
 // Constants that do not need to be customized
 define('STATUS_DONT_CARE', 0);
 define('STATUS_LOOKING', 1);
@@ -34,7 +45,8 @@ if (ENV === ENV_DEVELOPMENT) {
     assert_options(ASSERT_CALLBACK, 'loggerAssertHandler');
     
 } else {
-	error_reporting(0); 
+	error_reporting(0);
+	assert_options(ASSERT_ACTIVE, 0); 
 }
 
 // Simple auto loading:
@@ -51,10 +63,9 @@ function __autoload($className) {
 }
 
 // Global configuration
-$globalConf = parse_ini_file(CONF_PATH . '/carpool.ini', false);
+$globalConf = parse_ini_file(CONF_PATH . '/' . CONF_FILE, false);
 if (!$globalConf) {
 	// We can't really do anything without that
-	Logger::err('Init: Could not parse configuration file: ' . CONF_PATH . '/carpool.ini');
 	die('Could not parse configuration file. Aborting.');
 }
 

@@ -14,7 +14,7 @@ $isActive = true;
 
 if ($contact) {
 	extract($contact, EXTR_PREFIX_ALL, 'contact');
-	$rideData = $db->getRideByContactId($contact_Id);
+	$rideData = $db->getRideProvidedByContactId($contact_Id);
 	
 	// Assume that we don't have logged-in contacts without a ride
 	assert($rideData !== false); 

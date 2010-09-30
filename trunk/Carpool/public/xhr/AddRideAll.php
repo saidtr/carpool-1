@@ -30,14 +30,13 @@ if ($srcCityId == LOCATION_NOT_FOUND && Utils::isEmptyString($srcCity)) {
     $messages[] = _("Please specify a source city");    
 }
 
-// At least one contact field is there
-if (empty($phone) && empty($email)) {
+// Email is mandatory
+if (empty($email)) {
     $valid = false;
-    $messages[] = _("Please specify at least one way to contact");
+    $messages[] = _("Please specify a valid email address");
 }
 
 if (empty($phone)) $phone = null;
-if (empty($email)) $email = null;
 
 $isUpdate = AuthHandler::isLoggedIn();
 
@@ -51,13 +50,12 @@ if ($valid) {
     
         if ($isUpdate) {
             $contactId = AuthHandler::getLoggedInUserId();
-            $ride = $server->getRideByContactId($contactId);   
+            $ride = $server->getRideProvidedByContactId($contactId);   
             $rideId = $ride['Id'];
         } else {
             $contactId = false;
             $rideId = false;
         }
-    
         
         // Add destination and source city in case we don't have them in the DB
         // Assumes we already verified that the names are not empty
@@ -100,7 +98,7 @@ if ($valid) {
             if (!$rideId) {
             	throw new Exception("Could not add ride");
             }
-            $mailBody = View_RegistrationMail::render($server->getContactById($contactId));
+            $mailBody = ViewRenderer::renderToString(VIEWS_PATH . '/registrationMail.php', array('contact' => $server->getContactById($contactId))); 
             Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);
             
             if (getConfiguration('notify.immediate') == 1) {

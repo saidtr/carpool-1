@@ -1,12 +1,4 @@
-<?php 
-
-$cities = DatabaseHelper::getInstance()->getCities();
-$citiesMapper = array();
-foreach ($cities as $city) {
-	$citiesMapper[$city['Id']] = $city['Name'];
-}
-
-?><html>
+<html>
 <head>
 <title></title>
 <style type="text/css">
@@ -50,8 +42,8 @@ $i = 0;
 foreach ($this->rides as $ride): 
 ?>
 	<tr class="<?php echo (++$i % 2 == 1) ? 'odd' : 'even'?>">
-		<td><?php echo $citiesMapper[$ride['SrcCityId']] . (Utils::isEmptyString($ride['SrcLocation']) ? '' : ', ' . $ride['SrcLocation'])?></td>
-		<td><?php echo $citiesMapper[$ride['DestCityId']] . (Utils::isEmptyString($ride['DestLocation']) ? '' : ', ' . $ride['DestLocation'])?></td>
+		<td><?php echo $ride['SrcCity'] . (Utils::isEmptyString($ride['SrcLocation']) ? '' : ', ' . $ride['SrcLocation'])?></td>
+		<td><?php echo $ride['DestCity'] . (Utils::isEmptyString($ride['DestLocation']) ? '' : ', ' . $ride['DestLocation'])?></td>
 		<td><?php echo Utils::FormatTime($ride['TimeMorning'])?></td>
 		<td><?php echo Utils::FormatTime($ride['TimeEvening'])?></td>
 		<td><?php echo $ride['Name']?></td>

@@ -17,36 +17,12 @@ if (!$contactId) {
 }
 
 try {
-
-    $server = DatabaseHelper::getInstance();
-
-    $ride = $server->getRideByContactId($contactId);
-    if (!$ride) {
-        throw new Exception("No ride found for contact $contactId");
-    }
-    $rideId = $ride['Id'];
-
-    if (!$server->deleteContact($contactId)) {
-        throw new Exception("Could not delete contact $contactId");
-    }
     
-    if (!$server->deleteRide($rideId)) {
-        throw new Exception("Could not delete ride $rideId");
-    }
-    
-    AuthHandler::logout();
-    
+    Service_DeleteUser::run($contactId);
     GlobalMessage::setGlobalMessage(_("Ride deleted. Happy now?"));
 
     echo json_encode(array('status' => 'ok', 'action' => $action));
-} catch (PDOException $e) {
-    Logger::logException($e);
-    echo json_encode(array('status' => 'err', 'action' => $action));
 } catch (Exception $e) {
     Logger::logException($e);
-    if (ENV == ENV_DEVELOPMENT) {
-        echo json_encode(array('status' => 'err', 'action' => $action, 'msg' => $e->getMessage()));
-    } else {
-        echo json_encode(array('status' => 'err', 'action' => $action));
-    }
+    echo json_encode(array('status' => 'err', 'action' => $action));
 }

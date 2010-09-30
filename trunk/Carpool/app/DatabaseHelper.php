@@ -51,6 +51,21 @@ class DatabaseHelper {
         return self::getInstance()->_db;
     }
     
+    public function beginTransaction() {
+        Logger::debug(__METHOD__);
+        return $this->_db->beginTransaction();
+    }
+    
+    public function rollBack() {
+        Logger::debug(__METHOD__);
+        return $this->_db->rollBack();
+    }
+    
+    public function commit() {
+        Logger::debug(__METHOD__);
+        return $this->_db->commit();
+    }
+    
     function addCity($name) {
     	Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($name)");
     	try {
@@ -282,6 +297,24 @@ class DatabaseHelper {
         }
     }
     
+   function deleteRideByContact($contactId) {
+        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($contactId)");
+        try {
+            $stmt = $this->_db->prepare('DELETE FROM Ride WHERE ContactId=:contactId');
+            $stmt->bindParam(':contactId', $contactId);
+            if ($stmt->execute()) {
+                Logger::log(Logger::LOG_INFO, "Rides for $contactId successfully deleted");
+                return true;
+            } else {
+                Logger::log(Logger::LOG_ERR, "Rides for $contactId could not be deleted: " . Utils::errorInfoToString($stmt->errorInfo()));
+                return false;
+            }
+        } catch (PDOException $e) {
+            Logger::logException($e);
+            return false;
+        }
+    }
+    
     function updateRideStatus($rideId, $status) {
         Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($rideId, $status)");
         try {
@@ -291,7 +324,8 @@ class DatabaseHelper {
             $stmt = $this->_db->prepare('UPDATE Ride SET status=:status, timeUpdated=:timeUpdated WHERE id=:rideId');
             $stmt->bindParam(':rideId', $rideId);
             $stmt->bindParam(':status', $status);
-            $stmt->bindParam(':timeUpdated', time());
+            $curTime = time();
+            $stmt->bindParam(':timeUpdated', $curTime);
             if ($stmt->execute()) {
                 Logger::log(Logger::LOG_INFO, "Status of ride $rideId successfully set to $status");
                 return true;
@@ -305,10 +339,16 @@ class DatabaseHelper {
         }
     }
     
+    /**
+     * Search all available rides, possibly with various parameters
+     * 
+     * @param $params array Array that holds various parameters in key-value format
+     * @return mixed Array with the search results, or false in case of failures
+     */
     function searchRides($params = null) {
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone 
-        		FROM ride r, contacts co 
-        		WHERE co.Id = r.ContactId';
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone ' .         		
+				'FROM ride r, contacts co ' .         		
+				'WHERE co.Id = r.ContactId'; 
         if (!empty($params)) {
             if (isset($params['status'])) {
                 $sql .= ' AND r.Status = ' . $this->_db->quote($params['status']);
@@ -329,7 +369,24 @@ class DatabaseHelper {
         try {
             $rs = $this->_db->query($sql);
             if ($rs) {
-                return $rs->fetchAll(PDO::FETCH_ASSOC);
+            	$res = $rs->fetchAll(PDO::FETCH_ASSOC);
+            	
+            	// Now, take care of the cities
+            	$cities = $this->getCities();
+            	$citiesMapper = array();
+            	foreach ($cities as $city) {
+            		$citiesMapper[$city['Id']] = $city['Name'];
+            	}
+            	$citiesMapper[LOCATION_NOT_FOUND] = _('N/A');
+            	$citiesMapper[LOCATION_DONT_CARE] = _('Everywhere');
+
+            	// Apply translations
+            	foreach ($res as &$record) {
+            		$record['SrcCity'] = _($citiesMapper[$record['SrcCityId']]);
+        			$record['DestCity'] = _($citiesMapper[$record['DestCityId']]);
+        		}
+        		
+        		return $res;
             } else {
                 return array();
             }
@@ -342,16 +399,19 @@ class DatabaseHelper {
     
     /**
      * 
-     * Return ride information for a given contact
+     * Return provided ride information for a given contact.
+     * This function return a single result. It is assumed that
+     * no more a single ride can be provided by each contact
      * 
      * @param $contactId int Contact id
-     * @return array Ride details
+     * @return array Ride details (a single result)
+     * 
      */
-    function getRideByContactId($contactId) {
+    function getRideProvidedByContactId($contactId) {
+        Logger::debug(__METHOD__ . "($contactId)");
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation  
                 FROM ride r 
-                WHERE r.ContactId = :contactId';        
-        Logger::debug(__METHOD__ . "($contactId)");
+                WHERE r.Status IN (' . STATUS_OFFERED . ', ' . STATUS_OFFERED_HIDE . ') AND r.ContactId = :contactId LIMIT 1';        
         try {
             $stmt = $this->_db->prepare($sql);
             $stmt->bindParam(':contactId', $contactId);
@@ -374,6 +434,7 @@ class DatabaseHelper {
      * 
      * @param $rideId int Ride id
      * @return array Ride details
+     * 
      */
     function getRideById($rideId) {
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone 
