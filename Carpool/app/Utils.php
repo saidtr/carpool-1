@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Various utility functions
+ */
 class Utils {
     
     const MAIL_EOL = "\r\n";

@@ -129,7 +129,6 @@ echo View_Php_To_Js::render();
 <script type="text/javascript" src="js/filter.js"></script>
 <script type="text/javascript">
 
-var citiesMapper = null;
 var searchResults = null;
 
 function cell(str, escape) {
@@ -204,8 +203,8 @@ function buildSearchResults(/* JSON */ data) {
 		for (var res in data) {
 			var ride = data[res];
 			var elemStr = '<tr>';
-			elemStr += cell(citiesMapper[ride.SrcCityId] + (ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
-			elemStr += cell(citiesMapper[ride.DestCityId] + (ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
+			elemStr += cell(ride.SrcCity + (ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
+			elemStr += cell(ride.DestCity + (ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
 			elemStr += cell(formatTime(ride.TimeMorning));
 			elemStr += cell(formatTime(ride.TimeEvening));
 			elemStr += cell(ride.Name);
@@ -247,12 +246,6 @@ function positionShowInterest() {
 }
 
 $(document).ready(function() {
-
-	// Populate city list
-	citiesMapper = [];
-	for (city in cities) {
-		citiesMapper[cities[city].Id] = cities[city].Name;
-	}
 	
 	$("#searchForm").unbind('submit');
 

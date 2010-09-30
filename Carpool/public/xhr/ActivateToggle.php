@@ -18,7 +18,7 @@ try {
 
     $server = DatabaseHelper::getInstance();
 
-    $ride = $server->getRideByContactId($contactId);
+    $ride = $server->getRideProvidedByContactId($contactId);
     if (!$ride) {
         throw new Exception("No ride found for contact $contactId");
     }
@@ -39,15 +39,15 @@ try {
     
     GlobalMessage::setGlobalMessage($msg);
     
-    echo json_encode(array('status' => 'ok', 'action' => $action));
+    echo json_encode(array('status' => 'ok'));
 } catch (PDOException $e) {
     Logger::logException($e);
-    echo json_encode(array('status' => 'err', 'action' => $action));
+    echo json_encode(array('status' => 'err'));
 } catch (Exception $e) {
     Logger::logException($e);
     if (ENV == ENV_DEVELOPMENT) {
-        echo json_encode(array('status' => 'err', 'action' => $action, 'msg' => $e->getMessage()));
+        echo json_encode(array('status' => 'err', 'msg' => $e->getMessage()));
     } else {
-        echo json_encode(array('status' => 'err', 'action' => $action));
+        echo json_encode(array('status' => 'err'));
     }
 }

@@ -44,25 +44,26 @@ if ($valid) {
         }
         
         // Add the ride       
-        $rideId = $server->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo);
+        $rideId = $server->addRide($srcCityId, null, $destCityId, null, null, null, $contactId, null, $wantTo);
         if (!$rideId) {
         	throw new Exception("Could not add ride");
         }
+        
         //$mailBody = View_RegistrationMail::render($server->getContactById($contactId));
         //Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);
     
-        echo json_encode(array('status' => 'ok', 'action' => $action));
+        echo json_encode(array('status' => 'ok'));
     } catch (PDOException $e) {
         Logger::logException($e);
-        echo json_encode(array('status' => 'err', 'action' => $action));
+        echo json_encode(array('status' => 'err'));
     } catch (Exception $e) {
         Logger::logException($e);
         if (ENV == ENV_DEVELOPMENT) {
-        	echo json_encode(array('status' => 'err', 'action' => $action, 'msg' => $e->getMessage()));
+        	echo json_encode(array('status' => 'err', 'msg' => $e->getMessage()));
         } else {
-        	echo json_encode(array('status' => 'err', 'action' => $action));
+        	echo json_encode(array('status' => 'err'));
         } 
     }
 } else {
-    echo json_encode(array('status' => 'invalid', 'action' => $action, 'messages' => $messages));
+    echo json_encode(array('status' => 'invalid', 'messages' => $messages));
 }
