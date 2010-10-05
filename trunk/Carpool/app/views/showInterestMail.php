@@ -1,4 +1,8 @@
-<html>
+<?php 
+
+$optoutUrl = Utils::buildLocalUrl('optout.php', array('c' => $this->contact['Id'], 'i' => $this->contact['Identifier']));
+ 
+?><html>
 <head>
 <title></title>
 <style type="text/css">
@@ -53,5 +57,8 @@ foreach ($this->rides as $ride):
 	</tr>
 <?php endforeach; ?>
 </table>
+<div style="font-size: small">
+<?php printf (_('This is an automatic mail from %s. Click <a href="%s">here</a> if you do not want to get any more notifications from the site'), 'Carpool')?>
+</div>
 </body>
 </html>
