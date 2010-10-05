@@ -44,20 +44,21 @@ class AuthHandler {
 
     public static function authByVerification($contactId, $identifier) {
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
-            return DatabaseHelper::getInstance()->getContactById($contactId);
+            // In case we already have a logged-in user, we'll first log-out
+            self::logout();
+        }
+        
+        $contact = DatabaseHelper::getInstance()->getContactByIdentifier($contactId, $identifier);
+        if ($contact) {
+            $_SESSION[SESSION_KEY_AUTH_USER] = $contact['Id'];
+            Logger::info('Contact ' . $contact['Id'] . ' successfully authenticated');
+            return $contact;
         } else {
-            $contact = DatabaseHelper::getInstance()->getContactByIdentifier($contactId, $identifier);
-            if ($contact) {
-                $_SESSION[SESSION_KEY_AUTH_USER] = $contact['Id'];
-                Logger::info('Contact ' . $contact['Id'] . ' successfully authenticated');
-                return $contact;
-            } else {
-                Logger::warn('Authentication failed for contact "' . $email . '" and token "' . $identifier . '"');
-                return false;
-            }
+            Logger::warn('Authentication failed for contact "' . $email . '" and token "' . $identifier . '"');
+            return false;
         }
     }
-    
+
     public static function authByContactId($contactId) {
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
             return DatabaseHelper::getInstance()->getContactById($contactId);
