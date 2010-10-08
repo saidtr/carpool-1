@@ -23,7 +23,8 @@ if (isset($_GET['rideId'])) {
     $rideId = (int) $_GET['rideId'];
 } 
 
-info('Show interest job started' . ($rideId !== null) ? ' - only check ride ' . $rideId : ' - checking all rides');
+info('Show interest job started' . (($rideId !== null) ? ' - only check ride ' . $rideId : ' - checking all rides'));
+
 
 Service_ShowInterest::run($rideId);
 
