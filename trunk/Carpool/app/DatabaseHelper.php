@@ -346,7 +346,7 @@ class DatabaseHelper {
      * @return mixed Array with the search results, or false in case of failures
      */
     function searchRides($params = null) {
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone ' .         		
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.ContactId, co.Name, co.Email, co.Phone ' .         		
 				'FROM ride r, contacts co ' .         		
 				'WHERE co.Id = r.ContactId'; 
         if (!empty($params)) {
