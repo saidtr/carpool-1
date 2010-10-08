@@ -12,7 +12,7 @@ class AuthHandler {
     
     public static function init() {
         if (!session_start()) {
-            Logger::warn("Could not initialize session");
+            warn("Could not initialize session");
         }
     }
     
@@ -51,10 +51,10 @@ class AuthHandler {
         $contact = DatabaseHelper::getInstance()->getContactByIdentifier($contactId, $identifier);
         if ($contact) {
             $_SESSION[SESSION_KEY_AUTH_USER] = $contact['Id'];
-            Logger::info('Contact ' . $contact['Id'] . ' successfully authenticated');
+            info('Contact ' . $contact['Id'] . ' successfully authenticated');
             return $contact;
         } else {
-            Logger::warn('Authentication failed for contact "' . $email . '" and token "' . $identifier . '"');
+            warn('Authentication failed for contact "' . $email . '" and token "' . $identifier . '"');
             return false;
         }
     }
@@ -66,17 +66,17 @@ class AuthHandler {
             $contact = DatabaseHelper::getInstance()->getContactById($contactId);
             if ($contact) {
                 $_SESSION[SESSION_KEY_AUTH_USER] = $contactId;
-                Logger::info('Contact ' . $contactId . ' automatically authenticated');
+                info('Contact ' . $contactId . ' automatically authenticated');
                 return $contact;
             } else {
-                Logger::warn('Contact "' . $contactId . '" was not found in the database');
+                warn('Contact "' . $contactId . '" was not found in the database');
                 return false;
             }
         }
     }
     
     public static function logout() {
-        Logger::debug(__METHOD__);
+        debug(__METHOD__);
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
             unset($_SESSION[SESSION_KEY_AUTH_USER]);
         }
