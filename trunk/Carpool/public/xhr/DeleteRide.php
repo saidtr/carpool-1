@@ -12,7 +12,7 @@ $action = 'deleted';
 $contactId = AuthHandler::getLoggedInUserId();
 
 if (!$contactId) {
-    Logger::warn("Delete command sent while no user is logged in");
+    warn("Delete command sent while no user is logged in");
     die();
 }
 
@@ -23,6 +23,6 @@ try {
 
     echo json_encode(array('status' => 'ok', 'action' => $action));
 } catch (Exception $e) {
-    Logger::logException($e);
+    logException($e);
     echo json_encode(array('status' => 'err', 'action' => $action));
 }

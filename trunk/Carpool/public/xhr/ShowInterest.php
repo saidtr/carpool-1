@@ -33,7 +33,7 @@ if ($valid) {
         $contact = $server->getContactByEmail($email);
         
         if ($contact) {
-            Logger::debug("$email is already registered");
+            debug("$email is already registered");
             $contactId = $contact['Id'];
         } else {            
             // Register this contact
@@ -54,10 +54,10 @@ if ($valid) {
     
         echo json_encode(array('status' => 'ok'));
     } catch (PDOException $e) {
-        Logger::logException($e);
+        logException($e);
         echo json_encode(array('status' => 'err'));
     } catch (Exception $e) {
-        Logger::logException($e);
+        logException($e);
         if (ENV == ENV_DEVELOPMENT) {
         	echo json_encode(array('status' => 'err', 'msg' => $e->getMessage()));
         } else {

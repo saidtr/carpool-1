@@ -17,10 +17,10 @@ if ($action === 'login') {
 	}
 } else if ($action === 'logout') {
 	if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
-		Logger::info('Contact ' . $_SESSION[SESSION_KEY_AUTH_USER] . ' logged out');
+		info('Contact ' . $_SESSION[SESSION_KEY_AUTH_USER] . ' logged out');
 		GlobalMessage::setGlobalMessage(_('Goodbye!'));
 	} else {
-		Logger::warn('User tried to logout without being logged in');
+		warn('User tried to logout without being logged in');
 	}
 	AuthHandler::logout();
 }

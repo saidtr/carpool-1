@@ -52,7 +52,7 @@ class ViewRenderer {
 	 * @param array $params Array with parameters to pass
 	 */
 	public static function render($path, $params = null) {
-		Logger::debug(__METHOD__ . "($path, $params)");
+		debug(__METHOD__ . "($path, $params)");
 		$view = new ViewRenderer($path);
 		if ($params)
 			$view->assign($params);
@@ -68,7 +68,7 @@ class ViewRenderer {
 	 * @return string String containing the result
 	 */
 	public static function renderToString($path, $params = null) {
-		Logger::debug(__METHOD__ . "($path, $params)");
+		debug(__METHOD__ . "($path, $params)");
 		$view = new ViewRenderer($path);
 		if ($params)
 			$view->assign($params);

@@ -7,11 +7,11 @@ class Service_ShowInterest {
     }
     
     private static function notify($rideId, $potentialRideIds) {
-    	Logger::debug(__METHOD__ . "($rideId, " . json_encode($potentialRideIds) . ")");
+    	debug(__METHOD__ . "($rideId, " . json_encode($potentialRideIds) . ")");
     }
     
     public static function run($rideId = null) {
-        Logger::info('ShowInterestNotifier: started');
+        info('ShowInterestNotifier: started');
         
         $db = DatabaseHelper::getInstance();
         
@@ -20,10 +20,10 @@ class Service_ShowInterest {
         
         $lastRun = $db->getLastShowInterestNotifier();
         if ($lastRun !== false && $lastRun > 0) {
-        	Logger::info('Last run was at ' . $lastRun);
+        	info('Last run was at ' . $lastRun);
         	$searchParams['minTimeCreated'] = $lastRun;
         } else {
-        	Logger::info('No last run found, we go from the start');
+        	info('No last run found, we go from the start');
         }
         
         if ($rideId == null) {
@@ -79,7 +79,7 @@ class Service_ShowInterest {
         
         $db->updateLastShowInterestNotifier(time());
         
-        Logger::info('ShowInterestNotifier: done');
+        info('ShowInterestNotifier: done');
     }
 
 }

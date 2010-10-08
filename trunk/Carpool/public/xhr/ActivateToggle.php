@@ -10,7 +10,7 @@ if (ENV !== ENV_DEVELOPMENT && (!Utils::IsXhrRequest() || !AuthHandler::isSessio
 $contactId = AuthHandler::getLoggedInUserId();
 
 if (!$contactId) {
-    Logger::warn("Toggle activate command sent while no user is logged in");
+    warn("Toggle activate command sent while no user is logged in");
     die();
 }
 
@@ -41,10 +41,10 @@ try {
     
     echo json_encode(array('status' => 'ok'));
 } catch (PDOException $e) {
-    Logger::logException($e);
+    logException($e);
     echo json_encode(array('status' => 'err'));
 } catch (Exception $e) {
-    Logger::logException($e);
+    logException($e);
     if (ENV == ENV_DEVELOPMENT) {
         echo json_encode(array('status' => 'err', 'msg' => $e->getMessage()));
     } else {

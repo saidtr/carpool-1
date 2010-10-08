@@ -4,7 +4,7 @@ include "env.php";
 include APP_PATH . "/Bootstrap.php";
 
 if (!AuthHandler::isLoggedIn()) {
-    Logger::warn("Thank you page requested by user that is not logged in");
+    warn("Thank you page requested by user that is not logged in");
     Utils::redirect('index.php');
 }
 
