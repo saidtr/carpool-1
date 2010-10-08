@@ -2,13 +2,9 @@
 
 $authUrl = Utils::buildLocalUrl('auth.php', array('c' => $this->contact['Id'], 'i' => $this->contact['Identifier']));
  
-?><html>
-<head><title></title></head>
-<style>
-h1 { font-size: xx-large; }
-#content p { font-size: large } 
+?><style>
+#content p { font-size: large }
 </style>
-<body>
 <h1><?php printf(_('Thanks, %s'), htmlspecialchars($this->contact['Name'])) ?>!</h1>
 <div id="content">
 <p><?php echo _('You sucssfully joined the carpool.') ?></p>
@@ -16,5 +12,3 @@ h1 { font-size: xx-large; }
 <p><?php echo _('Unless you ask for it, you will never get any more emails from this site.') ?></p>
 <p><?php echo _('Thanks') ?>,<br/><?php printf('The %s team', _(getConfiguration('app.name'))) ?></p>
 </div>
-</body>
-</html>
