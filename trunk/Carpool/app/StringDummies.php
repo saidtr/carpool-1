@@ -107,4 +107,6 @@ _('An error occured.');
 _('Could not add ride');
 _('Could not update ride');
 _('Sorry, something went wrong.');
+_('Sorry, no results found.');
 _('Congrats! You broke everything!');
+_('Thanks for your interest! You will notified about new rides.');

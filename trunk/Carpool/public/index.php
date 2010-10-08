@@ -105,20 +105,19 @@ $availableSrcCities = $db->getCities();
 </div>
 </div>
 <?php 
-View_Php_To_Js::putTranslations(array(
-	'Sorry, something went wrong. Request could not be completed.',
-	'Loading...'
-));
 View_Php_To_Js::putVariable('cities', $db->getCities());
 View_Php_To_Js::putConstant('DEFAULT_DOMAIN', getConfiguration('default.domain'));
 View_Php_To_Js::putConstant('APP_NAME', _(getConfiguration('app.name')));
 View_Php_To_Js::putTranslations(
     array(
     	'Sorry, no results found.', 
-    	'Show interest in this ride',
     	'Sorry, something went wrong. Request could not be completed.',
         'N/A',
-        'Differs'
+        'Differs',
+        'Show interest',
+        'Loading...',
+        'Could not add ride',
+        'Thanks for showing interest! You will notified about new rides.'
     )
 );
 echo View_Php_To_Js::render();
@@ -270,7 +269,7 @@ $(document).ready(function() {
 			action = xhr.action;
 			
 			if (status === 'ok') {
-				showMessage(_('Thanks for your interest! You will notified about new rides.'));
+				showMessage(_('Thanks for showing interest! You will notified about new rides.'));
 				displayShowInterestDialog(false);
 			} else if (status === 'invalid') {
 				var str = '';
