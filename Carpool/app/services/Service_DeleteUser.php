@@ -20,7 +20,7 @@ class Service_DeleteUser {
             $db->commit();
             AuthHandler::logout();
         } catch (Exception $e) {
-            Logger::logException($e);
+            logException($e);
             $db->rollBack();
             throw $e;
         }

@@ -109,10 +109,10 @@ if ($valid) {
         
         echo json_encode(array('status' => 'ok', 'action' => $action));
     } catch (PDOException $e) {
-        Logger::logException($e);
+        logException($e);
         echo json_encode(array('status' => 'err', 'action' => $action));
     } catch (Exception $e) {
-        Logger::logException($e);
+        logException($e);
         if (ENV == ENV_DEVELOPMENT) {
         	echo json_encode(array('status' => 'err', 'action' => $action, 'msg' => $e->getMessage()));
         } else {

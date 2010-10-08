@@ -55,7 +55,7 @@ class Utils {
     
     public static function sendMail($to, $toName, $from, $fromName, $subject, $body, $replyTo = null, $replyToName = null) {
 	    
-	    Logger::info("Send mail to $to as $toName, from $from as $fromName, subject is $subject");
+	    info("Send mail to $to as $toName, from $from as $fromName, subject is $subject");
 	    
 	    $mime_boundary = md5(time());
 	    
@@ -102,7 +102,7 @@ class Utils {
 	    ini_restore('sendmail_from');
         
 	    if (!$mail_sent) {
-            Logger::err("Could not send mail: $subject to $to");	        
+            err("Could not send mail: $subject to $to");	        
 	    }
 	    return $mail_sent;
 	}

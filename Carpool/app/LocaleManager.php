@@ -38,7 +38,7 @@ class LocaleManager {
 			$this->locale = self::$LOCALES[$_GET['lang']];
 			// Set the cookie for 30 days, available to the whole domain
 			if (!setcookie('lang', $_GET['lang'], time() + 60 * 60 * 24 * 30, '/')) {
-				Logger::warn(__METHOD__ . ': Could not set cookie for user! Output already exists.');
+				warn(__METHOD__ . ': Could not set cookie for user! Output already exists.');
 			}
 			unset($_GET['lang']);
 		} else if (isset($_COOKIE['lang']) && array_key_exists($_COOKIE['lang'], self::$LOCALES)) {
@@ -46,7 +46,7 @@ class LocaleManager {
 		} else {
 			$this->locale = self::$LOCALES[getConfiguration('default.locale')];
 		}
-		Logger::info(__METHOD__ . ' locale selected: ' . $this->locale['name'] . ' (' . $this->locale['locale'] . ')');
+		info(__METHOD__ . ' locale selected: ' . $this->locale['name'] . ' (' . $this->locale['locale'] . ')');
 		setlocale(LC_ALL, $this->locale['locale']);
 		putenv('LC_ALL=' . $this->locale['locale']);	
 	}

@@ -24,16 +24,16 @@ class DatabaseHelper {
 
     private function __construct() {
     	$dsn = 'sqlite:' . DATA_PATH . '/' . self::DATABASE_NAME . '.sq3';
-    	Logger::info('Connecting to DB: ' . $dsn);
+    	info('Connecting to DB: ' . $dsn);
     	try {
             $this->_db = new PDO($dsn);
             // Use exceptions as error handling
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if (!$this->_db) {
-                Logger::log(Logger::LOG_ERR, 'DB Connection failed: ' . Utils::errorInfoToString($this->_db->errorCode()));    
+                err('DB Connection failed: ' . Utils::errorInfoToString($this->_db->errorCode()));    
             }
     	} catch (PDOException $e) {
-        	Logger::logException($e);
+        	logException($e);
         }
     }
     
@@ -44,7 +44,7 @@ class DatabaseHelper {
      */
     public static function getConnection() {
         if (ENV !== ENV_DEVELOPMENT) {
-            Logger::err(__METHOD__ . ': This method should not be called!');
+            err(__METHOD__ . ': This method should not be called!');
             return false;
         }
         
@@ -52,47 +52,47 @@ class DatabaseHelper {
     }
     
     public function beginTransaction() {
-        Logger::debug(__METHOD__);
+        debug(__METHOD__);
         return $this->_db->beginTransaction();
     }
     
     public function rollBack() {
-        Logger::debug(__METHOD__);
+        debug(__METHOD__);
         return $this->_db->rollBack();
     }
     
     public function commit() {
-        Logger::debug(__METHOD__);
+        debug(__METHOD__);
         return $this->_db->commit();
     }
     
     function addCity($name) {
-    	Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($name)");
+    	debug(__METHOD__ . "($name)");
     	try {
 	        $stmt = $this->_db->prepare('INSERT INTO Cities(name) VALUES(:name)');
 	        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
 			
 	        $res = $stmt->execute();
 	        if (!$res) {
-	        	Logger::log(Logger::LOG_ERR, "City insert failed: " . Utils::errorInfoToString($stmt->errorCode()));
+	        	err("City insert failed: " . Utils::errorInfoToString($stmt->errorCode()));
 	        	return false;
 	        }
 	        
 	        $inserted = $this->_db->lastInsertId();
 	        
-	        Logger::log(Logger::LOG_INFO, "City $name inserted: $inserted");
+	        info("City $name inserted: $inserted");
 	        
 	        return $inserted; 
         
     	} catch(PDOException $e) {
-    		Logger::logException($e);
+    		logException($e);
     		return false;
     	}
     	
     }
 
     function getCities() {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__);
+        debug(__METHOD__);
         try {
         	$rs = $this->_db->query('SELECT id, name FROM cities');
         	if ($rs) {
@@ -108,15 +108,15 @@ class DatabaseHelper {
         	}
             return $res;
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
     
     function getAvailableCities($opt) {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($opt)");
+        debug(__METHOD__ . "($opt)");
         if (!$opt === 'Src' && !$opt === 'Dest') {
-        	Logger::log(Logger::LOG_ERR, "Illegal access to method " . __METHOD__ . ": $opt");
+        	err("Illegal access to method " . __METHOD__ . ": $opt");
         	return false;
         }
         try {
@@ -134,13 +134,13 @@ class DatabaseHelper {
             }
             return $res;
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
     
     function addContact($name, $phone, $email) {
-    	Logger::debug(__METHOD__ . "($name, $phone, $email)");
+    	debug(__METHOD__ . "($name, $phone, $email)");
     	
     	try {
     		
@@ -155,22 +155,22 @@ class DatabaseHelper {
 	        if ($stmt->execute()) {
     	        $inserted = $this->_db->lastInsertId();
     	        
-    	        Logger::log(Logger::LOG_INFO, "Contact $name inserted: $inserted");
+    	        info("Contact $name inserted: $inserted");
             
     	        return $inserted;
 	        } else {
-	            Logger::log(Logger::LOG_ERR, "Contact insert failed: " . Utils::errorInfoToString($stmt->errorCode()));
+	            err("Contact insert failed: " . Utils::errorInfoToString($stmt->errorCode()));
 	            return false;
 	        }
 	        
     	} catch (PDOException $e) {
-			Logger::logException($e);   
+			logException($e);   
 			return false; 		
     	} 
     }
     
     function updateContact($contactId, $name, $phone, $email) {
-    	Logger::debug(__METHOD__ . "($contactId, $name, $phone, $email)");
+    	debug(__METHOD__ . "($contactId, $name, $phone, $email)");
     	
     	try {  		
 
@@ -181,33 +181,33 @@ class DatabaseHelper {
 	        $stmt->bindParam(':contactId', $contactId);
 	        
 	        if ($stmt->execute()) {  	        
-    	        Logger::info("Contact number $contactId updated");
+    	        info("Contact number $contactId updated");
     	        return true;
 	        } else {
-	            Logger::err("Contact $contactId update failed: " . Utils::errorInfoToString($stmt->errorCode()));
+	            err("Contact $contactId update failed: " . Utils::errorInfoToString($stmt->errorCode()));
 	            return false;
 	        }
 	        
     	} catch (PDOException $e) {
-			Logger::logException($e);   
+			logException($e);   
 			return false; 		
     	} 
     }
     
     function deleteContact($contactId) {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($contactId)");
+        debug(__METHOD__ . "($contactId)");
         try {
             $stmt = $this->_db->prepare('DELETE FROM Contacts WHERE id=:contactId');
             $stmt->bindParam(':contactId', $contactId);
             if ($stmt->execute()) {
-                Logger::log(Logger::LOG_INFO, "Contact $contactId successfully deleted");
+                info("Contact $contactId successfully deleted");
                 return true;
             } else {
-                Logger::log(Logger::LOG_ERR, "Contact $contactId could not be deleted: " . Utils::errorInfoToString($stmt->errorInfo()));
+                err("Contact $contactId could not be deleted: " . Utils::errorInfoToString($stmt->errorInfo()));
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
@@ -215,7 +215,7 @@ class DatabaseHelper {
     function addRide(
         $srcCityId, $srcLocation, $destCityId, $destLocation, 
         $timeMorning, $timeEvening, $contactId, $comment, $status) {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $status)");
+        debug(__METHOD__ . "($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $status)");
 
         try {
             $stmt = $this->_db->prepare(
@@ -236,14 +236,14 @@ class DatabaseHelper {
             
             if ($stmt->execute()) {
                $inserted = $this->_db->lastInsertId();
-               Logger::log(Logger::LOG_INFO, "Ride from $srcCityId to $destCityId with $contactId inserted: $inserted");
+               info("Ride from $srcCityId to $destCityId with $contactId inserted: $inserted");
                return $inserted; 
             } else {
-                Logger::log(Logger::LOG_ERR, "Ride insert failed: " . Utils::errorInfoToString($stmt->errorInfo()));
+                err("Ride insert failed: " . Utils::errorInfoToString($stmt->errorInfo()));
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
@@ -251,7 +251,7 @@ class DatabaseHelper {
     function updateRide(
         $rideId, $srcCityId, $srcLocation, $destCityId, $destLocation,
         $timeMorning, $timeEvening, $comment, $status) {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $status)");
+        debug(__METHOD__ . "($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $status)");
 
         try {
             $stmt = $this->_db->prepare('UPDATE Ride SET srcCityId=:srcCityId, srcLocation=:srcLocation, destCityId=:destCityId, destLocation=:destLocation, timeMorning=:timeMorning, timeEvening=:timeEvening, comment=:comment, status=:status, timeUpdated=:timeUpdated WHERE id=:rideId');
@@ -267,56 +267,56 @@ class DatabaseHelper {
             $stmt->bindParam(':rideId', $rideId);
             
             if ($stmt->execute()) {
-               Logger::log(Logger::LOG_INFO, "Ride $rideId successfully updated");
+               info("Ride $rideId successfully updated");
                return true; 
             } else {
-                Logger::log(Logger::LOG_ERR, "Ride $rideId update failed: " . Utils::errorInfoToString($stmt->errorInfo()));
+                err("Ride $rideId update failed: " . Utils::errorInfoToString($stmt->errorInfo()));
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
     
     function deleteRide($rideId) {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($rideId)");
+        debug(__METHOD__ . "($rideId)");
         try {
             $stmt = $this->_db->prepare('DELETE FROM Ride WHERE id=:rideId');
             $stmt->bindParam(':rideId', $rideId);
             if ($stmt->execute()) {
-                Logger::log(Logger::LOG_INFO, "Ride $rideId successfully deleted");
+                info("Ride $rideId successfully deleted");
                 return true;
             } else {
-                Logger::log(Logger::LOG_ERR, "Ride $rideId could not be deleted: " . Utils::errorInfoToString($stmt->errorInfo()));
+                err("Ride $rideId could not be deleted: " . Utils::errorInfoToString($stmt->errorInfo()));
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
     
    function deleteRideByContact($contactId) {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($contactId)");
+        debug(__METHOD__ . "($contactId)");
         try {
             $stmt = $this->_db->prepare('DELETE FROM Ride WHERE ContactId=:contactId');
             $stmt->bindParam(':contactId', $contactId);
             if ($stmt->execute()) {
-                Logger::log(Logger::LOG_INFO, "Rides for $contactId successfully deleted");
+                info("Rides for $contactId successfully deleted");
                 return true;
             } else {
-                Logger::log(Logger::LOG_ERR, "Rides for $contactId could not be deleted: " . Utils::errorInfoToString($stmt->errorInfo()));
+                err("Rides for $contactId could not be deleted: " . Utils::errorInfoToString($stmt->errorInfo()));
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
     
     function updateRideStatus($rideId, $status) {
-        Logger::log(Logger::LOG_DEBUG, __METHOD__ . "($rideId, $status)");
+        debug(__METHOD__ . "($rideId, $status)");
         try {
             if (!in_array($status, array(STATUS_LOOKING, STATUS_OFFERED, STATUS_OFFERED_HIDE))) {
                 return false;
@@ -327,14 +327,14 @@ class DatabaseHelper {
             $curTime = time();
             $stmt->bindParam(':timeUpdated', $curTime);
             if ($stmt->execute()) {
-                Logger::log(Logger::LOG_INFO, "Status of ride $rideId successfully set to $status");
+                info("Status of ride $rideId successfully set to $status");
                 return true;
             } else {
-                Logger::log(Logger::LOG_ERR, "Ride $rideId update failed: " . Utils::errorInfoToString($stmt->errorInfo()));
+                err("Ride $rideId update failed: " . Utils::errorInfoToString($stmt->errorInfo()));
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
     }
@@ -365,7 +365,7 @@ class DatabaseHelper {
         } 
         // Order - show newer first
         $sql .= ' ORDER BY r.Id DESC';
-        Logger::log(Logger::LOG_INFO, __METHOD__ . ": $sql");
+        info(__METHOD__ . ": $sql");
         try {
             $rs = $this->_db->query($sql);
             if ($rs) {
@@ -391,7 +391,7 @@ class DatabaseHelper {
                 return array();
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }
         
@@ -408,7 +408,7 @@ class DatabaseHelper {
      * 
      */
     function getRideProvidedByContactId($contactId) {
-        Logger::debug(__METHOD__ . "($contactId)");
+        debug(__METHOD__ . "($contactId)");
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation  
                 FROM ride r 
                 WHERE r.Status IN (' . STATUS_OFFERED . ', ' . STATUS_OFFERED_HIDE . ') AND r.ContactId = :contactId LIMIT 1';        
@@ -423,7 +423,7 @@ class DatabaseHelper {
                 return false;
             }        
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }    
     }
@@ -440,7 +440,7 @@ class DatabaseHelper {
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone 
         		FROM ride r, contacts co 
         		WHERE co.Id = r.ContactId AND r.Id = :rideId';        
-        Logger::debug(__METHOD__ . "($rideId)");
+        debug(__METHOD__ . "($rideId)");
         try {
             $stmt = $this->_db->prepare($sql);
             $stmt->bindParam(':rideId', $rideId);
@@ -452,13 +452,13 @@ class DatabaseHelper {
                 return false;
             }        
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }    
     }
     
     function getContactByIdentifier($contactId, $identifier) {
-        Logger::debug(__METHOD__ . "($contactId, $identifier)");
+        debug(__METHOD__ . "($contactId, $identifier)");
         try {
             $stmt = $this->_db->query('SELECT Id, Name, Email, Phone FROM contacts WHERE Id=:id AND identifier=:identifier');
 			$stmt->bindParam(':id', $contactId);
@@ -471,13 +471,13 @@ class DatabaseHelper {
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }    	
     }
     
     function getContactById($id) {
-        Logger::debug(__METHOD__ . "($id)");
+        debug(__METHOD__ . "($id)");
         try {
             $stmt = $this->_db->query('SELECT Id, Name, Email, Phone, Identifier FROM contacts WHERE Id=:id');
 			$stmt->bindParam(':id', $id);
@@ -489,13 +489,13 @@ class DatabaseHelper {
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }    	
     }
     
    function getContactByEmail($email) {
-        Logger::debug(__METHOD__ . "($email)");
+        debug(__METHOD__ . "($email)");
         try {
             $stmt = $this->_db->query('SELECT Id, Name, Phone FROM contacts WHERE Email=:email');
             
@@ -508,13 +508,13 @@ class DatabaseHelper {
                 return false;
             }
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }    	
     }
     
     function getLastShowInterestNotifier() {
-         Logger::debug(__METHOD__ . "()");
+         debug(__METHOD__ . "()");
          try {
          	$rs = $this->_db->query('SELECT LastRun FROM ShowInterestNotifier');
             $res = $rs->fetch(PDO::FETCH_ASSOC);
@@ -524,13 +524,13 @@ class DatabaseHelper {
                 return false;
             }        		 
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }    	   	
     }
     
     function updateLastShowInterestNotifier($time) {
-         Logger::debug(__METHOD__ . "($time)");
+         debug(__METHOD__ . "($time)");
          assert(is_integer($time) === true && $time > 0);
          try {
             $stmt = $this->_db->query('UPDATE ShowInterestNotifier SET LastRun=:time');
@@ -538,7 +538,7 @@ class DatabaseHelper {
 			$stmt->execute();
 			return true;
         } catch (PDOException $e) {
-            Logger::logException($e);
+            logException($e);
             return false;
         }    	   	
     }

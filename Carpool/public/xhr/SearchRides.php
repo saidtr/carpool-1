@@ -12,7 +12,7 @@ extract($_GET, EXTR_SKIP);
 $params = array();
 
 if (isset($srcCityId) && !empty($srcCityId) && !($srcCityId == LOCATION_DONT_CARE)) {
-	Logger::log(Logger::LOG_INFO, "SrcCityId $srcCityId");
+	info("SrcCityId $srcCityId");
     $params['srcCityId'] = $srcCityId;
 }
 

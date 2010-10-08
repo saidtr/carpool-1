@@ -38,7 +38,7 @@ if (ENV === ENV_DEVELOPMENT) {
     
     // Assert handler - log the failure
     function loggerAssertHandler($file, $line, $code) {
-        Logger::err("Assertion Failed in $file, line $line");
+        err("Assertion Failed in $file, line $line");
     }
     
     // Set up the callback
@@ -72,13 +72,63 @@ if (!$globalConf) {
 $GLOBALS['conf'] = $globalConf;
 
 function getConfiguration($key) {
-	$globalConf = $GLOBALS['conf'];
-	if (!isset($globalConf) || !isset($globalConf[$key])) {
-		return false;
-	}
-	return $globalConf[$key];
+    $globalConf = $GLOBALS['conf'];
+    if (!isset($globalConf) || !isset($globalConf[$key])) {
+        return false;
+    }
+    return $globalConf[$key];
 }
 
+// Logger
+$logger = null;
+$logLevel = getConfiguration('log.level');
+
+try {
+    if ($logLevel < Logger::LOG_NONE) {
+        /*
+        $logPath = getConfiguration('log.file');
+        echo "Before: $logPath<br/>";
+        $logPath = str_replace("~", BASE_PATH, $logPath);
+        echo "After: $logPath<br/>";
+        */
+        $logger = new Logger(str_replace("~", BASE_PATH, getConfiguration('log.file')), $logLevel);
+    }
+} catch (Exception $e) {
+    // Ignore
+}
+
+if ($logger == null) {
+    $logger = new NullLogger();
+}
+
+
+$GLOBALS['logger'] = $logger;
+
+function debug($str) {
+    global $logger;
+    $logger->doLog(Logger::LOG_DEBUG, $str);
+}
+ 
+function info($str) {
+    global $logger;
+    $logger->doLog(Logger::LOG_INFO, $str);
+}
+ 
+function warn($str) {
+    global $logger;
+    $logger->doLog(Logger::LOG_WARN, $str);
+}
+ 
+function err($str) {
+    global $logger;
+    $logger->doLog(Logger::LOG_ERR, $str);
+}
+
+function logException(Exception $e) {
+    global $logger;
+    $logger->logException($e);
+}
+ 
 // Locale
 $localeManager = LocaleManager::getInstance();
 $localeManager->init();
@@ -86,4 +136,4 @@ $localeManager->init();
 // Start session
 AuthHandler::init();
 
-Logger::info('Bootstrap done.');
+info('Bootstrap done.');

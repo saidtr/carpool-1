@@ -7,6 +7,8 @@ mail.addr          =
 mail.display       = Carpool Support
 ; Log level: 0 - very verbose, 4 - no logging. Recommend for production: 3
 log.level          = 0
+; Log file. Use "~" as reference to BASE_PATH
+log.file           = "~/carpool.log"
 
 [database]
 
