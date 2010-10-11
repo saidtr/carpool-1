@@ -7,7 +7,7 @@ class Service_ShowInterest {
     }
     
     private static function notify($contactId, $allRides, $potentialRideIds) {
-        Logger::debug(__METHOD__ . "($contactId, " . json_encode($potentialRideIds) . ")");
+        debug(__METHOD__ . "($contactId, " . json_encode($potentialRideIds) . ")");
         $toNotify = array();
         foreach ($allRides as $ride) {
             if (in_array($ride['Id'], $potentialRideIds)) {

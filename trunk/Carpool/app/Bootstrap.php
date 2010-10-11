@@ -31,7 +31,7 @@ define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
 if (ENV === ENV_DEVELOPMENT) {
 	error_reporting(E_ALL | E_STRICT); 
 	
-	// Active assert and make it quiet
+	// Activate assert and make it quiet
     assert_options(ASSERT_ACTIVE, 1);
     assert_options(ASSERT_WARNING, 0);
     assert_options(ASSERT_QUIET_EVAL, 1);
