@@ -7,4 +7,5 @@ INSERT INTO ShowInterestNotifier VALUES(0);
 CREATE INDEX RideDest ON Ride(DestCityId ASC);
 CREATE INDEX RideFrom ON Ride(SrcCityId ASC);
 CREATE UNIQUE INDEX Unique_City ON Cities(Name ASC);
+CREATE UNIQUE INDEX Unique_Email ON Contacts (Email ASC);
 COMMIT;
