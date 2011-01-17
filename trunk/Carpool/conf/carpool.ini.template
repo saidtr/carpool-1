@@ -5,6 +5,13 @@ domain             =
 default.locale     = en
 mail.addr          = 
 mail.display       = Carpool Support
+
+; Feedback properties
+feedback.mail      = 
+feedback.to.name   = 
+feedback.from      = 
+feedback.from.name = Carpool Feedback
+
 ; Log level: 0 - very verbose, 4 - no logging. Recommend for production: 3
 log.level          = 0
 ; Log file. Use "~" as reference to BASE_PATH
@@ -14,3 +21,9 @@ log.file           = "~/carpool.log"
 
 [settings]
 notify.immediate   = 1
+
+[localization]
+default.src.city   =
+default.src.loc    =
+default.dest.city  = 
+default.dest.loc   = 
