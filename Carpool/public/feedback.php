@@ -15,7 +15,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!Utils::isEmptyString($feedback)) {
         $mail = new View_FeedbackMail();
         $body = $mail->render($wantTo, $feedback, $email);
-        Utils::sendMail('itaypk+carpool@gmail.com', 'Itay', 'feedback@brachot.net', 'Carpool feedback', 'New carpool feedback', $body);
+        
+        $to       = getConfiguration('feedback.mail');
+        $toName   = getConfiguration('feedback.to.name');
+        $from     = getConfiguration('feedback.from');
+        $fromName = getConfiguration('feedback.from.name');
+        
+        Utils::sendMail($to, $toName, $from, 'Carpool feedback', 'New carpool feedback', $body);
         GlobalMessage::setGlobalMessage(_('Thanks for the feedback!'));
     } else {
         GlobalMessage::setGlobalMessage(_('Please write something.'), GlobalMessage::ERROR);

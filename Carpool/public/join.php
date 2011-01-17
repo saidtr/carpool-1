@@ -24,6 +24,11 @@ if ($contact) {
     $isActive = ($ride_Status == STATUS_OFFERED);
 }
 
+$defaultSrcCity       = getConfiguration('default.src.city');
+$defaultSrcLocation   = getConfiguration('default.src.loc');
+$defaultDestCity      = getConfiguration('default.dest.city');
+$defaultDestLocation  = getConfiguration('default.dest.loc');
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -63,11 +68,11 @@ echo View_Header::render($header);
 				</dd>
 				<dd class="optional">
 					<label for="srcLocation"><?php echo _('Location')?></label>
-					<input id="srcLocation" name="srcLocation" type="text" size=30 value="<?php echo (isset($ride_SrcLocation) ? $ride_SrcLocation : '') ?>" />
+					<input id="srcLocation" name="srcLocation" type="text" size=30 value="<?php echo (isset($ride_SrcLocation) ? $ride_SrcLocation : $defaultSrcLocation) ?>" />
 				</dd>
 			</dl>
 			<div class="clearFloat"></div>
-			<input id="srcCityId" name="srcCityId" type="hidden" value="<?php echo (isset($ride_SrcCityId) ? $ride_SrcCityId : LOCATION_NOT_FOUND) ?>"/>
+			<input id="srcCityId" name="srcCityId" type="hidden" value="<?php echo (isset($ride_SrcCityId) ? $ride_SrcCityId : ($defaultSrcCity ? $defaultSrcCity : LOCATION_NOT_FOUND)) ?>"/>
 			<dl>
 				<dd class="mandatory">
 					<label for="destCity"><?php echo _('To')?></label>
@@ -75,10 +80,10 @@ echo View_Header::render($header);
 				</dd>
 				<dd class="optional">
 					<label for="destLocation"><?php echo _('Location')?></label>
-					<input id="destLocation" name="destLocation" type="text" size=30 value="<?php echo (isset($ride_destLocation) ? $ride_destLocation : 'Checkpoint NBX') ?>"/>
+					<input id="destLocation" name="destLocation" type="text" size=30 value="<?php echo (isset($ride_destLocation) ? $ride_destLocation : $defaultDestLocation) ?>"/>
 				</dd>
 			</dl>
-			<input id="destCityId" name="destCityId" type="hidden" value="<?php echo (isset($ride_DestCityId) ? $ride_DestCityId : 57) ?>"/>
+			<input id="destCityId" name="destCityId" type="hidden" value="<?php echo (isset($ride_DestCityId) ? $ride_DestCityId : ($defaultDestCity ? $defaultDestCity : LOCATION_NOT_FOUND)) ?>"/>
 			<div class="clearFloat"></div>
 			<dl>
 				<dd class="optional">
