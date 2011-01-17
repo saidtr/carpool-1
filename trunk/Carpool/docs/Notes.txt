@@ -1,3 +1,14 @@
-- On linux, it is required to set write permissions for both the SQLite database file and the directory where is resides.
+- On linux, it is required to set write permissions for both the SQLite database file and the directory where is resides:
+chown -R www-data data
+Symptoms: fail to add new data; SQLite general error
+Might need to do the same to the log file, otherwise it won't be created:
+First create it: touch carpool.log (or the name of the log file)
+Change permissions: chown www-data carpool.log
+Symptoms: log file is not created
 - On linux, it was required to create the relevant locale (locale-gen) before it was possible to use it.
-  It might have been already there, in /usr/share/i18n/SUPPORTED - need to check the list
+For hebrew, for example:
+locale-gen he_IL.UTF-8
+It might have been already there, in /usr/share/i18n/SUPPORTED - need to check the list
+Symptoms: Switching to other language doesn't work
+- Error 26 (corrupted or encrypted DB) could happen because SQLite version used for creation of the database and the 
+version php uses do not match
