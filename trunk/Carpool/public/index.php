@@ -33,18 +33,16 @@ $availableSrcCities = $db->getCities();
 			<fieldset>
 			<legend></legend>
 			<dl>
-				<!-- 
 				<dd>
 					<label for="wantTo">Show me&nbsp;</label>
 					<select id="wantTo" name="wantTo">
 						<option value="<?php echo STATUS_DONT_CARE?>">Everyone</option>
-						<option value="<?php echo STATUS_OFFERED ?>">Available rides</option>
+						<option value="<?php echo STATUS_OFFERED ?>" selected="selected" >Available rides</option>
 						<option value="<?php echo STATUS_LOOKING  ?>">People looking for a ride</option>
 					</select>
 				</dd>
-				 -->
 				<dd>
-					<label for="srcCity"><?php echo _('Show me rides from')?>&nbsp;</label>
+					<label for="srcCity"><?php echo _('From')?>&nbsp;</label>
 					<select id="srcCity" name="srcCity">
 						<option value="<?php echo LOCATION_DONT_CARE ?>"><?php echo _('Everywhere')?></option> 
 						<?php foreach($availableSrcCities as $city):?>

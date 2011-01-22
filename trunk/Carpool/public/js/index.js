@@ -1,6 +1,8 @@
 
+// Stores all search results
 var searchResults = null;
 
+// Helper function to create a table cell element with the given content
 function cell(str, escape) {
 	if ((typeof escape == 'undefined') || escape == true) {
 		return '<td>' + htmlEnc(str) + '</td>';
@@ -42,7 +44,9 @@ function displayShowInterestDialog(/* Boolean */ show) {
 	if (show) {
 		positionShowInterest();
     	$('#loadingNotice').html('');
-    	$('#showInterest').slideDown('fast');
+    	$('#showInterest').slideDown('fast', function() {
+    		$('#email').focus();    		
+    	});
 	} else {
 		$('#showInterest').slideUp('fast');
 		updateShowInterestText();
@@ -58,11 +62,12 @@ function updateShowInterestText() {
 }
 
 function buildSearchResults(/* JSON */ data) {
-	// Clean everything
+	// Clean all existing results
 	$('#resultsTable tr:first').siblings().remove();
 	$('#resultsMessage').text('');
 
 	if (data.length === 0) {
+		// Well, nothing
 		$('#resultsTable').hide();
 		$('#resultsMessage').text(_('Sorry, no results found.'));
 	} else {
@@ -70,8 +75,8 @@ function buildSearchResults(/* JSON */ data) {
 		for (var res in data) {
 			var ride = data[res];
 			var elemStr = '<tr>';
-			elemStr += cell(ride.SrcCity + (ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
-			elemStr += cell(ride.DestCity + (ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
+			elemStr += cell(ride.SrcCity + (ride.SrcLocation && ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
+			elemStr += cell(ride.DestCity + (ride.DestLocation && ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
 			elemStr += cell(formatTime(ride.TimeMorning));
 			elemStr += cell(formatTime(ride.TimeEvening));
 			elemStr += cell(ride.Name);
@@ -96,6 +101,9 @@ function doFilter() {
 	var destId = $('#destCity').val();
 	if (destId != Constants.LOCATION_DONT_CARE)            	
 	    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
+	var wantTo = $('#wantTo').val();
+	if (wantTo != Constants.STATUS_DONT_CARE)
+		filter.addCriteria(new FilterCriteria('Status', wantTo, filterEquals));
 
 	buildSearchResults(filter.filter(searchResults));
 	
@@ -121,6 +129,7 @@ $(document).ready(function() {
 		$('#loadingNotice').text('');
 		searchResults = xhr.results;
 		doFilter();
+		$("#wantTo").change(doFilter);
 		$("#destCity").change(doFilter);
 		$("#srcCity").change(doFilter);
 	}, 'json');
