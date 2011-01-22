@@ -20,12 +20,11 @@ if (isset($destCityId) && !empty($destCityId) && !($destCityId == LOCATION_DONT_
     $params['destCityId'] = $destCityId;
 }
 
-/*
 if (isset($wantTo) && !empty($wantTo)) {
     $params['status'] = $wantTo;
 }
-*/
-$params['status'] = STATUS_OFFERED;
+
+//$params['status'] = STATUS_OFFERED;
 
 $server = DatabaseHelper::getInstance();
 

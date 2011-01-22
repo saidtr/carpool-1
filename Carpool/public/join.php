@@ -50,15 +50,13 @@ echo View_Header::render($header);
 ?>
 <div id="content">
 	<div>
-	<form id="addRideForm" action="#" method="post" onsubmit="return false;">
-		<!--  
+	<form id="addRideForm" action="#" method="post" onsubmit="return false;"> 
+		<p id="formMessage"></p>
 		<fieldset>
 			<legend>I want to...</legend>
-			<input type="radio" name="wantTo" checked="checked" value="<?php echo STATUS_LOOKING ?>"/>Join a ride
-			<input type="radio" name="wantTo" value="<?php echo STATUS_OFFERED ?>"/>Provide a ride
+			<p><input type="radio" name="wantTo" <?php if (!isset($ride_Status) || (isset($ride_Status) && $ride_Status == STATUS_LOOKING)) echo 'checked="checked"' ?> value="<?php echo STATUS_LOOKING ?>"/><?php echo _('I want to join a ride')?></p>
+			<p><input type="radio" name="wantTo" <?php if (isset($ride_Status) && $ride_Status == STATUS_OFFERED) echo 'checked="checked"' ?> value="<?php echo STATUS_OFFERED ?>"/><?php echo _('I want to provide a ride')?></p>
 		</fieldset>
-		-->
-		<p id="formMessage"></p>
 		<fieldset>
 			<legend>Ride details</legend>
 			<dl>
@@ -107,8 +105,7 @@ echo View_Header::render($header);
 					</select>
 				</dd>			
 			</dl>
-			<div class="clearFloat"></div>	
-			<input type="hidden" name="wantTo" value="<?php echo STATUS_OFFERED ?>"/>		
+			<div class="clearFloat"></div>			
 		</fieldset>
 		<fieldset>
 			<legend>Contact details</legend>
@@ -159,152 +156,6 @@ echo View_Php_To_Js::render();
 
 ?>
 <script type="text/javascript" src="js/utils.js"></script>
-<script type="text/javascript">
-
-var citiesMapper = null;
-var isWorking = false;
-
-function disableButtons(disable) {
-	var action = (disable) ? 'disabled' : '';
-	$('input[type="button"],input[type="submit"]').attr('disabled', action);
-	isWorking = disable;
-}
-
-function deleteRide() {
-	var delConfirm = confirm(_("Are you sure you want to completely, fully, eternally delete your ride?"));
-	if (delConfirm) {
-		disableButtons(true);
-    	$.post(Constants.xhr['DEL_RIDE'], null, function(data) {
-    		refresh();
-    	});
-	} 
-}
-
-function initAutocomplete() {
-	$("#srcCity, #destCity").autocomplete(cities, {
-		formatItem: function(item) {
-			return htmlEnc(item.Name);
-		}
-	});
-	$("#srcCity").result(function(event, item) {
-		if (item) {
-			$("#srcCityId").val(item.Id);
-		} else {
-			$("#srcCityId").val(Constants.LOCATION_NOT_FOUND);
-		}
-	});
-	$("#destCity").result(function(event, item) {
-		if (item) {
-			$("#destCityId").val(item.Id);
-		} else {
-			$("#destCityId").val(Constants.LOCATION_NOT_FOUND);
-		}
-	});
-
-	$("#srcCity, #destCity").change(function() {
-		$(this).search();
-	});	
-}
-
-function doActivateToggle() {
-	disableButtons(true);
-	$.get(Constants.xhr['TOGGLE_ACTIVATE'], {}, function(xhr) {
-		if (xhr.status == 'ok') {
-			refresh();
-		} else {
-			disableButtons(false);
-			showError(_('An error occured.'));
-		}
-	}, 'json');
-}
-
-$(document).ready(function() {
-
-	initAutocomplete();
-
-	citiesMapper = [];
-	for (city in cities) {
-		citiesMapper[cities[city].Id] = cities[city].Name;
-	}
-
-	// Set the cities names according to the city id
-	
-	if ($("#srcCityId").val() !== Constants.LOCATION_NOT_FOUND) {
-		$("#srcCity").val(citiesMapper[$("#srcCityId").val()]);
-	}
-
-	if ($("#destCityId").val() !== Constants.LOCATION_NOT_FOUND) {
-		$("#destCity").val(citiesMapper[$("#destCityId").val()]);
-	}	
-	
-	$("#addRideForm").unbind('submit');
-	$("#addRideForm").attr('action', Constants.xhr['ADD_RIDE']);
-
-	var del = $("#deleteButton");
-	if (del) {
-		del.click(deleteRide);
-	}
-
-	// Ajax form
-	var addRideFormOptions = { 
-		type         : 'POST', 
-		dataType     : 'json',
-		beforeSubmit : function() {
-			if (isWorking)
-				return false;
-
-			valid = true;
-
-			disableButtons(true);
-			
-			return valid;
-		},
-		success      : function(xhr) {
-			status = xhr.status;
-			action = xhr.action;
-			if (status === 'ok') {
-				if (action === 'add') {
-					redirect('thanks.php');
-				} else {
-					refresh();
-				}
-			} else if (status === 'invalid') {
-				var str = '';
-				for (msg in xhr.messages) {
-					str += '' + xhr.messages[msg] + '; ';
-				}
-				if (xhr.messages.length > 0) {
-					str = str.substring(0, str.length - 2) + '.';
-				} 
-				if (action === 'add')
-					showError(_('Could not add ride') + ': ' + str);
-				else if (action === 'update')
-					showError(_('Could not update ride') + ': ' + str);
-
-				disableButtons(false);
-			} else if (status === 'err') {
-				showError('Could not ' + action + ' ride: Internal error. ' + (status.msg ? status.msg : ""));
-				disableButtons(false);
-			} else {
-				showError(_('Congrats! You broke everything!'));
-				disableButtons(false);
-			}
-		}
-	}; 
-	
-	$("#addRideForm").ajaxForm(addRideFormOptions);
-
-	$("#activateToggleButton").click(doActivateToggle);
-
-	// Register ajax error handler
-	$(document).ajaxError(function(evt, xhr, settings, exception) {
-		showError(_('Sorry, something went wrong.'));
-	});
-
-	disableButtons(false);
-		
-});
-
-</script>
+<script type="text/javascript" src="js/join.js"></script>
 </body>
 </html>
