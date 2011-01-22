@@ -263,7 +263,8 @@ class DatabaseHelper {
             $stmt->bindParam(':timeEvening', $timeEvening);           
             $stmt->bindParam(':comment', $comment);
             $stmt->bindParam(':status', $status);
-            $stmt->bindParam(':timeUpdated', time());
+            $curTime = time();
+            $stmt->bindParam(':timeUpdated', $curTime);
             $stmt->bindParam(':rideId', $rideId);
             
             if ($stmt->execute()) {
