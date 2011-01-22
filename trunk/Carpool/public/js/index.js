@@ -68,7 +68,7 @@ function updateShowInterestText() {
 	var srcId = $('#srcCity').val();
 	var destId = $('#destCity').val();
 	
-	$('#loadingNotice').html('<a href="javascript:displayShowInterestDialog(true)" title="' +  _('Get mail notifications about new suitable rides.') + '">' + _('Show interest') + '</a>');
+	//$('#loadingNotice').html('<a href="javascript:displayShowInterestDialog(true)" title="' +  _('Get mail notifications about new suitable rides.') + '">' + _('Notify me about new rides') + '</a>');
 	
 }
 

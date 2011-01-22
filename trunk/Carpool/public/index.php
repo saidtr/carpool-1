@@ -70,7 +70,7 @@ $availableSrcCities = $db->getCities();
 			</fieldset>
 		</form>
     	<div id="showInterest">
-    		<span><a href="javascript:displayShowInterestDialog(false)"><?php echo _('Show interest')?></a></span>
+    		<span><a href="javascript:displayShowInterestDialog(false)"><?php echo _('Notify me about new rides')?></a></span>
     		<form id="showInterestForm" method="post" action="xhr/ShowInterest.php">
     			<dl class="noFloat">
                     <dd class="mandatory">
