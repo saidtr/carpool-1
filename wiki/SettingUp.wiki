@@ -13,4 +13,16 @@ Installing the carpool application is pretty simple, but requires some work. The
   * conf - This folder contains configuration files.
  # Put the files on your web server. The "public" folder should be publicly accessible; the rest shouldn't.
  # Use any text editor to open "env.php" (in the public folder) and point the various paths to their corresponding path on the disk. 
- # On Linux environment, make sure that both SQLite database file and the "data" folder have "write" permissions.
+ # On Linux environment, make sure that both SQLite database file and the "data" folder have "write" permissions for the user under which the web server is running (usually www-data). 
+{{{
+sudo chown -R www-data data
+}}}
+ # The same if you want to enable the logger. Create an empty log file and assign ownership to the user under which the web server runs:
+{{{
+touch carpool.log
+chown www-data carpool.log
+}}}
+ # On Linux environments, for translations support, you might need to generate the relevant locale. For Hebrew support, for example, run the following command (from the shell, with root permissions):
+{{{
+locale-gen he_IL.UTF-8
+}}}
