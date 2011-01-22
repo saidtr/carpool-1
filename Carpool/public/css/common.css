@@ -205,14 +205,18 @@ p#loadingNotice {
 	min-width: 7%;
 }
 
+#resultsWhat {
+	width: 3%;	
+}
+
 #resultsTo {
 	width: 12%;
 	min-width: 12%;
 }
 
 #resultsContact {
-	width: 15%;
-	min-width: 15%;
+	width: 12%;
+	min-width: 12%;
 }
 
 #resultsEmail {
