@@ -96,6 +96,7 @@ $availableSrcCities = $db->getCities();
 	<div id="results">
 		<table id="resultsTable">
 			<tr>
+				<th id="resultsWhat"><?php echo _('I\'m')?></th>
 				<th id="resultsFrom"><?php echo _('From')?></th>
 				<th id="resultsTo"><?php echo _('To')?></th>
 				<th id="resultsIn"><?php echo _('In')?></th>
@@ -123,7 +124,9 @@ View_Php_To_Js::putTranslations(
         'Show interest',
         'Loading...',
         'Could not add ride',
-        'Thanks for showing interest! You will notified about new rides.'
+        'Thanks for showing interest! You will notified about new rides.',
+        'Providing',
+        'Looking'
     )
 );
 echo View_Php_To_Js::render();

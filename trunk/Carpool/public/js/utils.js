@@ -1,4 +1,10 @@
 
+// Define a default console logger to avoid errors
+if (typeof console === 'undefined' || !console.log) {
+	var console = {};
+	console.log = function(/* String */ str) {};
+}
+
 function htmlEnc(str) {
 	if (!str) return '';
 	str = str.replace(/&/g, "&amp;");

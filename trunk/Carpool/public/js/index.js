@@ -40,6 +40,17 @@ function formatTime(/* String */ hour) {
 	} 
 }
 
+function statusCodeToText(/* Integer */status) {
+	status = parseInt(status);
+	switch (status) {
+	case Constants.STATUS_LOOKING: return _('Looking');
+	case Constants.STATUS_OFFERED: return _('Providing');
+	default: 
+		console.log('Illegal status code: ' + status);
+		return '';
+	}
+}
+
 function displayShowInterestDialog(/* Boolean */ show) {
 	if (show) {
 		positionShowInterest();
@@ -75,6 +86,7 @@ function buildSearchResults(/* JSON */ data) {
 		for (var res in data) {
 			var ride = data[res];
 			var elemStr = '<tr>';
+			elemStr += cell(statusCodeToText(ride.Status));
 			elemStr += cell(ride.SrcCity + (ride.SrcLocation && ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
 			elemStr += cell(ride.DestCity + (ride.DestLocation && ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
 			elemStr += cell(formatTime(ride.TimeMorning));
