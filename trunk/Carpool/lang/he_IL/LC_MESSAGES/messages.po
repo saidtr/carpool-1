@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Carpool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-22 23:38+0200\n"
+"POT-Creation-Date: 2011-01-22 23:42+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Itay Pk <itaypk@gmail.com>\n"
 "Language-Team: \n"
@@ -227,8 +227,8 @@ msgid "Show me"
 msgstr "הצג לי"
 
 #: public/index.php:39
-msgid "Everyone"
-msgstr "כל אחד"
+msgid "Everything"
+msgstr "הכל"
 
 #: public/index.php:40
 msgid "Available rides"
