@@ -58,7 +58,7 @@ $content = DatabaseHelper::getInstance()->getQuestionsAnswers(LocaleManager::get
 <?php endforeach; ?>
 </ul>
 <?php else: ?>
-<h2>Sorry, no content here.</h2>
+<h2><?php echo _('Sorry, no content found.')?></h2>
 <?php endif;?>
 </div>
 </div>
