@@ -14,8 +14,8 @@ class LocaleManager {
 	}
 	
 	public static $LOCALES = array(
-		'en' => array ('name' => 'English', 'locale' => 'en', 'direction' => 'ltr'),
-		'he_IL' => array ('name' => 'Hebrew', 'locale' => 'he_IL.UTF-8', 'direction' => 'rtl')
+		'en' => array ('id' => LANG_ID_ENGLISH, 'name' => 'English', 'locale' => 'en', 'direction' => 'ltr'),
+		'he_IL' => array ('id' => LANG_ID_HEBREW, 'name' => 'Hebrew', 'locale' => 'he_IL.UTF-8', 'direction' => 'rtl')
 	);
 	
 	private $locale;
@@ -27,6 +27,10 @@ class LocaleManager {
 	
 	public function getSelectedLanaguage() {
 		return $this->locale['name'];
+	}
+	
+	public function getSelectedLanaguageId() {
+		return $this->locale['id'];
 	}
 	
 	public function isRtl() {

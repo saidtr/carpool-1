@@ -8,4 +8,5 @@ CREATE INDEX RideDest ON Ride(DestCityId ASC);
 CREATE INDEX RideFrom ON Ride(SrcCityId ASC);
 CREATE UNIQUE INDEX Unique_City ON Cities(Name ASC);
 CREATE UNIQUE INDEX Unique_Email ON Contacts (Email ASC);
+CREATE TABLE QuestionsAnswers(Id INTEGER PRIMARY KEY, LangId INTEGER, Question TEXT, Answer TEXT);
 COMMIT;

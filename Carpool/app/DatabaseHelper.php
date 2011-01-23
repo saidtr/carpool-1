@@ -543,5 +543,20 @@ class DatabaseHelper {
             return false;
         }    	   	
     }
+    
+    function getQuestionsAnswers($langId) {
+        debug(__METHOD__ . "($langId)");
+        
+        assert(is_integer($langId) === true && ($langId >= LANG_ID_ENGLISH || $langId <= LANG_ID_HEBREW));
+        try {
+            $stmt = $this->_db->query('SELECT Id, Question, Answer FROM QuestionsAnswers WHERE LangId = :langId');
+            $stmt->bindParam(':langId', $langId);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            logException($e);
+            return false;
+        }
+    }
 
 }
