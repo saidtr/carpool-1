@@ -141,7 +141,7 @@ class Utils {
 	}
 	
 	public static function buildEmail($mail) {
-	    if (!strpos($mail, '@')) {
+	    if (strpos($mail, '@') === false) {
 	        return $mail . '@' . getConfiguration('default.domain');
 	    }
 	    return $mail;

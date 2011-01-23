@@ -34,6 +34,9 @@ if ($srcCityId == LOCATION_NOT_FOUND && Utils::isEmptyString($srcCity)) {
 if (empty($email)) {
     $valid = false;
     $messages[] = _("Please specify a valid email address");
+} else {
+    // Make sure that the email has a domain part
+    $email = Utils::buildEmail($email);
 }
 
 if (empty($phone)) $phone = null;
