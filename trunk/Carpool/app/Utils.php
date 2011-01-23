@@ -96,7 +96,7 @@ class Utils {
 	    $msg .= "--".$mime_boundary."--".self::MAIL_EOL.self::MAIL_EOL;  // finish with two eol's for better security. see Injection.
 
 	    // Send the mail
-	    ini_set('sendmail_from', $from);  // the INI lines are to force the From Address to be used !
+	    ini_set('sendmail_from', $from);  // the INI lines are to force the From Address to be used
 	    $mail_sent = @mail($to, $subject_encoded, $msg, $headers);
 
 	    ini_restore('sendmail_from');

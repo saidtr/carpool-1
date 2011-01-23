@@ -5,6 +5,7 @@ include APP_PATH . "/Bootstrap.php";
 
 AuthHandler::putUserToken();
 
+/*
 $content = array(
 	array(
 		'q' => _('What\'s this for?'), 
@@ -28,6 +29,8 @@ $content = array(
 	)
 
 );
+*/
+$content = DatabaseHelper::getInstance()->getQuestionsAnswers(LocaleManager::getInstance()->getSelectedLanaguageId());
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -45,14 +48,18 @@ $content = array(
 <?php echo View_Navbar::buildNavbar(AuthHandler::isLoggedIn())?>
 <?php echo View_Header::render(_('Okay, just a quick question.'))?>
 <div id="content">
+<?php if ($content): ?>
 <ul id="questionsHolder">
 <?php foreach ($content as $qa): ?>
 <li>
-	<p class='q'><span><?php echo _('Q')?>:</span><?php echo $qa['q']?></p>
-	<p class='a'><span><?php echo _('A')?>:</span><?php echo $qa['a']?></p>
+	<p class='q'><span><?php echo _('Q')?>:</span><?php echo $qa['Question']?></p>
+	<p class='a'><span><?php echo _('A')?>:</span><?php echo $qa['Answer']?></p>
 </li>
 <?php endforeach; ?>
 </ul>
+<?php else: ?>
+<h2>Sorry, no content here.</h2>
+<?php endif;?>
 </div>
 </div>
 <script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
