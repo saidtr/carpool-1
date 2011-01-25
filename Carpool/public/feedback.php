@@ -26,6 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         GlobalMessage::setGlobalMessage(_('Please write something.'), GlobalMessage::ERROR);
     }
+    
+    // Get after post
     Utils::redirect('feedback.php');
 } else {
     
