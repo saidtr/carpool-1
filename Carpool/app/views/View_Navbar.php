@@ -21,13 +21,13 @@ class View_Navbar {
     	$localeManager = LocaleManager::getInstance();
     	$html = '<div id="langHolder"><form id="langSelectorForm" method="get" action="' . $_SERVER['PHP_SELF'] . '"><p>';
     	$html .= '<select id="lang" name="lang">' . PHP_EOL;
-    	foreach (LocaleManager::$LOCALES as $abbr => $lang) {
-    		$html .= '<option value="' . $abbr . '"';
-    		if ($lang['name'] === $localeManager->getSelectedLanaguage()) {
+    	foreach ($localeManager->getLocales() as $langId => $lang) {
+    		$html .= '<option value="' . $langId . '"';
+    		if ($lang['Name'] === $localeManager->getSelectedLanaguage()) {
     			$html .= ' selected="selected"';
     		}
     		
-    		$html .= '>' . _($lang['name']) . '</option>';
+    		$html .= '>' . _($lang['Name']) . '</option>';
     	}
     	$html .= '</select><input type="submit" class="hidden" /></p></form></div>';
     	return $html;

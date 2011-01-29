@@ -27,10 +27,6 @@ define('SESSION_KEY_AUTH_USER', 'user');
 define('SESSION_KEY_RUNNING', 'running');
 define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
 
-// Languages
-define('LANG_ID_ENGLISH', 0);
-define('LANG_ID_HEBREW', 1);
-
 // Error reporting and assertions
 if (ENV === ENV_DEVELOPMENT) {
 	error_reporting(E_ALL | E_STRICT); 
