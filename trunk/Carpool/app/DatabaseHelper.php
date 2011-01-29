@@ -544,13 +544,30 @@ class DatabaseHelper {
         }    	   	
     }
     
-    function getQuestionsAnswers($langId) {
-        debug(__METHOD__ . "($langId)");
+    function getLocales() {
+        debug(__METHOD__ . "()");
         
-        assert(is_integer($langId) === true && ($langId >= LANG_ID_ENGLISH || $langId <= LANG_ID_HEBREW));
         try {
-            $stmt = $this->_db->query('SELECT Id, Question, Answer FROM QuestionsAnswers WHERE LangId = :langId');
-            $stmt->bindParam(':langId', $langId);
+            $stmt = $this->_db->query('SELECT Id, Name, Abbrev, Locale, Direction FROM Languages');
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $locales = array();
+            foreach ($res as $locale) {
+                $locales[$locale['Id']] = $locale;
+            }
+            return $locales;
+        } catch (PDOException $e) {
+            logException($e);
+            return false;
+        }
+    }
+    
+    function getQuestionsAnswersByLang($lang) {
+        debug(__METHOD__ . "($lang)");
+        
+        assert(array_key_exists($lang, LocaleManager::getInstance()->getLocales()));
+        try {
+            $stmt = $this->_db->query('SELECT Id, Question, Answer FROM QuestionsAnswers WHERE Lang = :lang');
+            $stmt->bindParam(':lang', $lang);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -558,5 +575,96 @@ class DatabaseHelper {
             return false;
         }
     }
+    
+    function getQuestionsAnswers() {
+        debug(__METHOD__ . "()");
+               
+        try {
+            $rs = $this->_db->query('SELECT Lang, Id, Question, Answer FROM QuestionsAnswers ORDER BY Id, Lang');
+            $all = $rs->fetchAll(PDO::FETCH_ASSOC);
+            $res = array();
+            foreach ($all as $qa) {
+                $res[$qa['Id']][$qa['Lang']] = array('Id' => $qa['Id'], 'Question' => $qa['Question'], 'Answer' => $qa['Answer']);
+            }
+            return $res;
+        } catch (PDOException $e) {
+            logException($e);
+            return false;
+        }
+    }    
+    
+    function updateQuestionAnswer($id, $langId, $question, $answer) {
+        debug(__METHOD__ . "($id, $langId, $question, $answer)");
+        
+        try {
+            $stmt = $this->_db->query('UPDATE QuestionsAnswers SET Question = :question, ANSWER = :answer WHERE Id = :id AND Lang = :lang');
+            $stmt->bindParam(':question', $question);
+            $stmt->bindParam(':answer', $answer);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':lang', $lang);
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            logException($e);
+            return false;            
+        }               
+    }
+    
+    function updateQuestionAnswer($id, $langId, $question, $answer) {
+        debug(__METHOD__ . "($id, $langId, $question, $answer)");
+        
+        try {
+            $stmt = $this->_db->query('UPDATE QuestionsAnswers SET Question = :question, ANSWER = :answer WHERE Id = :id AND Lang = :lang');
+            $stmt->bindParam(':question', $question);
+            $stmt->bindParam(':answer', $answer);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':lang', $lang);
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            logException($e);
+            return false;            
+        }               
+    }
+    
+    /**
+     * 
+     * Get the next available ID for use with new QAs. 
+     * 
+     */
+    function getNextQuestionAnswerId() {
+        debug(__METHOD__ . "()");
+        
+        try {
+            
+            // We might have a synchronization
+            // problem here, but typcial usage pattern doesn't worth the work of creating a 
+            // better auto-incrementing mechanism.
+            $rs = $this->_db->query('SELECT MAX(Id) FROM QuestionsAnswers');
+            $res = $rs->fetch(PDO::FETCH_ASSOC);
+            if ($res) {
+                return ($res['Id'] + 1);
+            } 
+            return 1;
+        } catch(PDOException $e) {
+            logException($e);
+            return false;            
+        }   
+    }
+    
+    function insertQuestionAnswer($id, $langId, $question, $answer) {
+        debug(__METHOD__ . "($id, $langId, $question, $answer)");
+        
+        try {
+            $stmt = $this->_db->query('INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES (:id, :lang, :question, :answer)');
+            $stmt->bindParam(':question', $question);
+            $stmt->bindParam(':answer', $answer);
+            $stmt->bindParam(':id', $id);
+            $stmt->bindParam(':lang', $lang);
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            logException($e);
+            return false;            
+        }               
+    }
+    
 
 }

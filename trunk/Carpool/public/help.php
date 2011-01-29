@@ -30,7 +30,7 @@ $content = array(
 
 );
 */
-$content = DatabaseHelper::getInstance()->getQuestionsAnswers(LocaleManager::getInstance()->getSelectedLanaguageId());
+$content = DatabaseHelper::getInstance()->getQuestionsAnswersByLang(LocaleManager::getInstance()->getSelectedLanaguageId());
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
