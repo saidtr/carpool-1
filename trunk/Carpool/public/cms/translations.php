@@ -47,6 +47,7 @@ $locales = LocaleManager::getInstance()->getLocales();
 $currentQuestions = DatabaseHelper::getInstance()->getQuestionsAnswers();
 
 foreach($currentQuestions as $questionAnswerAllLangs) {
+    $id = $questionAnswerAllLangs[LocaleManager::getDefaultLocale()]['Id'];
     foreach ($locales as $lang => $locale) {
         $questionAnswer = isset($questionAnswerAllLangs[$lang]) ? $questionAnswerAllLangs[$lang] : null;
 ?>
@@ -55,10 +56,10 @@ foreach($currentQuestions as $questionAnswerAllLangs) {
     			<span><?php echo $locales[$lang]['Name'] ?></span>
     		</td>
         	<td>
-        		<input type="text" id="question_<?php echo $questionAnswer['Id'] ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Question'] ?>" />
+        		<input type="text" id="question_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Question'] ?>" />
         	</td>
         	<td>
-        		<input type="text" id="answer_<?php echo $questionAnswer['Id'] ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Answer'] ?>" />
+        		<input type="text" id="answer_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Answer'] ?>" />
         	</td>
     	</tr>
 <?php 
