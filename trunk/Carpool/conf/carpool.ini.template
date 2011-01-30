@@ -2,7 +2,7 @@
 app.name           = Carpool
 default.domain     = 
 domain             = 
-default.locale     = en
+default.locale     = 1
 mail.addr          = 
 mail.display       = Carpool Support
 
