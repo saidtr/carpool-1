@@ -609,22 +609,6 @@ class DatabaseHelper {
         }               
     }
     
-    function updateQuestionAnswer($id, $langId, $question, $answer) {
-        debug(__METHOD__ . "($id, $langId, $question, $answer)");
-        
-        try {
-            $stmt = $this->_db->query('UPDATE QuestionsAnswers SET Question = :question, ANSWER = :answer WHERE Id = :id AND Lang = :lang');
-            $stmt->bindParam(':question', $question);
-            $stmt->bindParam(':answer', $answer);
-            $stmt->bindParam(':id', $id);
-            $stmt->bindParam(':lang', $lang);
-            return $stmt->execute();
-        } catch(PDOException $e) {
-            logException($e);
-            return false;            
-        }               
-    }
-    
     /**
      * 
      * Get the next available ID for use with new QAs. 
