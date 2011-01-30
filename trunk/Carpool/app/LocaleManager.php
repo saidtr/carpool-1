@@ -24,6 +24,10 @@ class LocaleManager {
 		textdomain(self::DOMAIN);
 	}
 	
+	public static function getDefaultLocale() {
+	    return getConfiguration('default.locale');
+	}
+	
 	public function getLocales() {
 	    return $this->locales;
 	}
@@ -53,7 +57,7 @@ class LocaleManager {
 		} else if (isset($_COOKIE['lang']) && array_key_exists($_COOKIE['lang'], $this->locales)) {
 			$this->locale = $this->locales[$_COOKIE['lang']];
 		} else {
-			$this->locale = $this->locales[getConfiguration('default.locale')];
+			$this->locale = $this->locales[self::getDefaultLocale()];
 		}
 		info(__METHOD__ . ' locale selected: ' . $this->locale['Name'] . ' (' . $this->locale['Locale'] . ')');
 		setlocale(LC_ALL, $this->locale['Locale']);
