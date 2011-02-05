@@ -534,7 +534,7 @@ class DatabaseHelper {
          debug(__METHOD__ . "($time)");
          assert(is_integer($time) === true && $time > 0);
          try {
-            $stmt = $this->_db->query('UPDATE ShowInterestNotifier SET LastRun=:time');
+            $stmt = $this->_db->prepare('UPDATE ShowInterestNotifier SET LastRun=:time');
 			$stmt->bindParam(':time', $time);
 			$stmt->execute();
 			return true;
@@ -597,11 +597,32 @@ class DatabaseHelper {
         debug(__METHOD__ . "($id, $langId, $question, $answer)");
         
         try {
-            $stmt = $this->_db->query('UPDATE QuestionsAnswers SET Question = :question, ANSWER = :answer WHERE Id = :id AND Lang = :lang');
-            $stmt->bindParam(':question', $question);
-            $stmt->bindParam(':answer', $answer);
-            $stmt->bindParam(':id', $id);
-            $stmt->bindParam(':lang', $lang);
+            $setQuestion = !is_null($question);
+            $setAnswer = !is_null($answer);
+            
+            // Assert we try to change at least one
+            assert($setQuestion || $setAnswer);
+            
+            $sql = 'UPDATE QuestionsAnswers SET ';
+            if ($setQuestion)
+                $sql .= 'Question=:question';
+            if ($setAnswer) {
+                if ($setQuestion)
+                    $sql .= ', ';
+                $sql .= 'Answer=:answer';
+            }
+            
+            $sql .= ' WHERE Id=:id AND Lang=:lang';
+            
+            $stmt = $this->_db->prepare($sql);
+            if ($setQuestion) {
+                $stmt->bindParam(':question', $question);
+            }
+            if ($setAnswer) {
+                $stmt->bindParam(':answer', $answer);
+            }
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':lang', $langId, PDO::PARAM_INT);
             return $stmt->execute();
         } catch(PDOException $e) {
             logException($e);
@@ -622,11 +643,12 @@ class DatabaseHelper {
             // We might have a synchronization
             // problem here, but typcial usage pattern doesn't worth the work of creating a 
             // better auto-incrementing mechanism.
-            $rs = $this->_db->query('SELECT MAX(Id) FROM QuestionsAnswers');
+            $rs = $this->_db->query('SELECT MAX(Id) AS Id FROM QuestionsAnswers');
             $res = $rs->fetch(PDO::FETCH_ASSOC);
             if ($res) {
                 return ($res['Id'] + 1);
-            } 
+            }
+            // Nothing found - starting from 1
             return 1;
         } catch(PDOException $e) {
             logException($e);
@@ -638,11 +660,11 @@ class DatabaseHelper {
         debug(__METHOD__ . "($id, $langId, $question, $answer)");
         
         try {
-            $stmt = $this->_db->query('INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES (:id, :lang, :question, :answer)');
+            $stmt = $this->_db->prepare('INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES (:id, :lang, :question, :answer)');
             $stmt->bindParam(':question', $question);
             $stmt->bindParam(':answer', $answer);
             $stmt->bindParam(':id', $id);
-            $stmt->bindParam(':lang', $lang);
+            $stmt->bindParam(':lang', $langId);
             return $stmt->execute();
         } catch(PDOException $e) {
             logException($e);
