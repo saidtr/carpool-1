@@ -28,8 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $qId = 0;
         } 
         foreach ($locales as $lang) {
+            $answerFunc = str_replace('question', 'answer', $func);
             $question = isset($_POST[$func . '_' . $qId . '_' . $lang['Id']]) ? $_POST[$func . '_' . $qId . '_' . $lang['Id']] : null; 
-            $answer = isset($_POST[$func . '_' . $qId . '_' . $lang['Id']]) ? $_POST[$func . '_' . $qId . '_' . $lang['Id']] : null;
+            $answer = isset($_POST[$answerFunc . '_' . $qId . '_' . $lang['Id']]) ? $_POST[$answerFunc . '_' . $qId . '_' . $lang['Id']] : null;
             
             if ($newQuestionAnswer) {
                 $db->insertQuestionAnswer($id, $lang['Id'], $question, $answer);
@@ -42,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     Utils::redirect('translations.php');
 } else {
-    
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
