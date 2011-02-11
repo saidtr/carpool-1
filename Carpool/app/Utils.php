@@ -39,7 +39,7 @@ class Utils {
     
     static function getRunningScript() {
         $currentFile = $_SERVER["SCRIPT_NAME"];
-        $parts = Explode('/', $currentFile);
+        $parts = explode('/', $currentFile);
         $currentFile = $parts[count($parts) - 1];
         return $currentFile;
     }
