@@ -21,7 +21,7 @@ if ($contact) {
 	
     extract($rideData, EXTR_PREFIX_ALL, 'ride');
     $isLogged = true;
-    $isActive = ($ride_Status == STATUS_OFFERED);
+    $isActive = ($ride_Active == RIDE_ACTIVE);
 }
 
 $defaultSrcCity       = getConfiguration('default.src.city');
@@ -135,6 +135,7 @@ echo View_Header::render($header);
 			<input type="button" id="deleteButton" value="<?php echo _('Delete')?>!" />
 			<input type="button" id="activateToggleButton" value="<?php echo ($isActive ? _("Deactivate") : _("Activate"))?>" />
 			<?php endif; ?>
+			<span id="submitStatus"></span>
 		</fieldset>
 	</form>
 	</div>
