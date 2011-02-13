@@ -23,17 +23,18 @@ try {
         throw new Exception("No ride found for contact $contactId");
     }
     $rideId = $ride['Id'];
-    if ($ride['Status'] == STATUS_OFFERED) {
-        $newStatus = STATUS_OFFERED_HIDE;
+    if ($ride['Active'] == RIDE_ACTIVE) {
+        // Hidden status is always status + 2
+        $newStatus = RIDE_INACTIVE;
         $msg = _("Ride de-activated. From now on, this ride will not appear in the search results.");
-    } else if ($ride['Status'] == STATUS_OFFERED_HIDE) {
-        $newStatus = STATUS_OFFERED;
+    } else if ($ride['Active'] == RIDE_INACTIVE) {
+        $newStatus = RIDE_ACTIVE;
         $msg = _("Ride activated. You are back in business!");
     } else {
-        throw Exception("Illegal status");
+        throw new Exception("Illegal status");
     }
     
-    if (!$server->updateRideStatus($rideId, $newStatus)) {
+    if (!$server->updateRideActive($rideId, $newStatus)) {
         throw new Exception("Could not change status to ride $rideId");
     }
     

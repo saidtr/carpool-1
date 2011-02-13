@@ -6,12 +6,17 @@ function disableButtons(disable) {
 	var action = (disable) ? 'disabled' : '';
 	$('input[type="button"],input[type="submit"]').attr('disabled', action);
 	isWorking = disable;
+	if (disable)
+		$('#submitStatus').text(_('Working...'));
+	else
+		$('#submitStatus').text('');
 }
 
 function deleteRide() {
 	var delConfirm = confirm(_("Are you sure you want to completely, fully, eternally delete your ride?"));
 	if (delConfirm) {
 		disableButtons(true);
+		
     	$.post(Constants.xhr['DEL_RIDE'], null, function(data) {
     		refresh();
     	});

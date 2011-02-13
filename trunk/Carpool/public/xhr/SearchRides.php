@@ -22,6 +22,9 @@ if (isset($destCityId) && !empty($destCityId) && !($destCityId == LOCATION_DONT_
 
 if (isset($wantTo) && !empty($wantTo)) {
     $params['status'] = $wantTo;
+} else {
+    // We need to avoid displaying of inactive rides
+    $params['status'] = array(STATUS_LOOKING, STATUS_OFFERED);
 }
 
 //$params['status'] = STATUS_OFFERED;
