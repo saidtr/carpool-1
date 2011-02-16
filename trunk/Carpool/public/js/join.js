@@ -103,8 +103,9 @@ $(document).ready(function() {
 			return valid;
 		},
 		success      : function(xhr) {
-			status = xhr.status;
-			action = xhr.action;
+			var status = xhr.status;
+			var action = xhr.action;
+
 			if (status === 'ok') {
 				if (action === 'add') {
 					redirect('thanks.php');
