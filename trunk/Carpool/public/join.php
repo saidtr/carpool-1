@@ -45,7 +45,7 @@ $defaultDestLocation  = getConfiguration('default.dest.loc');
 <div id="bd">
 <?php echo View_Navbar::buildNavbar($isLogged)?>
 <?php
-$header = ($isLogged) ? _("Hello again, ") . htmlspecialchars($contact_Name) : _("Provide a new ride.");
+$header = ($isLogged) ? _("Hello again, ") . htmlspecialchars($contact_Name) : _("Join the carpool.");
 echo View_Header::render($header); 
 ?>
 <div id="content">
