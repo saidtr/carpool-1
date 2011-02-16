@@ -34,7 +34,12 @@ class View_Navbar {
     }
 
     static function buildNavbar($logged = false) {
-        $html = '<div id="navbar">';
+        $html = '';
+        
+        // Put branding bar if we want one
+        if (getConfiguration('branding.enable'))
+            $html .= ViewRenderer::renderToString('views/branding.php');
+        $html .= '<div id="navbar">';
     	if ($logged) {
     		$pages =& self::$pagesMember;
     	} else {

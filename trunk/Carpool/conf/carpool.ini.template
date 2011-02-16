@@ -21,6 +21,7 @@ log.file           = "~/carpool.log"
 
 [settings]
 notify.immediate   = 1
+branding.enable    =
 
 [localization]
 default.src.city   =
