@@ -77,7 +77,7 @@ function buildSearchResults(/* JSON */ data) {
 	$('#resultsTable tr:first').siblings().remove();
 	$('#resultsMessage').text('');
 
-	if (data.length === 0) {
+	if (!data || data.length === 0) {
 		// Well, nothing
 		$('#resultsTable').hide();
 		$('#resultsMessage').text(_('Sorry, no results found.'));
@@ -103,8 +103,8 @@ function buildSearchResults(/* JSON */ data) {
 }
 
 function doFilter() {
-	if (!searchResults) 
-		return;
+	//if (!searchResults) 
+		//return;
 
 	var filter = new Filter();
 	var srcId = $('#srcCity').val();
