@@ -1,0 +1,10 @@
+INSERT INTO QuestionsAnswers VALUES(1,1,'What''s this for?','This tries to serve as a match-making system for people who wants to share rides together.');
+INSERT INTO QuestionsAnswers VALUES(1,2,'מה זה?','מטרת היישום היא לשמש כמערכת התאמה בין אנשים המעוניינים לנסוע יחד.');
+INSERT INTO QuestionsAnswers VALUES(2,1,'Why should I join?','Because it''s greener. Because it might save you some money on gas and toll roads. Because it''s much more fun.');
+INSERT INTO QuestionsAnswers VALUES(2,2,'מדוע כדאי לי להצטרף?','כי זה ירוק יותר. כי זה עשוי לחסוך לך כסף על דלק וכבישי אגרה. כי זה הרבה יותר כיף.');
+INSERT INTO QuestionsAnswers VALUES(3,1,'How can I delete/modify my account?','Use the authentication link to authenticate yourself. Then, under "My Profile", you can edit your settings, delete or de-activate your account.');
+INSERT INTO QuestionsAnswers VALUES(3,2,'איך אפשר לערוך/לשנות את החשבון שלי?','השתמשו בקישור ההזדהות כי לזהות את עצמכם. לאחר מכן תוכלו לעדכן או למחוק את פרטיכם בדף "הפרופיל שלי".');
+INSERT INTO QuestionsAnswers VALUES(4,1,'What is the authentication link? Where can I find it?','The authentication link used to identify you, instead of username and password. You can find it in the mail you received right after the registration. To use it, just paste this link in your browser.');
+INSERT INTO QuestionsAnswers VALUES(4,2,'מה זה "קישור ההזדהות"? איפה מוצאים אותו?','קישור ההזדהות משמש עבור זיהוי משתמשים, כתחליף למנגנון של שם משתמש וססמה. ניתן למצוא אותו בדואר שנשלח אליכם עם ההרשמה. כדי להשתמש בו, פשוט הדביקו אותו בחלון הכתובות של הדפדפן.');
+INSERT INTO QuestionsAnswers VALUES(5,1,'I lost the authentication link.','Use the "Feedback" page to ask for recovery.');
+INSERT INTO QuestionsAnswers VALUES(5,2,'איבדתי את קישור ההזדהות.','השתמשו בדף הפידבק על מנת לבקש אחזור.');
