@@ -98,6 +98,9 @@ input[type="text"], textarea {
 	border: 1px solid #c0c0c0;
 	padding: 4px;
 	background: none;
+}
+
+textarea {
 	overflow: auto;
 }
 
