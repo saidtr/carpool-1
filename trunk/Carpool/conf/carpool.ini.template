@@ -12,7 +12,7 @@ feedback.to.name   =
 feedback.from      = 
 feedback.from.name = Carpool Feedback
 
-; Log level: 0 - very verbose, 4 - no logging. Recommend for production: 3
+; Log level: 0 - very verbose, 4 - no logging. Recommended for production: 3
 log.level          = 0
 ; Log file. Use "~" as reference to BASE_PATH
 log.file           = "~/carpool.log"
