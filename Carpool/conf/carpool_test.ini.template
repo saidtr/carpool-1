@@ -1,0 +1,33 @@
+[global]
+app.name           = CarpoolTest
+default.domain     = 
+domain             = 
+default.locale     = 1
+mail.addr          = 
+mail.display       = Carpool Support
+
+; Feedback properties
+feedback.mail      = 
+feedback.to.name   = 
+feedback.from      = 
+feedback.from.name = Carpool Feedback
+
+; Log level: 0 - very verbose, 4 - no logging. Recommended for production: 3
+log.level          = 0
+; Log file. Use "~" as reference to BASE_PATH
+log.file           = "~/carpool_test.log"
+
+[database]
+database.dsn       = sqlite::memory:
+database.user      =
+database.pass      =
+
+[settings]
+notify.immediate   = 1
+branding.enable    =
+
+[localization]
+default.src.city   =
+default.src.loc    =
+default.dest.city  = 
+default.dest.loc   = 
