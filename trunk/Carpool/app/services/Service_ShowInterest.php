@@ -20,14 +20,11 @@ class Service_ShowInterest {
         Utils::sendMail(Utils::buildEmail($contact['Email']), $contact['Email'], getConfiguration('mail.addr'), getConfiguration('mail.display'), 'New rides from carpool', $mailBody);
     }
     
-    
-    public static function run($rideId = null) {
-        info('ShowInterestNotifier: started');
-        
+    public static function findPotentialRides($status, $rideId = null) {
         $db = DatabaseHelper::getInstance();
         
         $searchParams = array();
-        $searchParams['status'] = STATUS_OFFERED;
+        $searchParams['status'] = $status;
         
         $lastRun = $db->getLastShowInterestNotifier();
         if ($lastRun !== false && $lastRun > 0) {
@@ -42,7 +39,20 @@ class Service_ShowInterest {
         } else {
             $allRides = array(0 => $db->getRideById($rideId));
         }
+
+        return $allRides;
+    }
+    
+    public static function findRidesToNotify($status) {
+        $searchParams = array(
+            'status' => $status,
+            'notify' => 1    
+        );
         
+        return DatabaseHelper::getInstance()->searchRides($searchParams);
+    }
+    
+    public static function searchForMatchingRides($potentialRides, $ridesToNotify) {
         // List all rides and create an index.
         // For each ride from X to Y, we create the following pointer:
         // X to Y -> Ride ID
@@ -50,45 +60,55 @@ class Service_ShowInterest {
         // X to * -> Ride ID
         // * to Y -> Ride ID 
         $rideIdx = array();
-        foreach ($allRides as $ride) {
+        foreach ($potentialRides as $ride) {
             $index = self::buildIndexStr($ride['SrcCityId'], $ride['DestCityId']);
             // Put two additional indexes to fit "wild card" search (location = everywhere)
             $indexWildCardFrom = self::buildIndexStr(LOCATION_DONT_CARE, $ride['DestCityId']);
             $indexWildCardTo = self::buildIndexStr($ride['SrcCityId'], LOCATION_DONT_CARE);
-            if (!isset($fromIdx[$index])) {
-                $fromIdx[$index] = array();
+            if (!isset($rideIdx[$index])) {
+                $rideIdx[$index] = array();
             }
-            $fromIdx[$index] []= $ride['Id'];
-            if (!isset($fromIdx[$indexWildCardFrom])) {
-                $fromIdx[$indexWildCardFrom] = array();
+            $rideIdx[$index] []= $ride['Id'];
+            if (!isset($rideIdx[$indexWildCardFrom])) {
+                $rideIdx[$indexWildCardFrom] = array();
             }
-            $fromIdx[$indexWildCardFrom] []= $ride['Id'];
-            if (!isset($fromIdx[$indexWildCardTo])) {
-                $fromIdx[$indexWildCardTo] = array();
+            $rideIdx[$indexWildCardFrom] []= $ride['Id'];
+            if (!isset($rideIdx[$indexWildCardTo])) {
+                $rideIdx[$indexWildCardTo] = array();
             }
-            $fromIdx[$indexWildCardTo] []= $ride['Id'];
-            
+            $rideIdx[$indexWildCardTo] []= $ride['Id'];          
         }
         
         // Now, use the index we created before to find matching rides
         // for all users who showed interest in a specific ride.
         $results = array();
-        $toNotifyRides = $db->searchRides(array('status' => STATUS_LOOKING));
-        foreach ($toNotifyRides as $ride) {
+        foreach ($ridesToNotify as $ride) {
             $index = self::buildIndexStr($ride['SrcCityId'], $ride['DestCityId']); 
-            if (isset($fromIdx[$index])) {
+            if (isset($rideIdx[$index])) {
                 if (!isset($results[$ride['ContactId']])) {
                     $results[$ride['ContactId']] = array();
                 }
-                $results[$ride['ContactId']] = array_merge($results[$ride['ContactId']], $fromIdx[$index]);
+                $results[$ride['ContactId']] = array_merge($results[$ride['ContactId']], $rideIdx[$index]);
             } 
-        }
+        }       
+
+        return $results;
+    } 
+    
+    
+    public static function run($rideId = null) {
+        info('ShowInterestNotifier: started');
         
+        $potentialRides = self::findPotentialRides(STATUS_OFFERED, $rideId);
+        $ridesToNotify = self::findRidesToNotify(STATUS_LOOKING);
+        
+        $results = self::searchForMatchingRides($potentialRides, $ridesToNotify);
+             
         foreach ($results as $contactId => $potentialResults) {
             self::notify($contactId, $allRides, $potentialResults);            
         }
         
-        $db->updateLastShowInterestNotifier(time());
+        DatabaseHelper::getInstance()->updateLastShowInterestNotifier(time());
         
         info('ShowInterestNotifier: done');
     }
