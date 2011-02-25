@@ -18,6 +18,9 @@ log.level          = 0
 log.file           = "~/carpool.log"
 
 [database]
+database.dsn       = sqlite:%DATAPATH%/data.sq3
+database.user      =
+database.pass      =
 
 [settings]
 notify.immediate   = 1

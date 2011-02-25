@@ -23,10 +23,13 @@ class DatabaseHelper {
 	}
 
     private function __construct() {
-    	$dsn = 'sqlite:' . DATA_PATH . '/' . self::DATABASE_NAME . '.sq3';
+    	$dsn = str_replace('%DATAPATH%', DATA_PATH, getConfiguration('database.dsn'));
+    	$user = getConfiguration('database.user');
+    	$pass = getConfiguration('database.pass');
+    	
     	info('Connecting to DB: ' . $dsn);
     	try {
-            $this->_db = new PDO($dsn);
+            $this->_db = new PDO($dsn, $user, $pass);
             // Use exceptions as error handling
             $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if (!$this->_db) {
@@ -35,7 +38,7 @@ class DatabaseHelper {
     	} catch (PDOException $e) {
         	logException($e);
         }
-    }
+    }  
     
     /**
      * Returns the PDO object holding the DB connection. For testing purpose only 
@@ -214,13 +217,13 @@ class DatabaseHelper {
     
     function addRide(
         $srcCityId, $srcLocation, $destCityId, $destLocation, 
-        $timeMorning, $timeEvening, $contactId, $comment, $status) {
-        debug(__METHOD__ . "($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $status)");
+        $timeMorning, $timeEvening, $contactId, $comment, $status, $notify) {
+        debug(__METHOD__ . "($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $status, $notify)");
 
         try {
             $stmt = $this->_db->prepare(
-            	'INSERT INTO Ride(srcCityId, srcLocation, destCityId, destLocation, timeMorning, timeEvening, contactId, comment, status, timeCreated, timeUpdated, Active) ' . 
-            	'VALUES (:srcCityId, :srcLocation, :destCityId, :destLocation, :timeMorning, :timeEvening, :contactId, :comment, :status, :timeCreated, :timeUpdated, :active)');
+            	'INSERT INTO Ride(srcCityId, srcLocation, destCityId, destLocation, timeMorning, timeEvening, contactId, comment, status, timeCreated, timeUpdated, Active, Notify) ' . 
+            	'VALUES (:srcCityId, :srcLocation, :destCityId, :destLocation, :timeMorning, :timeEvening, :contactId, :comment, :status, :timeCreated, :timeUpdated, :active, :notify)');
             $stmt->bindParam(':srcCityId', $srcCityId);
             $stmt->bindParam(':srcLocation', $srcLocation);
             $stmt->bindParam(':destCityId', $destCityId);
@@ -235,6 +238,7 @@ class DatabaseHelper {
             $stmt->bindParam(':timeUpdated', $curTime);
             $active = RIDE_ACTIVE;
             $stmt->bindParam(':active', $active);
+            $stmt->bindParam(':notify', $notify);
             
             if ($stmt->execute()) {
                $inserted = $this->_db->lastInsertId();
@@ -252,11 +256,11 @@ class DatabaseHelper {
 
     function updateRide(
         $rideId, $srcCityId, $srcLocation, $destCityId, $destLocation,
-        $timeMorning, $timeEvening, $comment, $status) {
-        debug(__METHOD__ . "($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $status)");
+        $timeMorning, $timeEvening, $comment, $status, $notify) {
+        debug(__METHOD__ . "($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $status, $notify)");
 
         try {
-            $stmt = $this->_db->prepare('UPDATE Ride SET srcCityId=:srcCityId, srcLocation=:srcLocation, destCityId=:destCityId, destLocation=:destLocation, timeMorning=:timeMorning, timeEvening=:timeEvening, comment=:comment, status=:status, timeUpdated=:timeUpdated WHERE id=:rideId');
+            $stmt = $this->_db->prepare('UPDATE Ride SET srcCityId=:srcCityId, srcLocation=:srcLocation, destCityId=:destCityId, destLocation=:destLocation, timeMorning=:timeMorning, timeEvening=:timeEvening, comment=:comment, status=:status, timeUpdated=:timeUpdated, notify=:notify WHERE id=:rideId');
             $stmt->bindParam(':srcCityId', $srcCityId);
             $stmt->bindParam(':srcLocation', $srcLocation);
             $stmt->bindParam(':destCityId', $destCityId);
@@ -268,6 +272,7 @@ class DatabaseHelper {
             $curTime = time();
             $stmt->bindParam(':timeUpdated', $curTime);
             $stmt->bindParam(':rideId', $rideId);
+            $stmt->bindParam(':notify', $notify);
             
             if ($stmt->execute()) {
                info("Ride $rideId successfully updated");
@@ -365,6 +370,9 @@ class DatabaseHelper {
             if (isset($params['minTimeCreated'])) {
             	$sql .= ' AND r.timeCreated >= ' . $this->_db->quote($params['minTimeCreated']);
             }
+            if (isset ($params['notify'])) {
+                $sql .= ' AND r.notify = ' . $this->_db->quote($params['notify']);
+            }
         } 
         // Order - show newer first
         $sql .= ' ORDER BY r.Id DESC';
@@ -412,7 +420,7 @@ class DatabaseHelper {
      */
     function getRideProvidedByContactId($contactId) {
         debug(__METHOD__ . "($contactId)");
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.Active   
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.Active, r.Notify   
                 FROM ride r 
                 WHERE r.ContactId = :contactId LIMIT 1';        
         try {
