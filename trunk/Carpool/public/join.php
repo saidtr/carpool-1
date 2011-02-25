@@ -124,7 +124,11 @@ echo View_Header::render($header);
 				</dd>				
 				<dd>
 					<label for="comment"><?php echo _('Comments')?></label>
-					<textarea id="comment" name="comment" rows=2 cols=40><?php echo (isset($Comment) ? $Comment : '')?></textarea>
+					<textarea id="comment" name="comment" rows=2 cols=40><?php echo (isset($ride_Comment) ? $ride_Comment : '')?></textarea>
+				</dd>
+				<dd>
+					<label for="notify"><?php echo _('Notify me by mail about new rides that may help me')?></label>
+					<input type="checkbox" id="notify" name="notify" value="1" <?php if (isset($ride_Notify) && $ride_Notify !== '0') echo 'checked="checked"'; ?> >
 				</dd>
 			</dl>
 		</fieldset>	

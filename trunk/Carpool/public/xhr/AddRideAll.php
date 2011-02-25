@@ -40,6 +40,7 @@ if (empty($email)) {
 }
 
 if (empty($phone)) $phone = null;
+if (empty($notify)) $notify = 0;
 
 $isUpdate = AuthHandler::isLoggedIn();
 
@@ -47,9 +48,9 @@ $action = ($isUpdate) ? 'update' : 'add';
 
 if ($valid) {
 
+    $server = DatabaseHelper::getInstance();
+    
     try {
-        
-        $server = DatabaseHelper::getInstance();
     
         if ($isUpdate) {
             $contactId = AuthHandler::getLoggedInUserId();
@@ -59,6 +60,9 @@ if ($valid) {
             $contactId = false;
             $rideId = false;
         }
+        
+        // Put it all in a transaction - we don't want contacts with no rides
+        $server->beginTransaction();
         
         // Add destination and source city in case we don't have them in the DB
         // Assumes we already verified that the names are not empty
@@ -91,13 +95,13 @@ if ($valid) {
         
         // Add or update ride
         if ($isUpdate) {
-            if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo)) {
+            if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo, $notify)) {
                 GlobalMessage::setGlobalMessage(_("Ride successfully updated."));
             } else {
                 throw new Exception("Could not update ride");
             }
         } else {
-            $rideId = $server->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo);
+            $rideId = $server->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo, $notify);
             if (!$rideId) {
             	throw new Exception("Could not add ride");
             }
@@ -110,11 +114,15 @@ if ($valid) {
             
         }
         
+        $server->commit();
+        
         echo json_encode(array('status' => 'ok', 'action' => $action));
     } catch (PDOException $e) {
+        $server->rollBack();
         logException($e);
         echo json_encode(array('status' => 'err', 'action' => $action));
     } catch (Exception $e) {
+        $server->rollBack();
         logException($e);
         if (ENV == ENV_DEVELOPMENT) {
         	echo json_encode(array('status' => 'err', 'action' => $action, 'msg' => $e->getMessage()));
