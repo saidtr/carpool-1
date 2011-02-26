@@ -104,6 +104,11 @@ textarea {
 	overflow: auto;
 }
 
+input[type="checkbox"] {
+	float: left;
+	margin-right: 5px;
+}
+
 input.textInput, textarea {
 	width: 200px;	
 }

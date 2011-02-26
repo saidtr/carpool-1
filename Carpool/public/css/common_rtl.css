@@ -35,6 +35,11 @@ body {
 
 /* Forms */
 
+input[type="checkbox"] {
+	float: right;
+	margin-left: 5px;
+}
+
 form dd {
 	float: right;
 	margin: 5px 0 5px 5px;
