@@ -109,6 +109,10 @@ input[type="checkbox"] {
 	margin-right: 5px;
 }
 
+input[type="radio"] {
+	margin-right: 5px;
+}
+
 input.textInput, textarea {
 	width: 200px;	
 }
@@ -130,6 +134,10 @@ form dd {
 
 form dl.noFloat dd {
 	float: none;
+}
+
+form ul.radioSelectorHolder li {
+	margin: 8px 0;
 }
 
 .description {

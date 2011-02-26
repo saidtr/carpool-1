@@ -54,8 +54,10 @@ echo View_Header::render($header);
 		<p id="formMessage"></p>
 		<fieldset>
 			<legend>I want to...</legend>
-			<p><input type="radio" name="wantTo" <?php if (!isset($ride_Status) || (isset($ride_Status) && $ride_Status == STATUS_LOOKING)) echo 'checked="checked"' ?> value="<?php echo STATUS_LOOKING ?>"/><?php echo _('I want to join a ride')?></p>
-			<p><input type="radio" name="wantTo" <?php if (isset($ride_Status) && $ride_Status == STATUS_OFFERED) echo 'checked="checked"' ?> value="<?php echo STATUS_OFFERED ?>"/><?php echo _('I want to provide a ride')?></p>
+			<ul class="radioSelectorHolder">
+    			<li><input type="radio" name="wantTo" <?php if (!isset($ride_Status) || (isset($ride_Status) && $ride_Status == STATUS_LOOKING)) echo 'checked="checked"' ?> value="<?php echo STATUS_LOOKING ?>" /><?php echo _('I want to join a ride')?></li>
+    			<li><input type="radio" name="wantTo" <?php if (isset($ride_Status) && $ride_Status == STATUS_OFFERED) echo 'checked="checked"' ?> value="<?php echo STATUS_OFFERED ?>" /><?php echo _('I want to provide a ride')?></li>
+			</ul>
 		</fieldset>
 		<fieldset>
 			<legend>Ride details</legend>
@@ -127,8 +129,10 @@ echo View_Header::render($header);
 					<textarea id="comment" name="comment" rows=2 cols=40><?php echo (isset($ride_Comment) ? $ride_Comment : '')?></textarea>
 				</dd>
 				<dd>
-					<label for="notify"><?php echo _('Notify me by mail about new rides that may help me')?></label>
-					<input type="checkbox" id="notify" name="notify" value="1" <?php if (isset($ride_Notify) && $ride_Notify !== '0') echo 'checked="checked"'; ?> >
+					
+					<label for="notify"><?php echo _('Notify me by mail about new rides that may be relevant to me')?>
+						<input type="checkbox" id="notify" name="notify" value="1" <?php if (isset($ride_Notify) && $ride_Notify !== '0') echo 'checked="checked"'; ?> >
+					</label>
 				</dd>
 			</dl>
 		</fieldset>	
