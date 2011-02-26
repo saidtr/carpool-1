@@ -20,7 +20,7 @@ class Service_ShowInterest {
         Utils::sendMail(Utils::buildEmail($contact['Email']), $contact['Email'], getConfiguration('mail.addr'), getConfiguration('mail.display'), 'New rides from carpool', $mailBody);
     }
     
-    public static function findPotentialRides($status, $rideId = null) {
+    public static function findPotentialRides($status) {
         $db = DatabaseHelper::getInstance();
         
         $searchParams = array();
@@ -34,11 +34,14 @@ class Service_ShowInterest {
             info('No last run found, we go from the start');
         }
         
+        /*
         if ($rideId == null) {
             $allRides = $db->searchRides($searchParams);
         } else {
             $allRides = array(0 => $db->getRideById($rideId));
         }
+        */
+        $allRides = $db->searchRides($searchParams);
 
         return $allRides;
     }
@@ -63,34 +66,42 @@ class Service_ShowInterest {
         foreach ($potentialRides as $ride) {
             $index = self::buildIndexStr($ride['SrcCityId'], $ride['DestCityId']);
             // Put two additional indexes to fit "wild card" search (location = everywhere)
-            $indexWildCardFrom = self::buildIndexStr(LOCATION_DONT_CARE, $ride['DestCityId']);
-            $indexWildCardTo = self::buildIndexStr($ride['SrcCityId'], LOCATION_DONT_CARE);
+            $indexWildCardFrom = $ride['DestCityId'] != LOCATION_DONT_CARE ? self::buildIndexStr(LOCATION_DONT_CARE, $ride['DestCityId']) : false;
+            $indexWildCardTo = $ride['SrcCityId'] != LOCATION_DONT_CARE ? self::buildIndexStr($ride['SrcCityId'], LOCATION_DONT_CARE) : false;
             if (!isset($rideIdx[$index])) {
                 $rideIdx[$index] = array();
             }
-            $rideIdx[$index] []= $ride['Id'];
-            if (!isset($rideIdx[$indexWildCardFrom])) {
-                $rideIdx[$indexWildCardFrom] = array();
+            if (array_search($ride['Id'], $rideIdx[$index]) === false)
+                $rideIdx[$index] []= $ride['Id'];
+            
+            if ($indexWildCardFrom) {
+                if (!isset($rideIdx[$indexWildCardFrom])) {
+                    $rideIdx[$indexWildCardFrom] = array();
+                }
+                if (array_search($ride['Id'], $rideIdx[$indexWildCardFrom]) === false)
+                    $rideIdx[$indexWildCardFrom] []= $ride['Id'];
             }
-            $rideIdx[$indexWildCardFrom] []= $ride['Id'];
-            if (!isset($rideIdx[$indexWildCardTo])) {
-                $rideIdx[$indexWildCardTo] = array();
-            }
-            $rideIdx[$indexWildCardTo] []= $ride['Id'];          
+            if ($indexWildCardTo) {
+                if (!isset($rideIdx[$indexWildCardTo])) {
+                    $rideIdx[$indexWildCardTo] = array();
+                }
+                if (array_search($ride['Id'], $rideIdx[$indexWildCardTo]) === false)
+                    $rideIdx[$indexWildCardTo] []= $ride['Id'];
+            }          
         }
         
         // Now, use the index we created before to find matching rides
         // for all users who showed interest in a specific ride.
         $results = array();
         foreach ($ridesToNotify as $ride) {
-            $index = self::buildIndexStr($ride['SrcCityId'], $ride['DestCityId']); 
+            $index = self::buildIndexStr($ride['SrcCityId'], $ride['DestCityId']);
             if (isset($rideIdx[$index])) {
                 if (!isset($results[$ride['ContactId']])) {
                     $results[$ride['ContactId']] = array();
                 }
-                $results[$ride['ContactId']] = array_merge($results[$ride['ContactId']], $rideIdx[$index]);
+                $results[$ride['ContactId']] = array_unique(array_merge($results[$ride['ContactId']], $rideIdx[$index]));
             } 
-        }       
+        }    
 
         return $results;
     } 
