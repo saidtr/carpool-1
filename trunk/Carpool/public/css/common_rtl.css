@@ -38,6 +38,12 @@ body {
 input[type="checkbox"] {
 	float: right;
 	margin-left: 5px;
+	margin-right: 0px;
+}
+
+input[type="radio"] {
+	margin-left: 5px;
+	margin-right: 0px;
 }
 
 form dd {
