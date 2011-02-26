@@ -34,13 +34,6 @@ class Service_ShowInterest {
             info('No last run found, we go from the start');
         }
         
-        /*
-        if ($rideId == null) {
-            $allRides = $db->searchRides($searchParams);
-        } else {
-            $allRides = array(0 => $db->getRideById($rideId));
-        }
-        */
         $allRides = $db->searchRides($searchParams);
 
         return $allRides;
@@ -110,13 +103,29 @@ class Service_ShowInterest {
     public static function run($rideId = null) {
         info('ShowInterestNotifier: started');
         
-        $potentialRides = self::findPotentialRides(STATUS_OFFERED, $rideId);
-        $ridesToNotify = self::findRidesToNotify(STATUS_LOOKING);
-        
-        $results = self::searchForMatchingRides($potentialRides, $ridesToNotify);
+        if ($rideId === null) {
+            $status1 = STATUS_OFFERED;
+            $status2 = STATUS_LOOKING;
+            for ($i = 0; $i < 2; $status1 = STATUS_LOOKING, $status2 = STATUS_OFFERED, ++$i) {
+                $potentialRides = self::findPotentialRides($status1);
+                $ridesToNotify = self::findRidesToNotify($status2);
+                
+                $results = self::searchForMatchingRides($potentialRides, $ridesToNotify);
+                     
+                foreach ($results as $contactId => $potentialResults) {
+                    self::notify($contactId, $potentialRides, $potentialResults);            
+                }
+            }
+        } else {
+            $newRide = array(0 => DatabaseHelper::getInstance()->getRideById($rideId));
+            $newRideStatus = $newRide[0]['Status'];
+            $ridesToNotify = self::findRidesToNotify($newRideStatus == STATUS_LOOKING ? STATUS_OFFERED : STATUS_LOOKING);
+
+            $results = self::searchForMatchingRides($newRide, $ridesToNotify);
              
-        foreach ($results as $contactId => $potentialResults) {
-            self::notify($contactId, $allRides, $potentialResults);            
+            foreach ($results as $contactId => $potentialResults) {
+                self::notify($contactId, $newRide, $potentialResults);
+            }
         }
         
         DatabaseHelper::getInstance()->updateLastShowInterestNotifier(time());
