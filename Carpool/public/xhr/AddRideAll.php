@@ -106,15 +106,14 @@ if ($valid) {
             	throw new Exception("Could not add ride");
             }
             $mailBody = ViewRenderer::renderToString(VIEWS_PATH . '/registrationMail.php', array('contact' => $server->getContactById($contactId))); 
-            Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);
-            
-            if (getConfiguration('notify.immediate') == 1) {
-                Service_ShowInterest::run($rideId);
-            }
-            
+            Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);          
         }
         
         $server->commit();
+        
+        if (!$isUpdate && getConfiguration('notify.immediate') == 1) {
+            Service_ShowInterest::run($rideId);
+        }
         
         echo json_encode(array('status' => 'ok', 'action' => $action));
     } catch (PDOException $e) {
