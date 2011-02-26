@@ -18,7 +18,7 @@ log.level          = 0
 log.file           = "~/carpool_test.log"
 
 [database]
-database.dsn       = sqlite::memory:
+database.dsn       = sqlite:%DATAPATH%/data_test.sq3
 database.user      =
 database.pass      =
 
