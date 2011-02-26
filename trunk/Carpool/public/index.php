@@ -36,8 +36,8 @@ $availableSrcCities = $db->getCities();
 				<dd>
 					<label for="wantTo"><?php echo _('Show me')?>&nbsp;</label>
 					<select id="wantTo" name="wantTo">
-						<option value="<?php echo STATUS_DONT_CARE?>"><?php echo _('Everything')?></option>
-						<option value="<?php echo STATUS_OFFERED ?>" selected="selected" ><?php echo _('Available rides')?></option>
+						<option value="<?php echo STATUS_DONT_CARE?>" selected="selected"><?php echo _('Everything')?></option>
+						<option value="<?php echo STATUS_OFFERED ?>"><?php echo _('Available rides')?></option>
 						<option value="<?php echo STATUS_LOOKING  ?>"><?php echo _('People looking for a ride')?></option>
 					</select>
 				</dd>
