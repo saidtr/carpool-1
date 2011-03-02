@@ -73,10 +73,10 @@ if (!$globalConf) {
 
 $GLOBALS['conf'] = $globalConf;
 
-function getConfiguration($key) {
+function getConfiguration($key, $default = false) {
     $globalConf = $GLOBALS['conf'];
     if (!isset($globalConf) || !isset($globalConf[$key])) {
-        return false;
+        return $default;
     }
     return $globalConf[$key];
 }

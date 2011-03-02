@@ -23,8 +23,15 @@ database.user      =
 database.pass      =
 
 [settings]
-notify.immediate   = 1
+; Send notification mail immediately on user join or update
+notify.immediate   = 0
+; Display branding bar on top of page
 branding.enable    =
+; If enabled, there would be only single destination, and users cannot choose
+; destination of a ride
+mode.single.dest   = 0
+; If enabled, all email addresses must be of the configured domain
+mode.domain.users  = 0
 
 [localization]
 default.src.city   =
