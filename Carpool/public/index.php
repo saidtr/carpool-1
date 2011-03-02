@@ -12,6 +12,8 @@ AuthHandler::putUserToken();
 $availableDestCities = $db->getCities();
 $availableSrcCities = $db->getCities();
 
+$displayDest = (getConfiguration('mode.single.dest', 0) == 0);
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -49,8 +51,8 @@ $availableSrcCities = $db->getCities();
 						<option value="<?php echo $city['Id']?>"><?php echo htmlspecialchars($city['Name'])?></option>
 						<?php endforeach; ?>
 					</select>
-				
 				</dd>
+				<?php if ($displayDest): ?>
 				<dd>
 					<label for="destCity"><?php echo _('To')?>&nbsp;</label>
 					<select id="destCity" name="destCity">
@@ -60,6 +62,7 @@ $availableSrcCities = $db->getCities();
 						<?php endforeach; ?>
 					</select>
 				</dd>	
+				<?php endif; ?>
 				<dd class="hidden">
 					<input type="submit"/>
 				</dd>	
@@ -69,36 +72,15 @@ $availableSrcCities = $db->getCities();
 			</dl>
 			</fieldset>
 		</form>
-    	<div id="showInterest">
-    		<span><a href="javascript:displayShowInterestDialog(false)"><?php echo _('Notify me about new rides')?></a></span>
-    		<form id="showInterestForm" method="post" action="xhr/ShowInterest.php">
-    			<dl class="noFloat">
-                    <dd class="mandatory">
-                        <label><?php echo _('From')?></label>
-                        <input type="text" name="email" id="email" />
-                    </dd>
-                    <dd class="mandatory">
-                        <label><?php echo _('To')?></label>
-                        <input type="text" name="email" id="email" />
-                    </dd>
-        			<dd class="mandatory">
-            			<label><?php echo _('Email')?></label>
-            			<input type="text" name="email" id="email" />
-            		</dd>
-        			<dd>
-        				<input type="hidden" name="wantTo" value="<?php echo STATUS_LOOKING ?>"/>
-        				<input type="submit" value="<?php echo _('Go!')?>" />
-        			</dd>
-    			</dl>
-    		</form>
-    	</div>					
 	</div>
 	<div id="results">
 		<table id="resultsTable">
 			<tr>
 				<th id="resultsWhat"><?php echo _('I\'m')?></th>
 				<th id="resultsFrom"><?php echo _('From')?></th>
+				<?php if ($displayDest): ?>
 				<th id="resultsTo"><?php echo _('To')?></th>
+				<?php endif; ?>
 				<th id="resultsIn"><?php echo _('In')?></th>
 				<th id="resultsOut"><?php echo _('Out')?></th>
 				<th id="resultsContact"><?php echo _('Name')?></th>
@@ -115,6 +97,7 @@ $availableSrcCities = $db->getCities();
 View_Php_To_Js::putVariable('cities', $db->getCities());
 View_Php_To_Js::putConstant('DEFAULT_DOMAIN', getConfiguration('default.domain'));
 View_Php_To_Js::putConstant('APP_NAME', _(getConfiguration('app.name')));
+View_Php_To_Js::putConstant('DISPLAY_DEST', $displayDest ? '1' : '0');
 View_Php_To_Js::putTranslations(
     array(
     	'Sorry, no results found.', 

@@ -20,7 +20,10 @@ if (Utils::isEmptyString($name)) {
 }
 
 // Make sure that locations are set
-if ($destCityId == LOCATION_NOT_FOUND && Utils::isEmptyString($destCity)) {
+if (getConfiguration('mode.single.dest')) {
+    $destCityId = getConfiguration('default.dest.city', 0);
+    $destLocation = getConfiguration('default.dest.loc', ''); 
+} else if ($destCityId == LOCATION_NOT_FOUND && Utils::isEmptyString($destCity)) {
     $valid = false;
     $messages[] = _("Please specify a destination city");    
 }
@@ -35,6 +38,12 @@ if (empty($email)) {
     $valid = false;
     $messages[] = _("Please specify a valid email address");
 } else {
+    // In domain-users mode, we simply prohibit mail addresses with '@' in them
+    if ((getConfiguration('mode.domain.users', 0) == 1) && strpos($email, '@') !== false) {
+        $valid = false;
+        $messages[] = _("Please specify a valid email address, without the domain suffix");
+    }
+    
     // Make sure that the email has a domain part
     $email = Utils::buildEmail($email);
 }

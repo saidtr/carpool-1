@@ -29,6 +29,11 @@ $defaultSrcLocation   = getConfiguration('default.src.loc');
 $defaultDestCity      = getConfiguration('default.dest.city');
 $defaultDestLocation  = getConfiguration('default.dest.loc');
 
+// In single destination mode, hide the "to" fields
+$displayDest = (getConfiguration('mode.single.dest', 0) == 0);
+// In "domain users" mode, only internal mail addresses are allowed
+$domainUsersMode = (getConfiguration('mode.domain.users', 0) == 1);
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -73,6 +78,7 @@ echo View_Header::render($header);
 			</dl>
 			<div class="clearFloat"></div>
 			<input id="srcCityId" name="srcCityId" type="hidden" value="<?php echo (isset($ride_SrcCityId) ? $ride_SrcCityId : ($defaultSrcCity ? $defaultSrcCity : LOCATION_NOT_FOUND)) ?>"/>
+			<?php if ($displayDest): ?>
 			<dl>
 				<dd class="mandatory">
 					<label for="destCity"><?php echo _('To')?></label>
@@ -84,6 +90,7 @@ echo View_Header::render($header);
 				</dd>
 			</dl>
 			<input id="destCityId" name="destCityId" type="hidden" value="<?php echo (isset($ride_DestCityId) ? $ride_DestCityId : ($defaultDestCity ? $defaultDestCity : LOCATION_NOT_FOUND)) ?>"/>
+			<?php endif; ?>
 			<div class="clearFloat"></div>
 			<dl>
 				<dd class="optional">
@@ -119,6 +126,12 @@ echo View_Header::render($header);
 				<dd class="mandatory">
 					<label for="email"><?php echo _('Email')?></label>
 					<input class="textInput" id="email" name="email" type="text" size=20 value="<?php echo (isset($contact_Email) ? $contact_Email : '')?>" />
+					<?php 
+					if ($domainUsersMode) {
+					    echo '@' . getConfiguration('domain');
+					    echo '<p class="description">' . _('Please use your company email, without the domain suffix.') . '</p>';   
+					}	
+					?>
 				</dd>
 				<dd>
 					<label for="phone"><?php echo _('Phone')?></label>

@@ -88,7 +88,9 @@ function buildSearchResults(/* JSON */ data) {
 			var elemStr = '<tr>';
 			elemStr += cell(statusCodeToText(ride.Status));
 			elemStr += cell(ride.SrcCity + (ride.SrcLocation && ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
-			elemStr += cell(ride.DestCity + (ride.DestLocation && ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
+			if (Constants.DISPLAY_DEST === '1') {
+				elemStr += cell(ride.DestCity + (ride.DestLocation && ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
+			}
 			elemStr += cell(formatTime(ride.TimeMorning));
 			elemStr += cell(formatTime(ride.TimeEvening));
 			elemStr += cell(ride.Name);
@@ -110,9 +112,12 @@ function doFilter() {
 	var srcId = $('#srcCity').val();
 	if (srcId != Constants.LOCATION_DONT_CARE)
 		filter.addCriteria(new FilterCriteria('SrcCityId', srcId, filterEquals));
-	var destId = $('#destCity').val();
-	if (destId != Constants.LOCATION_DONT_CARE)            	
-	    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
+	
+	if (Constants.DISPLAY_DEST === '1') {
+		var destId = $('#destCity').val();
+		if (destId != Constants.LOCATION_DONT_CARE)            	
+		    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
+	}
 	var wantTo = $('#wantTo').val();
 	if (wantTo != Constants.STATUS_DONT_CARE)
 		filter.addCriteria(new FilterCriteria('Status', wantTo, filterEquals));
@@ -142,7 +147,9 @@ $(document).ready(function() {
 		searchResults = xhr.results;
 		doFilter();
 		$("#wantTo").change(doFilter);
-		$("#destCity").change(doFilter);
+		if (Constants.DISPLAY_DEST === '1') {
+			$("#destCity").change(doFilter);
+		}
 		$("#srcCity").change(doFilter);
 	}, 'json');
 
