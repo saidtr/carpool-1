@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Carpool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-27 00:06+0200\n"
+"POT-Creation-Date: 2011-03-02 23:57+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Itay Pk <itaypk@gmail.com>\n"
 "Language-Team: \n"
@@ -47,22 +47,21 @@ msgid "Edit"
 msgstr "עריכה"
 
 #: public/thanks.php:36
-#: public/join.php:116
-#: public/index.php:104
+#: public/join.php:123
+#: public/index.php:86
 msgid "Name"
 msgstr "שם"
 
 #: public/thanks.php:38
-#: public/join.php:120
-#: public/index.php:85
-#: public/index.php:105
+#: public/join.php:127
+#: public/index.php:87
 #: public/feedback.php:69
 msgid "Email"
 msgstr "דואר אלקטרוני"
 
 #: public/thanks.php:41
-#: public/join.php:124
-#: public/index.php:106
+#: public/join.php:137
+#: public/index.php:88
 msgid "Phone"
 msgstr "טלפון"
 
@@ -102,139 +101,136 @@ msgstr "ת"
 msgid "Sorry, no content found."
 msgstr "מצטערים, לא נמצא תוכן מתאים."
 
-#: public/join.php:48
+#: public/join.php:53
 msgid "Hello again, "
 msgstr "ברוך שובך, "
 
-#: public/join.php:48
+#: public/join.php:53
 msgid "Join the carpool."
 msgstr "הצטרפו למאגר הנסיעות."
 
-#: public/join.php:58
+#: public/join.php:63
 msgid "I want to join a ride"
 msgstr "אני רוצה להצטרף לנסיעה"
 
-#: public/join.php:59
+#: public/join.php:64
 msgid "I want to provide a ride"
 msgstr "אני רוצה להציע נסיעה"
 
-#: public/join.php:66
+#: public/join.php:71
 msgid "Coming from city"
 msgstr "מגיע מהעיר"
 
-#: public/join.php:70
-#: public/join.php:82
+#: public/join.php:75
+#: public/join.php:88
 msgid "Location"
 msgstr "מיקום"
 
-#: public/join.php:78
-#: public/index.php:55
-#: public/index.php:81
-#: public/index.php:101
+#: public/join.php:84
+#: public/index.php:57
+#: public/index.php:82
 msgid "To"
 msgstr "אל"
 
-#: public/join.php:90
+#: public/join.php:97
 msgid "Coming"
 msgstr "הגעה"
 
-#: public/join.php:92
-#: public/join.php:102
+#: public/join.php:99
+#: public/join.php:109
 msgid "It differs"
 msgstr "זה משתנה"
 
-#: public/join.php:96
-#: public/join.php:106
+#: public/join.php:103
+#: public/join.php:113
 msgid "Irrelevant"
 msgstr "לא רלוונטי"
 
-#: public/join.php:100
+#: public/join.php:107
 msgid "Leaving"
 msgstr "עזיבה"
 
-#: public/join.php:128
+#: public/join.php:132
+msgid "Please use your company email, without the domain suffix."
+msgstr "אנא השתמשו בכתובת הדוא\"ל של החברה, ללא הסיומת."
+
+#: public/join.php:141
 msgid "Comments"
 msgstr "הערות"
 
-#: public/join.php:133
+#: public/join.php:146
 msgid "Notify me by mail about new rides that may be relevant to me"
 msgstr "ידעו אותי על נסיעות חדשות שעשויות להיות רלוונטיות עבורי"
 
-#: public/join.php:140
+#: public/join.php:153
 #: public/feedback.php:74
 #: public/cms/translations.php:146
 msgid "Submit"
 msgstr "שליחה"
 
-#: public/join.php:141
+#: public/join.php:154
 msgid "Update"
 msgstr "עדכון"
 
-#: public/join.php:141
-#: public/index.php:90
+#: public/join.php:154
 msgid "Go!"
 msgstr "שליחה"
 
-#: public/join.php:143
+#: public/join.php:156
 msgid "Delete"
 msgstr "מחיקה"
 
-#: public/join.php:144
+#: public/join.php:157
 msgid "Deactivate"
 msgstr "הקפאה"
 
-#: public/join.php:144
+#: public/join.php:157
 msgid "Activate"
 msgstr "הפעלה"
 
-#: public/index.php:29
+#: public/index.php:31
 msgid "Lookin' for a ride?"
 msgstr "מחפשים טרמפ?"
 
-#: public/index.php:37
+#: public/index.php:39
 msgid "Show me"
 msgstr "הצג לי"
 
-#: public/index.php:39
+#: public/index.php:41
 msgid "Everything"
 msgstr "הכל"
 
-#: public/index.php:40
+#: public/index.php:42
 msgid "Available rides"
 msgstr "מציעים נסיעה"
 
-#: public/index.php:41
+#: public/index.php:43
 msgid "People looking for a ride"
 msgstr "מחפשים נסיעה"
 
-#: public/index.php:45
-#: public/index.php:77
-#: public/index.php:100
+#: public/index.php:47
+#: public/index.php:80
 msgid "From"
 msgstr "מהיכן"
 
-#: public/index.php:47
-#: public/index.php:57
+#: public/index.php:49
+#: public/index.php:59
 msgid "Everywhere"
 msgstr "כל מקום"
 
-#: public/index.php:73
-msgid "Notify me about new rides"
-msgstr "הודיעו לי על נסיעות חדשות"
-
-#: public/index.php:99
+#: public/index.php:79
 msgid "I'm"
 msgstr "אני"
 
-#: public/index.php:102
+#: public/index.php:84
 msgid "In"
 msgstr "הלוך"
 
-#: public/index.php:103
+#: public/index.php:85
 msgid "Out"
 msgstr "חזור"
 
-#: public/index.php:107
+#: public/index.php:89
 msgid "Comment"
 msgstr "הערה"
 
@@ -290,33 +286,37 @@ msgstr "הנסיעה חזרה להיות פעילה. חזרת לעניינים!"
 msgid "The name is mandatory"
 msgstr "השם הוא הכרחי"
 
-#: public/xhr/AddRideAll.php:25
+#: public/xhr/AddRideAll.php:28
 msgid "Please specify a destination city"
 msgstr "אנא ציינו עיר יעד"
 
-#: public/xhr/AddRideAll.php:30
+#: public/xhr/AddRideAll.php:33
 msgid "Please specify a source city"
 msgstr "אנא ציינו עיר מוצא"
 
-#: public/xhr/AddRideAll.php:36
+#: public/xhr/AddRideAll.php:39
 msgid "Please specify a valid email address"
 msgstr "אנא הכניסו כתובת דוא\"ל חוקית"
 
-#: public/xhr/AddRideAll.php:99
+#: public/xhr/AddRideAll.php:44
+msgid "Please specify a valid email address, without the domain suffix"
+msgstr "אנא הכניסו כתובת דוא\"ל חוקית, ללא הסיומת"
+
+#: public/xhr/AddRideAll.php:108
 msgid "Ride successfully updated."
 msgstr "פרטי הנסיעה עודכנו בהצלחה"
 
 #: public/cms/translations.php:61
 msgid "Carpool CMS"
-msgstr ""
+msgstr "מערכת ניהול תוכן"
 
 #: public/cms/translations.php:63
 msgid "Questions and Answers editor"
-msgstr ""
+msgstr "עורך שאלות ותשובות"
 
 #: public/cms/translations.php:65
 msgid "Edit existing translations"
-msgstr ""
+msgstr "עריכת תרגומים קיימים"
 
 #: public/cms/translations.php:68
 #: public/cms/translations.php:114
@@ -335,11 +335,11 @@ msgstr "תשובה"
 
 #: public/cms/translations.php:110
 msgid "Add new"
-msgstr ""
+msgstr "הוספת חדש"
 
 #: public/cms/translations.php:111
 msgid "Add new translations"
-msgstr ""
+msgstr "הוסיפו תרגומים חדשים"
 
 #: app/DatabaseHelper.php:391
 #: app/Utils.php:36
@@ -803,6 +803,8 @@ msgstr "ליצור קשר"
 msgid "Other"
 msgstr "אחר"
 
+#~ msgid "Notify me about new rides"
+#~ msgstr "הודיעו לי על נסיעות חדשות"
 #~ msgid "What's this for?"
 #~ msgstr "מה זה?"
 #~ msgid ""
