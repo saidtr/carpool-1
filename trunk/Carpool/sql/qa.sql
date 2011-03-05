@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES(1,1,'What''s this for?','This tries to serve as a match-making system for people who wants to share rides together.');
 INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES(1,2,'מה זה?','מטרת היישום היא לשמש כמערכת התאמה בין אנשים המעוניינים לנסוע יחד.');
 INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES(2,1,'Why should I join?','Because it''s greener. Because it might save you some money on gas and toll roads. Because it''s much more fun.');
@@ -9,4 +8,3 @@ INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES(4,1,'What is th
 INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES(4,2,'מה זה "קישור ההזדהות"? איפה מוצאים אותו?','קישור ההזדהות משמש עבור זיהוי משתמשים, כתחליף למנגנון של שם משתמש וססמה. ניתן למצוא אותו בדואר שנשלח אליכם עם ההרשמה. כדי להשתמש בו, פשוט הדביקו אותו בחלון הכתובות של הדפדפן.');
 INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES(5,1,'I lost the authentication link.','Use the "Feedback" page to ask for recovery.');
 INSERT INTO QuestionsAnswers (Id, Lang, Question, Answer) VALUES(5,2,'איבדתי את קישור ההזדהות.','השתמשו בדף הפידבק על מנת לבקש אחזור.');
-COMMIT;

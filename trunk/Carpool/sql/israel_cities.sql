@@ -1,4 +1,3 @@
-BEGIN TRANSACTION;
 INSERT INTO Cities VALUES(1,'Acre');
 INSERT INTO Cities VALUES(2,'Afula');
 INSERT INTO Cities VALUES(3,'Arad');
@@ -76,4 +75,3 @@ INSERT INTO Cities VALUES(74,'Umm al-Fahm');
 INSERT INTO Cities VALUES(75,'Yavne');
 INSERT INTO Cities VALUES(76,'Yehud-Monosson');
 INSERT INTO Cities VALUES(77,'Yokneam');
-COMMIT;
