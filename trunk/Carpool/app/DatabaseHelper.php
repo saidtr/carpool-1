@@ -35,6 +35,10 @@ class DatabaseHelper {
             if (!$this->_db) {
                 err('DB Connection failed: ' . Utils::errorInfoToString($this->_db->errorCode()));    
             }
+            if (($initCode = getConfiguration('database.init')) !== false)
+            {
+                $this->_db->query($initCode);
+            }
     	} catch (PDOException $e) {
         	logException($e);
         }
@@ -480,7 +484,7 @@ class DatabaseHelper {
     function getContactById($id) {
         debug(__METHOD__ . "($id)");
         try {
-            $stmt = $this->_db->query('SELECT Id, Name, Email, Phone, Identifier FROM contacts WHERE Id=:id');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone, Identifier FROM contacts WHERE Id=:id');
 			$stmt->bindParam(':id', $id);
             
      	    if ($stmt->execute()) {
@@ -498,7 +502,7 @@ class DatabaseHelper {
    function getContactByEmail($email) {
         debug(__METHOD__ . "($email)");
         try {
-            $stmt = $this->_db->query('SELECT Id, Name, Phone FROM contacts WHERE Email=:email');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Phone FROM contacts WHERE Email=:email');
             
 			$stmt->bindParam(':email', $email);
 			

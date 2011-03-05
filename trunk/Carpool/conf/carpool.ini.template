@@ -24,6 +24,8 @@ database.dsn       = sqlite:%DATAPATH%/data.sq3
 ;database.dsn      = "mysql:host=localhost;dbname=carpool"
 database.user      =
 database.pass      =
+; Required for MySQL
+;database.init      = "SET NAMES UTF8"
 
 [settings]
 ; Send notification mail immediately on user join or update
