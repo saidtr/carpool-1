@@ -34,10 +34,7 @@ if ($srcCityId == LOCATION_NOT_FOUND && Utils::isEmptyString($srcCity)) {
 }
 
 // Email is mandatory
-if (empty($email)) {
-    $valid = false;
-    $messages[] = _("Please specify a valid email address");
-} else {
+if (!empty($email)) {
     // In domain-users mode, we simply prohibit mail addresses with '@' in them
     if ((getConfiguration('mode.domain.users', 0) == 1) && strpos($email, '@') !== false) {
         $valid = false;
@@ -47,6 +44,12 @@ if (empty($email)) {
     // Make sure that the email has a domain part
     $email = Utils::buildEmail($email);
 }
+
+if (empty($email) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false)) {
+    $valid = false;
+    $messages[] = _("Please specify a valid email address");
+}
+
 
 if (empty($phone)) $phone = null;
 if (empty($notify)) $notify = 0;
