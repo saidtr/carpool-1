@@ -131,6 +131,7 @@ class Test_Service_ShowInterest extends PHPUnit_TestCase {
         
         // We should now have (wildcards in the rides to notify are not supported yet):
         //   ride3: ride1
+        // TODO: Implement support for wildcards on the other way as well
         $expectedResults = array (
             $ride3 => array($ride1)
         );
