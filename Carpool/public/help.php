@@ -5,31 +5,6 @@ include APP_PATH . "/Bootstrap.php";
 
 AuthHandler::putUserToken();
 
-/*
-$content = array(
-	array(
-		'q' => _('What\'s this for?'), 
-		'a' => _('This tries to serve as a match-making system for people who wants to share rides together.')
-	),
-	array(
-		'q' => _('Why should I join?'), 
-		'a' => _('Because it\'s greener. Because it might save you some money. Because it\'s much more fun.')
-	),
-	array(
-	    'q' => _('How can I delete/modify my account?'),
-	    'a' => _('Use the authentication link to authenticate yourself. Then, under "My Profile", you can edit your settings, delete or de-activate your account.')
-	),
-	array(
-	    'q' => _('What is the authentication link? Where can I find it?'),
-	    'a' => _('The authentication link used to identify you, instead of username and password. You can find it in the mail you received right after the registration. To use it, just paste this link in your browser.')
-	),
-	array(
-	    'q' => _('I lost the authentication link.'),
-	    'a' => _('Use the "Feedback" page to ask for recovery.')
-	)
-
-);
-*/
 $content = DatabaseHelper::getInstance()->getQuestionsAnswersByLang(LocaleManager::getInstance()->getSelectedLanaguageId());
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
