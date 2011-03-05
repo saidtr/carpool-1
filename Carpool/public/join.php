@@ -12,8 +12,18 @@ $contact = AuthHandler::getLoggedInUser();
 $isLogged = false;
 $isActive = true;
 
+// In single destination mode, hide the "to" fields
+$displayDest = (getConfiguration('mode.single.dest', 0) == 0);
+// In "domain users" mode, only internal mail addresses are allowed
+$domainUsersMode = (getConfiguration('mode.domain.users', 0) == 1);
+
 if ($contact) {
 	extract($contact, EXTR_PREFIX_ALL, 'contact');
+    if ($domainUsersMode) {
+        // Trim the domain part
+        $contact_Email = substr($contact_Email, 0, strpos($contact_Email, '@'));
+    }
+	
 	$rideData = $db->getRideProvidedByContactId($contact_Id);
 	
 	// Assume that we don't have logged-in contacts without a ride
@@ -28,11 +38,6 @@ $defaultSrcCity       = getConfiguration('default.src.city');
 $defaultSrcLocation   = getConfiguration('default.src.loc');
 $defaultDestCity      = getConfiguration('default.dest.city');
 $defaultDestLocation  = getConfiguration('default.dest.loc');
-
-// In single destination mode, hide the "to" fields
-$displayDest = (getConfiguration('mode.single.dest', 0) == 0);
-// In "domain users" mode, only internal mail addresses are allowed
-$domainUsersMode = (getConfiguration('mode.domain.users', 0) == 1);
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
