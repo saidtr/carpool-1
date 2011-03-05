@@ -86,7 +86,7 @@ foreach($currentQuestions as $questionAnswerAllLangs) {
     			<span><?php echo $locales[$lang]['Name'] ?></span>
     		</td>
         	<td>
-        		<input style="width: 100%;" type="text" id="question_<?php echo $id ?>_<?php echo $lang ?>" name="question_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Question'] ?>" />
+        		<input style="width: 100%;" type="text" id="question_<?php echo $id ?>_<?php echo $lang ?>" name="question_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo htmlspecialchars($questionAnswer['Question']) ?>" />
         	</td>
         	<?php if ($first): ?>
         	<td rowspan="<?php echo count($locales)?>">
@@ -97,7 +97,7 @@ foreach($currentQuestions as $questionAnswerAllLangs) {
     	<tr>
     		<td></td>
         	<td>
-        		<input style="width: 100%;" type="text" id="answer_<?php echo $id ?>_<?php echo $lang ?>" name="answer_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Answer'] ?>" />
+        		<input style="width: 100%;" type="text" id="answer_<?php echo $id ?>_<?php echo $lang ?>" name="answer_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo htmlspecialchars($questionAnswer['Answer']) ?>" />
         	</td>
 
     	</tr>
