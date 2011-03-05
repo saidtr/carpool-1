@@ -18,7 +18,10 @@ log.level          = 0
 log.file           = "~/carpool.log"
 
 [database]
+; For SQLite database:
 database.dsn       = sqlite:%DATAPATH%/data.sq3
+; For MySQL database:
+;database.dsn      = "mysql:host=localhost;dbname=carpool"
 database.user      =
 database.pass      =
 
