@@ -97,7 +97,7 @@ class DatabaseHelper {
     function getCities() {
         debug(__METHOD__);
         try {
-        	$rs = $this->_db->query('SELECT id, name FROM cities');
+        	$rs = $this->_db->query('SELECT Id, Name FROM Cities');
         	if ($rs) {
         		$res = $rs->fetchAll(PDO::FETCH_ASSOC);
         		 
@@ -155,20 +155,15 @@ class DatabaseHelper {
 	        $stmt->bindParam(':phone', $phone);
 	        $stmt->bindParam(':identifier', $identifier);
 	        
-	        if ($stmt->execute()) {
-    	        $inserted = $this->_db->lastInsertId();
+	        $stmt->execute();
+    	    $inserted = $this->_db->lastInsertId();
     	        
-    	        info("Contact $name inserted: $inserted");
+    	    info("Contact $name inserted: $inserted");
             
-    	        return $inserted;
-	        } else {
-	            err("Contact insert failed: " . Utils::errorInfoToString($stmt->errorCode()));
-	            return false;
-	        }
-	        
+    	    return $inserted;
     	} catch (PDOException $e) {
 			logException($e);   
-			return false; 		
+			throw $e;
     	} 
     }
     
@@ -183,17 +178,12 @@ class DatabaseHelper {
 	        $stmt->bindParam(':phone', $phone);
 	        $stmt->bindParam(':contactId', $contactId);
 	        
-	        if ($stmt->execute()) {  	        
-    	        info("Contact number $contactId updated");
-    	        return true;
-	        } else {
-	            err("Contact $contactId update failed: " . Utils::errorInfoToString($stmt->errorCode()));
-	            return false;
-	        }
+	        $stmt->execute();  	        
+    	    info("Contact number $contactId updated");
 	        
     	} catch (PDOException $e) {
 			logException($e);   
-			return false; 		
+			throw $e;
     	} 
     }
     
@@ -576,7 +566,7 @@ class DatabaseHelper {
         
         assert(array_key_exists($lang, LocaleManager::getInstance()->getLocales()));
         try {
-            $stmt = $this->_db->query('SELECT Id, Question, Answer FROM QuestionsAnswers WHERE Lang = :lang');
+            $stmt = $this->_db->prepare('SELECT Id, Question, Answer FROM QuestionsAnswers WHERE Lang = :lang');
             $stmt->bindParam(':lang', $lang);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
