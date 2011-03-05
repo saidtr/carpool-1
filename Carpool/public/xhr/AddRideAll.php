@@ -89,22 +89,26 @@ if ($valid) {
         if ($srcCityId == LOCATION_NOT_FOUND && $srcCityId !== $destCityId) {
             $srcCityId = $server->addCity($srcCity);
             if (!$srcCityId) {
-            	throw new Exception("Could not insert city $destCity");
+                throw new Exception("Could not insert city $destCity");
             }
         }
-        
-        if ($isUpdate) {            
-            $server->updateContact($contactId, $name, $phone, $email);
-        } else {
-            // If it is a new ride - register this contact
-            $contactId = $server->addContact($name, $phone, $email);
-            if (!$contactId) {
-            	throw new Exception("Could not insert contact $name");
+
+        try {
+            if ($isUpdate) {
+                $server->updateContact($contactId, $name, $phone, $email);
+            } else {               
+                // If it is a new ride - register this contact
+                $contactId = $server->addContact($name, $phone, $email);
+
+                AuthHandler::authByContactId($contactId);
             }
-            // Auto sign in
-            AuthHandler::authByContactId($contactId);
+        } catch (PDOException $e) {
+            if ($e->getCode() == 23000) {
+                $messages []= _("This email address is already in use");
+            }
+            throw $e;
         }
-        
+
         // Add or update ride
         if ($isUpdate) {
             if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo, $notify)) {
@@ -130,8 +134,13 @@ if ($valid) {
         echo json_encode(array('status' => 'ok', 'action' => $action));
     } catch (PDOException $e) {
         $server->rollBack();
-        logException($e);
-        echo json_encode(array('status' => 'err', 'action' => $action));
+        if ($e->getCode() == 23000) {
+            // If this is a unique constraint problem - we want to display the correct message
+            echo json_encode(array('status' => 'invalid', 'action' => $action, 'messages' => $messages));
+        } else {            
+            logException($e);
+            echo json_encode(array('status' => 'err', 'action' => $action));
+        }
     } catch (Exception $e) {
         $server->rollBack();
         logException($e);
