@@ -67,12 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			<th>
     			<span><?php echo _('Language') ?></span>
     		</th>
-			<th>
-    			<span><?php echo _('Question') ?></span>
-    		</th>
-			<th>
-    			<span><?php echo _('Answer') ?></span>
-    		</th>		
+			<th></th>		
     		<th></th>
 		</tr>
 <?php 
@@ -91,16 +86,20 @@ foreach($currentQuestions as $questionAnswerAllLangs) {
     			<span><?php echo $locales[$lang]['Name'] ?></span>
     		</td>
         	<td>
-        		<input type="text" id="question_<?php echo $id ?>_<?php echo $lang ?>" name="question_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Question'] ?>" />
-        	</td>
-        	<td>
-        		<input type="text" id="answer_<?php echo $id ?>_<?php echo $lang ?>" name="answer_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Answer'] ?>" />
+        		<input style="width: 100%;" type="text" id="question_<?php echo $id ?>_<?php echo $lang ?>" name="question_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Question'] ?>" />
         	</td>
         	<?php if ($first): ?>
         	<td rowspan="<?php echo count($locales)?>">
         		<input class="deleteButton" type="button" id="delete_<?php echo $id?>" value="Delete!" />
         	</td>
         	<?php $first = false; endif; ?>
+    	</tr>
+    	<tr>
+    		<td></td>
+        	<td>
+        		<input style="width: 100%;" type="text" id="answer_<?php echo $id ?>_<?php echo $lang ?>" name="answer_<?php echo $id ?>_<?php echo $lang ?>" value="<?php echo $questionAnswer['Answer'] ?>" />
+        	</td>
+
     	</tr>
 <?php 
     } 
@@ -113,12 +112,7 @@ foreach($currentQuestions as $questionAnswerAllLangs) {
 			<th>
     			<span><?php echo _('Language') ?></span>
     		</th>
-			<th>
-    			<span><?php echo _('Question') ?></span>
-    		</th>
-			<th>
-    			<span><?php echo _('Answer') ?></span>
-    		</th>		
+			<th></th>		
 		</tr>	
 <?php 
 foreach ($locales as $lang => $locale) {
@@ -129,10 +123,14 @@ foreach ($locales as $lang => $locale) {
     			<span><?php echo $locales[$lang]['Name'] ?></span>
     		</td>
         	<td>
-        		<input type="text" id="questionnew_0_<?php echo $lang ?>" name="questionnew_0_<?php echo $lang ?>" value="" />
+        		<input type="text" style="width: 100%;" id="questionnew_0_<?php echo $lang ?>" name="questionnew_0_<?php echo $lang ?>" value="" />
+        	</td>
+        </tr>
+        <tr>
+        	<td>
         	</td>
         	<td>
-        		<input type="text" id="answernew_0_<?php echo $lang ?>" name="answernew_0_<?php echo $lang ?>"  value="" />
+        		<input type="text" style="width: 100%;" id="answernew_0_<?php echo $lang ?>" name="answernew_0_<?php echo $lang ?>"  value="" />
         	</td>
     	</tr>
 	
