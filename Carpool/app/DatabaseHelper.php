@@ -442,20 +442,20 @@ class DatabaseHelper {
      * 
      */
     function getRideById($rideId) {
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone 
-        		FROM Ride r, Contacts co 
-        		WHERE co.Id = r.ContactId AND r.Id = :rideId';        
+        $sql = 
+        	'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, ci1.Name AS DestCity, r.DestCityId, r.DestLocation, ci2.Name AS SrcCity, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone ' . 
+   			'FROM Ride r, Contacts co, Cities ci1, Cities ci2 ' . 
+        	'WHERE co.Id = r.ContactId AND r.Id = :rideId AND r.DestCityId = ci1.ID AND r.SrcCityId = ci2.Id';        
         debug(__METHOD__ . "($rideId)");
         try {
             $stmt = $this->_db->prepare($sql);
             $stmt->bindParam(':rideId', $rideId);
             
-        	if ($stmt->execute()) {
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-            } else {
-                // Ride not found - return false
-                return false;
-            }        
+        	$stmt->execute();
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+            $res['SrcCity'] = _($res['SrcCity']);
+            $res['DestCity'] = _($res['DestCity']);
+            return $res;
         } catch (PDOException $e) {
             logException($e);
             return false;
