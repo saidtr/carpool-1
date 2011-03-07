@@ -119,16 +119,8 @@ class Utils {
 	public static function buildLocalUrl($page, $params = null) {
 		$host = $_SERVER['HTTP_HOST'];
 		
-		$uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-		// Ugly hack to get the base directory path even if
-		// the running context is from the XHR folder
-		// TODO: Better solution with hard-coding the base folder?
-		// TODO: Why the hell strlen($uri) < 4?
-		if (strlen($uri) >= 4 && substr_compare($uri, "/xhr", -4, 4) == 0) { 
-			$uri = substr($uri, 0, -4);
-		}
+		$uri = getConfiguration('public.path', '/');
 		
-		//$uri = PUBLIC_BASE_PATH;
 		$res = "http://$host$uri/$page";
 		if ($params && !empty($params)) {
 		    $res .= '?';
