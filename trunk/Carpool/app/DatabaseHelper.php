@@ -465,7 +465,7 @@ class DatabaseHelper {
     function getContactByIdentifier($contactId, $identifier) {
         debug(__METHOD__ . "($contactId, $identifier)");
         try {
-            $stmt = $this->_db->query('SELECT Id, Name, Email, Phone FROM Contacts WHERE Id=:id AND identifier=:identifier');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone FROM Contacts WHERE Id=:id AND identifier=:identifier');
 			$stmt->bindParam(':id', $contactId);
 			$stmt->bindParam(':identifier', $identifier);
             
