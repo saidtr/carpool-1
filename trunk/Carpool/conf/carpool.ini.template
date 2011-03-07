@@ -2,6 +2,8 @@
 app.name           = Carpool
 default.domain     = 
 domain             = 
+; Path to the basic path folder. Must start with "/", and mustn't end with "/"
+public.path        = /
 default.locale     = 1
 mail.addr          = 
 mail.display       = Carpool Support
