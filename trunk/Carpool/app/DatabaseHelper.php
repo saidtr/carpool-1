@@ -349,7 +349,7 @@ class DatabaseHelper {
      */
     function searchRides($params = null) {
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.ContactId, co.Name, co.Email, co.Phone ' .         		
-				'FROM ride r, contacts co ' .         		
+				'FROM Ride r, Contacts co ' .         		
 				'WHERE co.Id = r.ContactId AND r.Active = ' . RIDE_ACTIVE; 
         if (!empty($params)) {
             if (isset($params['status'])) {
@@ -415,7 +415,7 @@ class DatabaseHelper {
     function getRideProvidedByContactId($contactId) {
         debug(__METHOD__ . "($contactId)");
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.Active, r.Notify   
-                FROM ride r 
+                FROM Ride r 
                 WHERE r.ContactId = :contactId LIMIT 1';        
         try {
             $stmt = $this->_db->prepare($sql);
@@ -443,7 +443,7 @@ class DatabaseHelper {
      */
     function getRideById($rideId) {
         $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone 
-        		FROM ride r, contacts co 
+        		FROM Ride r, Contacts co 
         		WHERE co.Id = r.ContactId AND r.Id = :rideId';        
         debug(__METHOD__ . "($rideId)");
         try {
@@ -465,7 +465,7 @@ class DatabaseHelper {
     function getContactByIdentifier($contactId, $identifier) {
         debug(__METHOD__ . "($contactId, $identifier)");
         try {
-            $stmt = $this->_db->query('SELECT Id, Name, Email, Phone FROM contacts WHERE Id=:id AND identifier=:identifier');
+            $stmt = $this->_db->query('SELECT Id, Name, Email, Phone FROM Contacts WHERE Id=:id AND identifier=:identifier');
 			$stmt->bindParam(':id', $contactId);
 			$stmt->bindParam(':identifier', $identifier);
             
@@ -484,7 +484,7 @@ class DatabaseHelper {
     function getContactById($id) {
         debug(__METHOD__ . "($id)");
         try {
-            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone, Identifier FROM contacts WHERE Id=:id');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone, Identifier FROM Contacts WHERE Id=:id');
 			$stmt->bindParam(':id', $id);
             
      	    if ($stmt->execute()) {
@@ -502,7 +502,7 @@ class DatabaseHelper {
    function getContactByEmail($email) {
         debug(__METHOD__ . "($email)");
         try {
-            $stmt = $this->_db->prepare('SELECT Id, Name, Phone FROM contacts WHERE Email=:email');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Phone FROM Contacts WHERE Email=:email');
             
 			$stmt->bindParam(':email', $email);
 			
