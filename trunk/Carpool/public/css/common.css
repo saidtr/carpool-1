@@ -13,6 +13,11 @@ h2 {
 	font-weight: bold;
 }
 
+h3 {
+	font-size: large;
+	font-weight: bold;
+}
+
 #branding {
     background: url('../img/Branding_Bg.gif');
     background-repeat: repeat-x;
