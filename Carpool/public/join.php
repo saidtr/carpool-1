@@ -101,7 +101,7 @@ echo View_Header::render($header);
 				<dd class="optional">
 					<label for="timeMorning"><?php echo _('Coming')?></label>
 					<select id="timeMorning" name="timeMorning">
-						<option selected="selected" value="<?php echo TIME_DIFFERS ?>"><?php echo _('It differs')?></option>
+						<option selected="selected" value="<?php echo TIME_DIFFERS ?>"><?php echo _('Not always the same time')?></option>
 						<?php for($i = 5; $i <= 10; ++$i): ?>
 						<option value="<?php echo $i?>" <?php if (isset($ride_TimeMorning) && $ride_TimeMorning == $i) echo 'selected="selected"'?>><?php echo Utils::FormatTime($i) ?></option>
 						<?php endfor; ?>
@@ -111,7 +111,7 @@ echo View_Header::render($header);
 				<dd class="optional">
 					<label for="timeEvening"><?php echo _('Leaving')?></label>
 					<select id="timeEvening" name="timeEvening">
-						<option value="<?php echo TIME_DIFFERS ?>"><?php echo _('It differs')?></option>
+						<option value="<?php echo TIME_DIFFERS ?>"><?php echo _('Not always the same time')?></option>
 					    <?php for($i = 15; $i <= 22; ++$i): ?>
 						<option value="<?php echo $i?>" <?php if (isset($ride_TimeEvening) && $ride_TimeEvening == $i) echo 'selected="selected"'?>><?php echo Utils::FormatTime($i) ?></option>
 						<?php endfor; ?>
