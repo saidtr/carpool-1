@@ -2,8 +2,12 @@
 
 class View_Header {
     
-    public static function render($header) {
-        $html = "<div id=\"header\"><h1>$header</h1></div>\n";
+    public static function render($header, $subHeader = null) {
+        $html = "<div id=\"header\"><h1>$header</h1>\n";
+        if ($subHeader !== null) {
+            $html .= "<h3>$subHeader</h3>\n";
+        }
+        $html .= "</div>\n";
         $msg = GlobalMessage::getGlobalMessage();
         if ($msg) {
         	$clazz = ($msg['type'] === GlobalMessage::ERROR) ? 'error' : '';
