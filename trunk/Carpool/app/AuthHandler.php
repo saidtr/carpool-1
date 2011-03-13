@@ -10,6 +10,10 @@
  */
 class AuthHandler {
     
+    const AUTH_MODE_TOKEN = 0;
+    const AUTH_MODE_LDAP  = 1;
+    const AUTH_MODE_PASS  = 2;
+    
     public static function init() {
         if (!session_start()) {
             warn("Could not initialize session");
@@ -40,6 +44,41 @@ class AuthHandler {
             return $_SESSION[SESSION_KEY_AUTH_USER];
         }
         return false;
+    }
+    
+    public static function authenticate($params, $mode = null) {
+        if (!isset($mode)) {
+            $mode = (int) getConfiguration('auth.mode', 0);
+        }
+        $authHelper = null;
+        switch ($mode) {
+            case self::AUTH_MODE_TOKEN : 
+                $authHelper = new AuthenticationHelperToken(); 
+                break;
+            case self::AUTH_MODE_LDAP  : 
+                $authHelper = new AuthenticationHelperLdap(); 
+                break;
+            case self::AUTH_MODE_PASS  : 
+                $authHelper = new AuthenticationHelperPassword(); 
+                break;
+            default:
+                err(__METHOD__ . ": Illegal authentication mode: $mode");
+                return false;
+        }
+
+        // In case we already have a logged-in user, we'll first log-out
+        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {           
+            self::logout();
+        }       
+        
+        $contactId = $authHelper->authenticate($params);
+        if ($contactId !== false) {
+            $_SESSION[SESSION_KEY_AUTH_USER] = $contactId;
+            info('Contact ' . $contactId . ' successfully authenticated');
+            return $contactId;            
+        } else {
+            return false;
+        }
     }
 
     public static function authByVerification($contactId, $identifier) {
