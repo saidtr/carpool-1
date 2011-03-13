@@ -3,18 +3,18 @@
 class View_Navbar {
 	
 	static $pagesGuest = array (
-		array('name' => 'Search', 'href' => 'index.php'),
-        array('name' => 'Join', 'href' => 'join.php'),
-        array('name' => 'Help', 'href' => 'help.php'),
-        array('name' => 'Feedback', 'href' => 'feedback.php')
+		0 => array('name' => 'Search', 'href' => 'index.php'),
+        1 => array('name' => 'Join', 'href' => 'join.php'),
+        2 => array('name' => 'Help', 'href' => 'help.php'),
+        3 => array('name' => 'Feedback', 'href' => 'feedback.php')
     );
     
     static $pagesMember = array (
-		array('name' => 'Search', 'href' => 'index.php'),
-        array('name' => 'My Profile', 'href' => 'join.php'),
-        array('name' => 'Help', 'href' => 'help.php'),
-        array('name' => 'Feedback', 'href' => 'feedback.php'),
-        array('name' => 'Logout', 'href' => 'auth.php?action=logout')
+		0 => array('name' => 'Search', 'href' => 'index.php'),
+        1 => array('name' => 'My Profile', 'href' => 'join.php'),
+        2 => array('name' => 'Help', 'href' => 'help.php'),
+        3 => array('name' => 'Feedback', 'href' => 'feedback.php'),
+        4 => array('name' => 'Logout', 'href' => 'logout.php')
     );
     
     static function buildLanguageSelector() {
@@ -42,6 +42,7 @@ class View_Navbar {
         $html .= '<div id="navbar">';
     	if ($logged) {
     		$pages =& self::$pagesMember;
+    		$pages[4]['href'] .= '?ref=' . Utils::getRunningScript();
     	} else {
     		$pages =& self::$pagesGuest;
     	}
