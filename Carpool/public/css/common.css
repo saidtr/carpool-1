@@ -99,7 +99,7 @@ label {
 	display: block;
 }
 
-input[type="text"], textarea {
+input[type="text"], input[type="password"], textarea {
 	border: 1px solid #c0c0c0;
 	padding: 4px;
 	background: none;
