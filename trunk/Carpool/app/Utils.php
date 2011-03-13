@@ -23,7 +23,7 @@ class Utils {
     static function getParam($name, $defaultValue = false) {
     	if (isset($_GET[$name])) {
     		return $_GET[$name];
-    	} 
+    	}
     	return $defaultValue;
     }
     
