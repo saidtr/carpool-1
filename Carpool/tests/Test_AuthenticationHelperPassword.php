@@ -6,19 +6,9 @@ require_once "PHPUnit.php";
 class Test_AuthenticationHelperPassword extends PHPUnit_TestCase {
 
     /**
-     * @var AuthenticationHelperLdap
+     * @var AuthenticationHelperPassword
      */
     private $helper;
-    
-    function contactExists($id) {
-        $db = DatabaseHelper::getInstance();
-        return ($db->getContactById($id) !== false);
-    }
-
-    function contactsCount() {
-        $dbCon = DatabaseHelper::getConnection();
-        return $dbCon->query('SELECT COUNT(*) AS Cnt FROM Contacts', PDO::FETCH_COLUMN, 0)->fetch();
-    }
 
     function setUp() {
         $this->helper = new AuthenticationHelperPassword();
