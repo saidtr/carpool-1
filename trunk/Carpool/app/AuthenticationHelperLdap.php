@@ -43,7 +43,7 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
             }
             
             // Internal error
-            throw new Exception("AuthenticationHelperLdap: authenticate: " . ldap_err2str($errCode));
+            throw new Exception(__METHOD__ . " : LDAP error: " . ldap_err2str($errCode));
         }
         
         ldap_unbind($con);
