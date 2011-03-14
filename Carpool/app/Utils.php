@@ -138,6 +138,11 @@ class Utils {
 	    }
 	    return $mail;
 	}
+	
+	// Created a hashed hexadecimal string, use salt if available
+	public static function hashPassword($password) {
+	    return sha1($password . getConfiguration('auth.pass.salt', ''));
+	}
 
 
 }

@@ -146,12 +146,14 @@ class DatabaseHelper {
         }
     }
     
-    function addContact($name, $phone, $email) {
+    function addContact($name, $phone, $email, $identifier = null) {
     	debug(__METHOD__ . "($name, $phone, $email)");
     	
     	try {
     		
-    		$identifier = uniqid('', true);
+    	    if (!isset($identifier)) {
+    		    $identifier = uniqid('', true);
+    	    } 
     		
 	        $stmt = $this->_db->prepare('INSERT INTO Contacts(name, email, phone, identifier) VALUES (:name, :email, :phone, :identifier)');
 	        $stmt->bindParam(':name', $name);
@@ -502,7 +504,7 @@ class DatabaseHelper {
    function getContactByEmail($email) {
         debug(__METHOD__ . "($email)");
         try {
-            $stmt = $this->_db->prepare('SELECT Id, Name, Phone FROM Contacts WHERE Email=:email');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Phone, Identifier FROM Contacts WHERE Email=:email');
             
 			$stmt->bindParam(':email', $email);
 			

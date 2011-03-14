@@ -7,12 +7,26 @@ class AuthenticationHelperPassword implements IAuthenticationHelper {
     }
     
     function authenticate($params) {
-        assert(isset($params['user']) && isset($params['pass']));
+        assert(isset($params['email']) && isset($params['password']));
         
-        $user = $params['user'];
-        $pass = $params['pass'];
+        // TODO: A primitive brute-force defense?
         
-        return true;
+        $email = $params['email'];
+        $pass = $params['password'];
+        
+        // Created a hashed hexadecimal string, use the salt if possible
+        $hashed = Utils::hashPassword($pass);
+        $contact = DatabaseHelper::getInstance()->getContactByEmail($email);
+        if ($contact !== false) {
+            if ($contact['Identifier'] === $hashed) {
+                info(__METHOD__ . ': Contact ' . $contact['Id'] . ' succesfully authenticated');
+                return true;
+            } else {
+                warn(__METHOD__ . ': Contact ' . $contact['Id'] . ' failed to authorize: wrong password');
+            }
+            
+        }
+        return false;
     }
     
 }
