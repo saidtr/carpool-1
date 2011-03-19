@@ -7,7 +7,7 @@ class AuthenticationHelperPassword implements IAuthenticationHelper {
     }
     
     function authenticate($params) {
-        assert(isset($params['email']) && isset($params['password']));
+        assert('isset($params["email"]) && isset($params["password"])');
         
         // TODO: A primitive brute-force defense?
         
