@@ -10,7 +10,7 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
     const LDAP_INVALID_CREDENTIALS = 49;
     
     function authenticate($params) {       
-        assert(isset($params['user']) && isset($params['password']));
+        assert('isset($params["user"]) && isset($params["password"])');
         
         $con = false;
         if (($domain = getConfiguration('auth.ldap.domain', 'Unspecified domain')) !== false) {
