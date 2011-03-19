@@ -29,18 +29,29 @@ define('SESSION_KEY_AUTH_USER', 'user');
 define('SESSION_KEY_RUNNING', 'running');
 define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
 
+// Random visitor
+define('ROLE_GUEST', 1);
+// Identified (e.g. by AD credentials), but not registered
+define('ROLE_IDENTIFIED', 2);
+// Identified and registered
+define('ROLE_IDENTIFIED_REGISTERED', 3);
+// Administrator, may access resources such as CMS
+define('ROLE_ADMINISTRATOR', 4);
+
 // Error reporting and assertions
 if (ENV === ENV_DEVELOPMENT) {
 	error_reporting(E_ALL | E_STRICT); 
 	
-	// Activate assert and make it quiet
-    assert_options(ASSERT_ACTIVE, 1);
-    assert_options(ASSERT_WARNING, 0);
-    assert_options(ASSERT_QUIET_EVAL, 1);
+	// Activate assertions
+    assert_options(ASSERT_ACTIVE, true);
+    assert_options(ASSERT_WARNING, false);
+    assert_options(ASSERT_BAIL, true);
+    assert_options(ASSERT_QUIET_EVAL, false);
     
     // Assert handler - log the failure
     function loggerAssertHandler($file, $line, $code) {
-        err("Assertion Failed in $file, line $line");
+        err("Assertion Failed in $file, line $line: $code");
+        echo("<p>Assertion Failed in $file, line $line: $code</p>");
     }
     
     // Set up the callback
