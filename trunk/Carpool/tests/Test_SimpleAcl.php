@@ -37,8 +37,6 @@ class Test_SimpleAcl extends PHPUnit_TestCase {
         $acl->addResource(ROLE_GUEST, array('resource1', 'resource2'));
         $acl->addResource(ROLE_IDENTIFIED, array('resource3', 'resource4'));
         
-        $acl->dump();
-        
         $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource1'));
         $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED, 'resource1'));
         $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource2'));
@@ -49,5 +47,39 @@ class Test_SimpleAcl extends PHPUnit_TestCase {
         $this->assertFalse($acl->isAllowed(ROLE_GUEST, 'resource4'));        
         
     }
+    
+    function testMultipleHierarchy() {
+        $acl = new SimpleAcl();
+        
+        $acl->addRole(ROLE_GUEST);
+        $acl->addRole(ROLE_IDENTIFIED, ROLE_GUEST);
+        $acl->addRole(ROLE_IDENTIFIED_REGISTERED, ROLE_IDENTIFIED);
+        $acl->addRole(ROLE_ADMINISTRATOR, ROLE_IDENTIFIED);
+        $acl->addResource(ROLE_GUEST, 'resource1');
+        $acl->addResource(ROLE_IDENTIFIED, 'resource2');
+        $acl->addResource(ROLE_IDENTIFIED_REGISTERED, 'resource_personal');
+        $acl->addResource(ROLE_ADMINISTRATOR, 'resource_important');
+        
+        $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource1'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED, 'resource1'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED_REGISTERED, 'resource1'));
+        $this->assertTrue($acl->isAllowed(ROLE_ADMINISTRATOR, 'resource1'));
+
+        $this->assertFalse($acl->isAllowed(ROLE_GUEST, 'resource2'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED, 'resource2'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED_REGISTERED, 'resource2'));
+        $this->assertTrue($acl->isAllowed(ROLE_ADMINISTRATOR, 'resource2'));
+
+        $this->assertFalse($acl->isAllowed(ROLE_GUEST, 'resource_personal'));
+        $this->assertFalse($acl->isAllowed(ROLE_IDENTIFIED, 'resource_personal'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED_REGISTERED, 'resource_personal'));
+        $this->assertFalse($acl->isAllowed(ROLE_ADMINISTRATOR, 'resource_personal'));
+        
+        $this->assertFalse($acl->isAllowed(ROLE_GUEST, 'resource_important'));
+        $this->assertFalse($acl->isAllowed(ROLE_IDENTIFIED, 'resource_important'));
+        $this->assertFalse($acl->isAllowed(ROLE_IDENTIFIED_REGISTERED, 'resource_important'));
+        $this->assertTrue($acl->isAllowed(ROLE_ADMINISTRATOR, 'resource_important'));        
+    }
+     
     
 }
