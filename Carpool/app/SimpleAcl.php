@@ -86,6 +86,19 @@ class SimpleAcl {
         }
         return $this->_rolesHierarchyCache[$role];
     }
+    
+    public function setRoles($roles) {
+        assert('(is_array($roles) === true) && !empty($roles)');
+        
+        $this->_roles = $roles;
+    }
+    
+    public function setAcl($acl) {
+        assert('(is_array($acl) === true) && !empty($acl)');
+        assert('$this->_roles !== null');
+        
+        $this->_acl = $acl;
+    }
 
     public function dump() {
         if (ENV === ENV_DEVELOPMENT) {
