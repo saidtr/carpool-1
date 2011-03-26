@@ -4,10 +4,12 @@ class SimpleAcl {
 
     private $_acl = null;
     private $_roles = null;
+    private $_rolesHierarchyCache = null;
 
     public function __construct() {
         $this->_acl = array();
         $this->_roles = array();
+        $this->_rolesHierarchyCache = array();
     }
 
     public function isAllowed($role, $resource) {
@@ -16,7 +18,10 @@ class SimpleAcl {
         // We should only have defined roles; resource may not exist
         assert('array_key_exists($role, $this->_roles)');
 
-        return (isset($this->_acl[$resource]) && in_array($role, $this->_acl[$resource]));
+        $res = (isset($this->_acl[$resource]) && in_array($role, $this->_acl[$resource]));
+        
+        info(__METHOD__ . ": Access to resource $resource for role $role is " . (($res) ? 'allowed' : 'blocked'));
+        return $res;
     }
 
     public function getAllowedRoles($resource) {
@@ -31,6 +36,8 @@ class SimpleAcl {
 
         assert('!isset($this->_roles[$role])');
 
+        // Each roles in the ACL holds an array of all roles that inherit from
+        // this role.  
         if (isset($rolesIncluded)) {
             if (is_array($rolesIncluded)) {
                 foreach ($rolesIncluded as $r) {
@@ -45,13 +52,39 @@ class SimpleAcl {
 
     public function addResource($role, $resource) {
         debug(__METHOD__ . "($role, " . json_encode($resource) . ")");
+        
+        assert('isset($this->_roles[$role])');
+        
+        // Each resource holds an array of 
         if (is_array($resource)) {
             foreach ($resource as $r) {
-                $this->_acl[$r] = $this->_roles[$role];
+                $this->_acl[$r] = $this->getAllRolesInherited($role);
             }
         } else {
-            $this->_acl[$resource] = $this->_roles[$role];
+            $this->_acl[$resource] = $this->getAllRolesInherited($role);
         }
+    }
+
+    // Iterate over the role hierarchy and returns a list of all roles 
+    // that inherit from this role.
+    private function getAllRolesInherited($role) {
+        if (!isset($this->_rolesHierarchyCache[$role])) {
+            $res = array();
+            $rolesIncluded = $this->_roles[$role];
+            $stupidCounter = 0;
+            while (!empty($rolesIncluded) && ++$stupidCounter < 10) {
+                $cur = array_pop($rolesIncluded);
+                $res []= $cur;
+                foreach ($this->_roles[$cur] as $inc) {
+                    if (in_array($inc, $res) === false) {
+                        array_push($rolesIncluded, $inc);
+                    }
+                }
+            }
+            $this->_rolesHierarchyCache[$role] = $res;
+            return $res;
+        }
+        return $this->_rolesHierarchyCache[$role];
     }
 
     public function dump() {
