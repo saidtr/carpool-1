@@ -78,8 +78,27 @@ class Test_SimpleAcl extends PHPUnit_TestCase {
         $this->assertFalse($acl->isAllowed(ROLE_GUEST, 'resource_important'));
         $this->assertFalse($acl->isAllowed(ROLE_IDENTIFIED, 'resource_important'));
         $this->assertFalse($acl->isAllowed(ROLE_IDENTIFIED_REGISTERED, 'resource_important'));
-        $this->assertTrue($acl->isAllowed(ROLE_ADMINISTRATOR, 'resource_important'));        
+        $this->assertTrue($acl->isAllowed(ROLE_ADMINISTRATOR, 'resource_important'));       
+    }     
+    
+    function testSetters() {
+        $acl = new SimpleAcl();
+        $roles = array(
+            ROLE_GUEST => array(ROLE_GUEST), 
+            ROLE_IDENTIFIED => array(ROLE_IDENTIFIED)
+        );
+        $accessList = array(
+            'resource1' => array(ROLE_GUEST),
+            'resource2' => array(ROLE_GUEST, ROLE_IDENTIFIED)
+        );
+        
+        $acl->setRoles($roles);
+        $acl->setAcl($accessList);
+        
+        $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource1'));
+        $this->assertFalse($acl->isAllowed(ROLE_IDENTIFIED, 'resource1'));
+        $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource2'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED, 'resource2'));
     }
-     
     
 }
