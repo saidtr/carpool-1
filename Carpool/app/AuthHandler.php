@@ -20,6 +20,17 @@ class AuthHandler {
         }
     }
     
+    public static function getRole() {
+        if (!isset($_SESSION[SESSION_KEY_AUTH_ROLE])) {
+            $_SESSION[SESSION_KEY_AUTH_ROLE] = ROLE_GUEST;
+        }
+        return $_SESSION[SESSION_KEY_AUTH_ROLE];
+    }
+
+    public static function setRole($role) {
+        $_SESSION[SESSION_KEY_AUTH_ROLE] = $role;
+    }
+
     public static function putUserToken() {
         $_SESSION[SESSION_KEY_RUNNING] = '1';
     }
@@ -98,6 +109,14 @@ class AuthHandler {
         }
     }
 
+    /**
+     * Automatically authenticate a given contact. This function should
+     * only be used when there is no need to authenticate, such as right
+     * after signing up
+     * 
+     * @param int $contactId Contact id of contact
+     * @returns Contact data if authenticated, or false if no such contact exists
+     */
     public static function authByContactId($contactId) {
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
             return DatabaseHelper::getInstance()->getContactById($contactId);
