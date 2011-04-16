@@ -10,11 +10,25 @@
 require_once 'testenv.php';
 require_once 'PHPUnit.php';
 require_once 'Test_Service_ShowInterest.php';
+require_once 'Test_AuthenticationHelperLdap.php';
+require_once 'Test_AuthenticationHelperPassword.php';
+require_once 'Test_SimpleAcl.php';
 
-$suite  = new PHPUnit_TestSuite("Test_Service_ShowInterest");
 $unit = new PHPUnit();
-$result = $unit->run($suite);
+$tests = array(
+	'Test_Service_ShowInterest', 
+	'Test_AuthenticationHelperLdap',
+    'Test_AuthenticationHelperPassword',
+    'Test_SimpleAcl'
+);
 
-echo $result->toHtml();
+foreach ($tests as $test) {
+    $suite  = new PHPUnit_TestSuite($test);
+    $result = $unit->run($suite);
+    echo "<h1>$test</h1>";
+    echo $result->toHtml();
+    echo "<hr />";
+}
+
 ?></body>
 </html>
