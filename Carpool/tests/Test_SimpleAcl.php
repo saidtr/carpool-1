@@ -29,6 +29,23 @@ class Test_SimpleAcl extends PHPUnit_TestCase {
         $this->assertFalse($acl->isAllowed(ROLE_GUEST, 'resource5'));
         $this->assertFalse($acl->isAllowed(ROLE_IDENTIFIED, 'resource1'));
     }
+
+    function testAddResourceTwice() {
+        $acl = new SimpleAcl();
+        $acl->addRole(ROLE_GUEST);
+        $acl->addRole(ROLE_IDENTIFIED);
+        $acl->addResource(ROLE_GUEST, array('resource1', 'resource2'));
+        $acl->addResource(ROLE_GUEST, 'resource3');
+        $acl->addResource(ROLE_IDENTIFIED, array('resource1', 'resource2'));
+        $acl->addResource(ROLE_IDENTIFIED, 'resource3');
+
+        $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource1'));
+        $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource2'));
+        $this->assertTrue($acl->isAllowed(ROLE_GUEST, 'resource3'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED, 'resource1'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED, 'resource2'));
+        $this->assertTrue($acl->isAllowed(ROLE_IDENTIFIED, 'resource3'));
+    }
     
     function testSimpleHierarchy() {
         $acl = new SimpleAcl();

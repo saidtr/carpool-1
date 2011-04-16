@@ -33,8 +33,10 @@ class View_Navbar {
     	return $html;
     }
 
-    static function buildNavbar($logged = false) {
+    static function buildNavbar() {
         $html = '';
+        
+        $logged = (AuthHandler::getRole() !== ROLE_GUEST);
         
         // Put branding bar if we want one
         if (getConfiguration('branding.enable'))
@@ -42,7 +44,12 @@ class View_Navbar {
         $html .= '<div id="navbar">';
     	if ($logged) {
     		$pages =& self::$pagesMember;
+    		// Put the right ref on the logout link
     		$pages[4]['href'] .= '?ref=' . Utils::getRunningScript();
+    		// If we have no ride yet, let's name of join.php is still "Join"
+    		if (AuthHandler::getRole() !== ROLE_IDENTIFIED_REGISTERED) {
+    		    $pages[1]['name'] = 'Join';
+    		}
     	} else {
     		$pages =& self::$pagesGuest;
     	}

@@ -45,7 +45,7 @@
 			</fileset>
 		</copy>
 	</target>
-
+	
 	<!-- 
 		Currently the SQLite JDBC and Ant are not playing nice. 
 		Script works but we're getting lots of error messages and the build fails

@@ -27,7 +27,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 </head>
 <body>
 <div id="bd">
-<?php echo View_Navbar::buildNavbar(AuthHandler::isLoggedIn())?>
+<?php echo View_Navbar::buildNavbar()?>
 <?php echo View_Header::render(_('Lookin\' for a ride?'), _('The colleagues, listed below, may be able to provide a ride both to and from the listed locations'))?>
 <div id="content">
 	<div id="searchFormHolder">

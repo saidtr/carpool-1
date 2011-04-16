@@ -39,10 +39,6 @@ class AuthHandler {
         return isset($_SESSION) && isset($_SESSION[SESSION_KEY_RUNNING]);
     }
 
-    public static function isLoggedIn() {
-        return isset($_SESSION[SESSION_KEY_AUTH_USER]);
-    }
-
     public static function getLoggedInUser() {
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
             return DatabaseHelper::getInstance()->getContactById($_SESSION[SESSION_KEY_AUTH_USER]);
@@ -58,24 +54,7 @@ class AuthHandler {
     }
     
     public static function authenticate($params, $mode = null) {
-        if (!isset($mode)) {
-            $mode = (int) getConfiguration('auth.mode', 0);
-        }
-        $authHelper = null;
-        switch ($mode) {
-            case self::AUTH_MODE_TOKEN : 
-                $authHelper = new AuthenticationHelperToken(); 
-                break;
-            case self::AUTH_MODE_LDAP  : 
-                $authHelper = new AuthenticationHelperLdap(); 
-                break;
-            case self::AUTH_MODE_PASS  : 
-                $authHelper = new AuthenticationHelperPassword(); 
-                break;
-            default:
-                err(__METHOD__ . ": Illegal authentication mode: $mode");
-                return false;
-        }
+        $authHelper = self::getAuthenticationHandler($mode);
 
         // In case we already have a logged-in user, we'll first log-out
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {           
@@ -86,25 +65,15 @@ class AuthHandler {
         if ($contactId !== false) {
             $_SESSION[SESSION_KEY_AUTH_USER] = $contactId;
             info('Contact ' . $contactId . ' successfully authenticated');
+            
+            if (DatabaseHelper::getInstance()->getRideProvidedByContactId($contactId) !== false) {
+                self::setRole(ROLE_IDENTIFIED_REGISTERED);    
+            } else {
+                self::setRole(ROLE_IDENTIFIED);
+            }          
+            
             return $contactId;            
         } else {
-            return false;
-        }
-    }
-
-    public static function authByVerification($contactId, $identifier) {
-        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
-            // In case we already have a logged-in user, we'll first log-out
-            self::logout();
-        }
-        
-        $contact = DatabaseHelper::getInstance()->getContactByIdentifier($contactId, $identifier);
-        if ($contact) {
-            $_SESSION[SESSION_KEY_AUTH_USER] = $contact['Id'];
-            info('Contact ' . $contact['Id'] . ' successfully authenticated');
-            return $contact;
-        } else {
-            warn('Authentication failed for contact "' . $email . '" and token "' . $identifier . '"');
             return false;
         }
     }
@@ -133,11 +102,46 @@ class AuthHandler {
         }
     }
     
+    public static function getAuthMode() {
+        $mode = getConfiguration('auth.mode');
+        assert('$mode !== false');
+        return $mode;
+    }
+    
     public static function logout() {
         debug(__METHOD__);
+        if (isset($_SESSION[SESSION_KEY_AUTH_ROLE])) {
+            unset($_SESSION[SESSION_KEY_AUTH_ROLE]);
+        }
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
             unset($_SESSION[SESSION_KEY_AUTH_USER]);
         }
+    }
+    
+    public static function getAuthenticationHandler($mode = null) {
+        if (!isset($mode)) {
+            $mode = (int) getConfiguration('auth.mode', 0);
+        }
+        $authHelper = null;
+
+        debug(__METHOD__ . ": Mode is $mode");
+
+        switch ($mode) {
+            case self::AUTH_MODE_TOKEN :
+                $authHelper = new AuthenticationHelperToken();
+                break;
+            case self::AUTH_MODE_LDAP  :
+                $authHelper = new AuthenticationHelperLdap();
+                break;
+            case self::AUTH_MODE_PASS  :
+                $authHelper = new AuthenticationHelperPassword();
+                break;
+            default:
+                err(__METHOD__ . ": Illegal authentication mode: $mode");
+                return false;
+        }
+        
+        return $authHelper;
     }
 
 }

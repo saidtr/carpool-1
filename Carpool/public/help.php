@@ -20,7 +20,7 @@ $content = DatabaseHelper::getInstance()->getQuestionsAnswersByLang(LocaleManage
 </head>
 <body>
 <div id="bd">
-<?php echo View_Navbar::buildNavbar(AuthHandler::isLoggedIn())?>
+<?php echo View_Navbar::buildNavbar()?>
 <?php echo View_Header::render(_('Okay, just a quick question.'))?>
 <div id="content">
 <?php if ($content): ?>

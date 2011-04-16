@@ -3,6 +3,8 @@
 include "env.php";
 include APP_PATH . "/Bootstrap.php";
 
+// TODO: Change password
+
 AuthHandler::putUserToken();
 
 $db = DatabaseHelper::getInstance();
@@ -18,6 +20,8 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 $domainUsersMode = (getConfiguration('mode.domain.users', 0) == 1);
 
 if ($contact) {
+    $isLogged = true;
+    
 	extract($contact, EXTR_PREFIX_ALL, 'contact');
     if ($domainUsersMode) {
         // Trim the domain part
@@ -27,11 +31,10 @@ if ($contact) {
 	$rideData = $db->getRideProvidedByContactId($contact_Id);
 	
 	// Assume that we don't have logged-in contacts without a ride
-	assert($rideData !== false); 
-	
-    extract($rideData, EXTR_PREFIX_ALL, 'ride');
-    $isLogged = true;
-    $isActive = ($ride_Active == RIDE_ACTIVE);
+	if ($rideData !== false) { 	
+        extract($rideData, EXTR_PREFIX_ALL, 'ride');
+        $isActive = ($ride_Active == RIDE_ACTIVE);
+	}
 }
 
 $defaultSrcCity       = getConfiguration('default.src.city');
@@ -138,6 +141,16 @@ echo View_Header::render($header);
 					}	
 					?>
 				</dd>
+				<?php if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_PASS): ?>
+				<dd class="mandatory">
+					<label for="passw1"><?php echo _('Password')?></label>
+					<input class="textInput" id="passw1" name="passw1" type="password" size=20 value="" />
+				</dd>
+				<dd class="mandatory">
+					<label for="passw2"><?php echo _('Confirm password')?></label>
+					<input class="textInput" id="passw2" name="passw2" type="password" size=20 value="" />
+				</dd>												
+				<?php endif; ?>
 				<dd>
 					<label for="phone"><?php echo _('Phone')?></label>
 					<input class="textInput" id="phone" name="phone" type="text" size=10 value="<?php echo (isset($contact_Phone) ? $contact_Phone : '')?>" />

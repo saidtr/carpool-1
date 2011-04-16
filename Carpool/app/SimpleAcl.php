@@ -13,7 +13,7 @@ class SimpleAcl {
     }
 
     public function isAllowed($role, $resource) {
-        debug(__METHOD__ . "($role, $resource)");
+        // debug(__METHOD__ . "($role, $resource)");
 
         // We should only have defined roles; resource may not exist
         assert('array_key_exists($role, $this->_roles)');
@@ -32,7 +32,7 @@ class SimpleAcl {
     }
 
     public function addRole($role, $rolesIncluded = null) {
-        debug(__METHOD__ . "($role, " . json_encode($rolesIncluded) . ")");
+        // debug(__METHOD__ . "($role, " . json_encode($rolesIncluded) . ")");
 
         assert('!isset($this->_roles[$role])');
 
@@ -51,17 +51,25 @@ class SimpleAcl {
     }
 
     public function addResource($role, $resource) {
-        debug(__METHOD__ . "($role, " . json_encode($resource) . ")");
+        // debug(__METHOD__ . "($role, " . json_encode($resource) . ")");
         
         assert('isset($this->_roles[$role])');
         
         // Each resource holds an array of 
         if (is_array($resource)) {
             foreach ($resource as $r) {
-                $this->_acl[$r] = $this->getAllRolesInherited($role);
+                if (!isset($this->_acl[$r])) {
+                    $this->_acl[$r] = $this->getAllRolesInherited($role);
+                } else {
+                    $this->_acl[$r] = array_merge($this->_acl[$r], $this->getAllRolesInherited($role));
+                }
             }
         } else {
-            $this->_acl[$resource] = $this->getAllRolesInherited($role);
+            if (!isset($this->_acl[$resource])) {
+                $this->_acl[$resource] = $this->getAllRolesInherited($role);
+            } else {
+                $this->_acl[$resource] = array_merge($this->_acl[$resource], $this->getAllRolesInherited($role));
+            }
         }
     }
 
@@ -71,8 +79,7 @@ class SimpleAcl {
         if (!isset($this->_rolesHierarchyCache[$role])) {
             $res = array();
             $rolesIncluded = $this->_roles[$role];
-            $stupidCounter = 0;
-            while (!empty($rolesIncluded) && ++$stupidCounter < 10) {
+            while (!empty($rolesIncluded)) {
                 $cur = array_pop($rolesIncluded);
                 $res []= $cur;
                 foreach ($this->_roles[$cur] as $inc) {

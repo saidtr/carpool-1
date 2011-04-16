@@ -108,12 +108,17 @@ class Utils {
 	}
 	
 	/**
-	 * Redirects to another page on the same site
+	 * Redirects to another page on the same site, ignoring any
+	 * further code
 	 * 
 	 * @param string $page Public page name
 	 */
 	public static function redirect($page) {
+	    // debug(__METHOD__ . ": $page");
+	    
 		header('Location: ' . self::buildLocalUrl($page));
+		// We want to make sure that no additional code is executed
+		die();
 	}
 	
 	public static function buildLocalUrl($page, $params = null) {

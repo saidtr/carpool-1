@@ -50,11 +50,24 @@ if (empty($email) || (filter_var($email, FILTER_VALIDATE_EMAIL) === false)) {
     $messages[] = _("Please specify a valid email address");
 }
 
-
 if (empty($phone)) $phone = null;
 if (empty($notify)) $notify = 0;
 
-$isUpdate = AuthHandler::isLoggedIn();
+$password = null;
+if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
+    if (empty($passw1) || empty($passw2)) {
+        $valid = false;
+        $messages[] = _("Please fill in password and confirmation");        
+    } else if ($passw1 !== $passw2) {
+        $valid = false;
+        $messages[] = _("Password and confirmation field does not match");           
+    } else {
+        // Valid
+        $password = Utils::hashPassword($passw1);  
+    } 
+}
+
+$isUpdate = (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED);
 
 $action = ($isUpdate) ? 'update' : 'add';
 
@@ -73,7 +86,7 @@ if ($valid) {
             $rideId = false;
         }
         
-        // Put it all in a transaction - we don't want contacts with no rides
+        // Put it all in a transaction - we might fail after a few successes
         $server->beginTransaction();
         
         // Add destination and source city in case we don't have them in the DB
@@ -98,7 +111,7 @@ if ($valid) {
                 $server->updateContact($contactId, $name, $phone, $email);
             } else {               
                 // If it is a new ride - register this contact
-                $contactId = $server->addContact($name, $phone, $email);
+                $contactId = $server->addContact($name, $phone, $email, $password);
 
                 AuthHandler::authByContactId($contactId);
             }
@@ -124,6 +137,9 @@ if ($valid) {
             $mailBody = ViewRenderer::renderToString(VIEWS_PATH . '/registrationMail.php', array('contact' => $server->getContactById($contactId))); 
             Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);          
         }
+        
+        // Finally, our new user gets their role
+        AuthHandler::setRole(ROLE_IDENTIFIED_REGISTERED);
         
         $server->commit();
         
