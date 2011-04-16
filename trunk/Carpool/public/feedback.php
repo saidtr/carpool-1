@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 <div id="bd">
-<?php echo View_Navbar::buildNavbar(AuthHandler::isLoggedIn())?>
+<?php echo View_Navbar::buildNavbar()?>
 <?php echo View_Header::render(_('So, what do you say?'))?>
 <div id="content">
 <form id="feedbackForm" action="feedback.php" method="post">

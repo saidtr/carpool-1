@@ -7,11 +7,13 @@ class AuthenticationHelperPassword implements IAuthenticationHelper {
     }
     
     function authenticate($params) {
-        assert('isset($params["email"]) && isset($params["password"])');
+        assert('isset($params["user"]) && isset($params["password"])');
         
         // TODO: A primitive brute-force defense?
         
-        $email = $params['email'];
+        // We must call buildEmail as we may have explicitely added the 
+        // domain suffix during registration
+        $email = Utils::buildEmail($params['user']);      
         $pass = $params['password'];
         
         // Created a hashed hexadecimal string, use the salt if possible
@@ -20,7 +22,7 @@ class AuthenticationHelperPassword implements IAuthenticationHelper {
         if ($contact !== false) {
             if ($contact['Identifier'] === $hashed) {
                 info(__METHOD__ . ': Contact ' . $contact['Id'] . ' succesfully authenticated');
-                return true;
+                return $contact['Id'];
             } else {
                 warn(__METHOD__ . ': Contact ' . $contact['Id'] . ' failed to authorize: wrong password');
             }

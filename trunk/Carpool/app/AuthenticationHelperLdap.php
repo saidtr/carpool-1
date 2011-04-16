@@ -12,6 +12,8 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
     function authenticate($params) {       
         assert('isset($params["user"]) && isset($params["password"])');
         
+        // TODO: Escape LDAP?
+        
         $con = false;
         if (($domain = getConfiguration('auth.ldap.domain', 'Unspecified domain')) !== false) {
             $con = ldap_connect($domain, getConfiguration('auth.ldap.port', self::LDAP_DEFAULT_PORT));
@@ -33,6 +35,7 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
                 return $contact['Id'];    
             } else {
                 // Contact is not in the database - we better create it
+                // TODO: Put the option to read data
                 return DatabaseHelper::getInstance()->addContact('', '', $email);
             }           
         } else {

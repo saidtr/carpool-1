@@ -26,17 +26,21 @@ define('LOCATION_NOT_FOUND', -1);
 define('LOCATION_DONT_CARE', -2);
 
 define('SESSION_KEY_AUTH_USER', 'user');
+define('SESSION_KEY_AUTH_ROLE', 'role');
 define('SESSION_KEY_RUNNING', 'running');
 define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
 
 // Random visitor
 define('ROLE_GUEST', 1);
-// Identified (e.g. by AD credentials), but not registered
-define('ROLE_IDENTIFIED', 2);
-// Identified and registered
-define('ROLE_IDENTIFIED_REGISTERED', 3);
-// Administrator, may access resources such as CMS
-define('ROLE_ADMINISTRATOR', 4);
+// Authorized but not identified. Useful when there's an organization-wide password,
+// IP based access, etc.
+define('ROLE_AUTHORIZED_ACCESS', 2);
+// Identified (e.g. by AD credentials), but not registered a ride.
+define('ROLE_IDENTIFIED', 3);
+// Identified and registered.
+define('ROLE_IDENTIFIED_REGISTERED', 4);
+// Administrator, may access resources such as CMS.
+define('ROLE_ADMINISTRATOR', 5);
 
 // Error reporting and assertions
 if (ENV === ENV_DEVELOPMENT) {
@@ -142,5 +146,36 @@ $localeManager->init();
 
 // Start session
 AuthHandler::init();
+
+// Initialize the ACL
+$acl = new SimpleAcl();
+
+$acl->addRole(ROLE_GUEST);
+$acl->addRole(ROLE_AUTHORIZED_ACCESS, ROLE_GUEST);
+$acl->addRole(ROLE_IDENTIFIED, ROLE_GUEST);
+$acl->addRole(ROLE_IDENTIFIED_REGISTERED, ROLE_IDENTIFIED);
+$acl->addRole(ROLE_ADMINISTRATOR, ROLE_IDENTIFIED_REGISTERED);
+
+$acl->addResource(ROLE_GUEST, array('auth.php', 'quickauth.php', 'optout.php', 'webres.php'));
+if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
+    $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'AddRideAll.php'));
+} 
+$acl->addResource(ROLE_IDENTIFIED, array('join.php', 'help.php', 'index.php', 'feedback.php', 'logout.php', 'thanks.php', 'SearchRides.php', 'AddRideAll.php'));
+$acl->addResource(ROLE_IDENTIFIED_REGISTERED, array('ActivateToggle.php', 'DeleteRide.php', 'ShowInterest.php'));
+
+// Enfore access control
+$role = AuthHandler::getRole();
+$resource = Utils::getRunningScript();
+
+if (!$acl->isAllowed($role, $resource)) {
+    GlobalMessage::setGlobalMessage(_('Please login to access this page'), GlobalMessage::ERROR);
+    if ($acl->isAllowed($role, 'auth.php')) {
+        Utils::redirect('auth.php?ref=' . $resource);
+        // Need to put this, otherwise the afterward code is executed
+        die(); 
+    } else {
+        die ('<p>' . _('Sorry, you are not allowed to use this application.') . '</p>');
+    }
+}
 
 info('Bootstrap done.');
