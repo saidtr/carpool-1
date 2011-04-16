@@ -156,10 +156,16 @@ $acl->addRole(ROLE_IDENTIFIED, ROLE_GUEST);
 $acl->addRole(ROLE_IDENTIFIED_REGISTERED, ROLE_IDENTIFIED);
 $acl->addRole(ROLE_ADMINISTRATOR, ROLE_IDENTIFIED_REGISTERED);
 
-$acl->addResource(ROLE_GUEST, array('auth.php', 'quickauth.php', 'optout.php', 'webres.php'));
+if (ENV === ENV_DEVELOPMENT) {
+    $acl->addResource(ROLE_GUEST, 'webres.php');    
+}
+
+$acl->addResource(ROLE_GUEST, array('auth.php', 'optout.php', 'webres.php'));
 if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
     $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'AddRideAll.php'));
-} 
+} else if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_TOKEN) {
+    $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'index.php', 'AddRideAll.php', 'feedback.php', 'SearchRides.php'));
+}
 $acl->addResource(ROLE_IDENTIFIED, array('join.php', 'help.php', 'index.php', 'feedback.php', 'logout.php', 'thanks.php', 'SearchRides.php', 'AddRideAll.php'));
 $acl->addResource(ROLE_IDENTIFIED_REGISTERED, array('ActivateToggle.php', 'DeleteRide.php', 'ShowInterest.php'));
 
@@ -171,11 +177,11 @@ if (!$acl->isAllowed($role, $resource)) {
     GlobalMessage::setGlobalMessage(_('Please login to access this page'), GlobalMessage::ERROR);
     if ($acl->isAllowed($role, 'auth.php')) {
         Utils::redirect('auth.php?ref=' . $resource);
-        // Need to put this, otherwise the afterward code is executed
-        die(); 
     } else {
         die ('<p>' . _('Sorry, you are not allowed to use this application.') . '</p>');
     }
 }
+
+$GLOBALS['acl'] = $acl;
 
 info('Bootstrap done.');

@@ -1,9 +1,34 @@
 <?php
 
+/**
+ * The Simple ACL class provides a simple data structure that holds "roles"
+ * and "resources". Both roles and resources can be of any type, but the usual
+ * usage would be integer roles and string resources.
+ * 
+ * Supports fast answer for queries of type "is role X allowed to resource Y"
+ * The roles can be hierarchic, meaning - we can define roles that inherits all
+ * the priveleges of other roles.
+ * 
+ * Usage:
+ * 1. Define relevant roles
+ * 2. Add rules of type: role -> allowed resources 
+ * 3. Query the ACL
+ * 
+ * This class does not do any actual filtering, only providing convenient data
+ * structure for managing access
+ *
+ */
 class SimpleAcl {
 
+    // Array containing list of available resources, each resource points on
+    // all roles allowed access
     private $_acl = null;
+    
+    // Array containing list of all available roles, each role points on all 
+    // inherited roles
     private $_roles = null;
+    
+    // Cache role hierarchy, to save the tree traversal each time
     private $_rolesHierarchyCache = null;
 
     public function __construct() {
@@ -11,7 +36,7 @@ class SimpleAcl {
         $this->_roles = array();
         $this->_rolesHierarchyCache = array();
     }
-
+    
     public function isAllowed($role, $resource) {
         // debug(__METHOD__ . "($role, $resource)");
 
@@ -36,7 +61,7 @@ class SimpleAcl {
 
         assert('!isset($this->_roles[$role])');
 
-        // Each roles in the ACL holds an array of all roles that inherit from
+        // Each role in the ACL holds an array of all roles that inherit from
         // this role.  
         if (isset($rolesIncluded)) {
             if (is_array($rolesIncluded)) {
@@ -55,7 +80,7 @@ class SimpleAcl {
         
         assert('isset($this->_roles[$role])');
         
-        // Each resource holds an array of 
+        // Each resource holds an array of roles allowed to access it
         if (is_array($resource)) {
             foreach ($resource as $r) {
                 if (!isset($this->_acl[$r])) {
@@ -74,7 +99,7 @@ class SimpleAcl {
     }
 
     // Iterate over the role hierarchy and returns a list of all roles 
-    // that inherit from this role.
+    // that inherit from this role (including this one).
     private function getAllRolesInherited($role) {
         if (!isset($this->_rolesHierarchyCache[$role])) {
             $res = array();

@@ -118,6 +118,12 @@ class AuthHandler {
         }
     }
     
+    /**
+     * Factory method for authentication helpers 
+     * 
+     * @param int $mode Authentication mode to use
+     * @return IAuthenticationHelper implementation 
+     */
     public static function getAuthenticationHandler($mode = null) {
         if (!isset($mode)) {
             $mode = (int) getConfiguration('auth.mode', 0);
