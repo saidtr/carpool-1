@@ -5,6 +5,8 @@ include APP_PATH . "/Bootstrap.php";
 
 $contact = null;
 
+// TODO: Is this page still relevant? Maybe use the token for quick authentication?
+
 $contactId = Utils::getParam('c');
 $identifier = Utils::getParam('i');
 

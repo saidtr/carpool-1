@@ -3,6 +3,9 @@
 include "env.php";
 include APP_PATH . "/Bootstrap.php";
 
+$authHelper = AuthHandler::getAuthenticationHelper();
+$interactiveMode = ($authHelper instanceof IAuthenticationHelperInteractive);
+
 // This is a post - form submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
@@ -10,32 +13,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Try to discard bots by dropping requests with no session
         die();
     }
-    
-    extract($_POST, EXTR_SKIP);
-    if (!Utils::isEmptyString($user) && !Utils::isEmptyString($password)) {
-        $params = array ('user' => $user, 'password' => $password);
-        try {
-            
-            if (AuthHandler::authenticate($params)) {            
-                // Redirect to original page
-                if (!isset($ref)) {
-                    $ref = 'index.php';
-                }
-                Utils::redirect($ref);
-            } else {
-                GlobalMessage::setGlobalMessage(_('Failed to authenticate') . ': ' . _('Incorrect credentials.'), GlobalMessage::ERROR);
+
+    try {
+        if (!$authHelper->validateForm($_POST)) {
+            GlobalMessage::setGlobalMessage(_('Failed to authenticate') . ': ' . _('Please fill in all the required details.'), GlobalMessage::ERROR);        
+        } else if (AuthHandler::authenticate($authHelper, $_POST)) {
+            // Redirect to original page
+            if (!isset($ref)) {
+                $ref = 'index.php';
             }
-            
-        } catch (Exception $e) {
-            logException($e);
-            GlobalMessage::setGlobalMessage(_('Failed to authenticate') . ': ' . _('Internal error.'), GlobalMessage::ERROR);
+            Utils::redirect($ref);
+        } else {
+            GlobalMessage::setGlobalMessage(_('Failed to authenticate') . ': ' . _('Incorrect credentials.'), GlobalMessage::ERROR);
         }
-    } else {
-        GlobalMessage::setGlobalMessage(_('Please fill in email and password.'), GlobalMessage::ERROR);
+    } catch (Exception $e) {
+        logException($e);
+        GlobalMessage::setGlobalMessage(_('Failed to authenticate') . ': ' . _('Internal error.'), GlobalMessage::ERROR);
     }
     
+    // GET after POST
     Utils::redirect('auth.php');
-    
+
 } else {
     
     AuthHandler::putUserToken();
@@ -58,14 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div id="content">
 <form id="authenticationForm" action="auth.php" method="post">
 	<dl class="noFloat">
-	<dd class="mandatory">
-		<label for="user"><?php echo _('User name')?></label>
-		<input type="text" id="user" name="user" class="textInput" size=20 />
-	</dd>
-	<dd class="mandatory">
-		<label for="password"><?php echo _('Password')?></label>
-		<input type="password" id="password" name="password" class="textInput" size=20 />
-	</dd>
+	<?php $authHelper->putLogonFormFields(); ?>
 	<dd>
 		<input type="hidden" id="ref" name="ref" value="<?php echo htmlspecialchars(Utils::getParam('ref', ''))?>" />
 		<input type="submit" value="<?php echo _('Submit')?>" />
@@ -74,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </form>
 </div>
 </div>
-<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.5.2.min.js"></script>
 <?php echo View_Php_To_Js::render();?>
 <script type="text/javascript" src="js/utils.js"></script>
 </body>
