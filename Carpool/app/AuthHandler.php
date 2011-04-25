@@ -53,8 +53,8 @@ class AuthHandler {
         return false;
     }
     
-    public static function authenticate($params, $mode = null) {
-        $authHelper = self::getAuthenticationHandler($mode);
+    public static function authenticate($authHelper, $params) {
+        //$authHelper = self::getAuthenticationHelper($mode);
 
         // In case we already have a logged-in user, we'll first log-out
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {           
@@ -124,7 +124,7 @@ class AuthHandler {
      * @param int $mode Authentication mode to use
      * @return IAuthenticationHelper implementation 
      */
-    public static function getAuthenticationHandler($mode = null) {
+    public static function getAuthenticationHelper($mode = null) {
         if (!isset($mode)) {
             $mode = (int) getConfiguration('auth.mode', 0);
         }

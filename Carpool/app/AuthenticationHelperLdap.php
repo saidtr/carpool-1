@@ -8,12 +8,38 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
     // For full list of LDAP errors, see first comment in http://il2.php.net/manual/en/function.ldap-errno.php
     const LDAP_INAPPROPRIATE_AUTH  = 48;
     const LDAP_INVALID_CREDENTIALS = 49;
+
+    /**
+     * Taken from Zend Framework
+     * 
+     * Escapes the given VALUES according to RFC 2254 so that they can be safely used in LDAP filters.
+     *
+     * Any control characters with an ACII code < 32 as well as the characters with special meaning in
+     * LDAP filters "*", "(", ")", and "\" (the backslash) are converted into the representation of a
+     * backslash followed by two hex digits representing the hexadecimal value of the character.
+     * @see Net_LDAP2_Util::escape_filter_value() from Benedikt Hallinger <beni@php.net>
+     * @link http://pear.php.net/package/Net_LDAP2
+     * @author Benedikt Hallinger <beni@php.net>
+     *
+     * @param  string $val Value to escape
+     * @return string Escaped value
+     */
+    private function ldap_escape($val) {
+        $val = str_replace(array('\\', '*', '(', ')'), array('\5c', '\2a', '\28', '\29'), $val);
+        for ($i = 0; $i < strlen($val); $i++) {
+            $char = substr($val, $i, 1);
+            if (ord($char)<32) {
+                $hex = dechex(ord($char));
+                if (strlen($hex) == 1) $hex = '0' . $hex;
+                $val = str_replace($char, '\\' . $hex, $val);
+            }
+        }
+        return $val;
+    }
     
     function authenticate($params) {       
         assert('isset($params["user"]) && isset($params["password"])');
-        
-        // TODO: Escape LDAP?
-        
+    
         $con = false;
         if (($domain = getConfiguration('auth.ldap.domain', 'Unspecified domain')) !== false) {
             $con = ldap_connect($domain, getConfiguration('auth.ldap.port', self::LDAP_DEFAULT_PORT));
@@ -22,8 +48,8 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
             throw new Exception(__METHOD__ . ": Failed to connect to $domain");
         }
         
-        $user = $params['user'];
-        $pass = $params['password'];
+        $user = ldap_escape($params['user']);
+        $pass = ldap_escape($params['password']);
         
         if (ldap_bind($con, $user, $pass)) {
             // We're assuming that the email used is as the user name
@@ -52,6 +78,19 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
         ldap_unbind($con);
         
         return true;
+    }
+    
+    function putLogonFormFields() { 
+         ViewRenderer::render('views/authFormLdap.php');
+    }
+    
+    function validateForm($request) {
+        return (
+            isset($request['user']) && 
+            !Utils::isEmptyString($request['user']) &&
+            isset($request['password']) &&
+            !Utils::isEmptyString($request['password'])
+            );
     }
     
 }

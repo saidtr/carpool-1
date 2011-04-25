@@ -1,4 +1,4 @@
-<style>
+<style type="text/css">
 /* Possibly, place special branding styles here */
 #navbar {
 	

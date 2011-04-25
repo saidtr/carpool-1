@@ -1,19 +1,15 @@
 <?php
 
-class AuthenticationHelperPassword implements IAuthenticationHelper {
-    
-    function init() {
-        return true;
-    }
+class AuthenticationHelperPassword implements IAuthenticationHelperInteractive {
     
     function authenticate($params) {
-        assert('isset($params["user"]) && isset($params["password"])');
+        assert('isset($params["email"]) && isset($params["password"])');
         
         // TODO: A primitive brute-force defense?
         
         // We must call buildEmail as we may have explicitely added the 
         // domain suffix during registration
-        $email = Utils::buildEmail($params['user']);      
+        $email = Utils::buildEmail($params['email']);      
         $pass = $params['password'];
         
         // Created a hashed hexadecimal string, use the salt if possible
@@ -30,5 +26,19 @@ class AuthenticationHelperPassword implements IAuthenticationHelper {
         }
         return false;
     }
+    
+    function putLogonFormFields() { 
+         ViewRenderer::render('views/authFormPassword.php');
+    }
+    
+    function validateForm($request) {
+        return (
+            isset($request['email']) && 
+            !Utils::isEmptyString($request['email']) &&
+            isset($request['password']) &&
+            !Utils::isEmptyString($request['password'])
+            );
+    }
+    
     
 }
