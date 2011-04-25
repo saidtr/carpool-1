@@ -43,7 +43,7 @@ mode.single.dest   = 0
 mode.domain.users  = 0
 
 [authentication]
-; Authentication mode: 0 - Use token (default), 1 - Use password, 2 - Use LDAP
+; Authentication mode: 0 - Use token (default), 1 - Use LDAP, 2 - Use password
 auth.mode          = 0
 ; For password authenticaion - password salt
 auth.pass.salt     = 
