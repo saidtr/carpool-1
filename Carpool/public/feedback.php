@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </form>
 </div>
 </div>
-<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.5.2.min.js"></script>
 <?php echo View_Php_To_Js::render();?>
 <script type="text/javascript" src="js/utils.js"></script>
 </body>

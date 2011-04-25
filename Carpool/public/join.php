@@ -180,7 +180,7 @@ echo View_Header::render($header);
 	</div>
 </div>
 </div>
-<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.5.2.min.js"></script>
 <script type="text/javascript" src="lib/packed/join.pack.js"></script>
 <?php
 View_Php_To_Js::putTranslations(array(
