@@ -145,6 +145,9 @@ class Utils {
 	}
 	
 	// Created a hashed hexadecimal string, use salt if available
+	// TODO: Enhance security:
+	// 1. Add salt based on user data (e.g. join time)
+	// 2. Use stronger method (see here: http://stackoverflow.com/questions/4795385)
 	public static function hashPassword($password) {
 	    return sha1($password . getConfiguration('auth.pass.salt', ''));
 	}
