@@ -22,6 +22,17 @@ database.dsn       = sqlite:%DATAPATH%/data_test.sq3
 database.user      =
 database.pass      =
 
+[authentication]
+; Authentication mode: 0 - Use token (default), 1 - Use LDAP, 2 - Use password
+auth.mode          = 0
+; For password authenticaion - password salt
+auth.pass.salt     = 
+; For LDAP based authentication - LDAP domain
+auth.ldap.domain   = 
+auth.ldap.port     = 
+; Used for adding a prefix to user names when authenticating, e.g. ADCOMP\User1
+auth.ldap.domain.name = 
+
 [settings]
 notify.immediate   = 1
 branding.enable    =

@@ -48,10 +48,17 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
             throw new Exception(__METHOD__ . ": Failed to connect to $domain");
         }
         
-        $user = ldap_escape($params['user']);
-        $pass = ldap_escape($params['password']);
+        $authUser = $user = $this->ldap_escape($params['user']);
+        $pass = $this->ldap_escape($params['password']);
         
-        if (ldap_bind($con, $user, $pass)) {
+        $ldapDomainName = getConfiguration('auth.ldap.domain.name');
+        if ($ldapDomainName) {
+            $authUser = $ldapDomainName . '\\' . $authUser;
+        }
+        
+        debug(__METHOD__ . ": Trying to authenticate $authUser against $domain");
+        
+        if (ldap_bind($con, $authUser, $pass)) {
             // We're assuming that the email used is as the user name
             $email = $email = Utils::buildEmail($user);
             

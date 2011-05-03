@@ -50,6 +50,8 @@ auth.pass.salt     =
 ; For LDAP based authentication - LDAP domain
 auth.ldap.domain   = 
 auth.ldap.port     = 
+; Used for adding a prefix to user names when authenticating, e.g. ADCOMP\User1
+auth.ldap.domain.name = 
 
 [localization]
 default.src.city   =
