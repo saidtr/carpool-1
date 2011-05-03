@@ -11,8 +11,12 @@ $db = DatabaseHelper::getInstance();
 
 $contact = AuthHandler::getLoggedInUser();
 
+// Is the user logged; in some cases, user might be logged even if there is no ride
 $isLogged = false;
-$isActive = true;
+// True if the user is logged and registered to a ride
+$hasRide = false;
+// True if the user has ride and the ride is active
+$isActive = false;
 
 // In single destination mode, hide the "to" fields
 $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
@@ -32,6 +36,7 @@ if ($contact) {
 	
 	// Assume that we don't have logged-in contacts without a ride
 	if ($rideData !== false) { 	
+	    $hasRide = true;
         extract($rideData, EXTR_PREFIX_ALL, 'ride');
         $isActive = ($ride_Active == RIDE_ACTIVE);
 	}
@@ -56,9 +61,9 @@ $defaultDestLocation  = getConfiguration('default.dest.loc');
 </head>
 <body>
 <div id="bd">
-<?php echo View_Navbar::buildNavbar($isLogged)?>
+<?php echo View_Navbar::buildNavbar()?>
 <?php
-$header = ($isLogged) ? _("Hello again, ") . htmlspecialchars($contact_Name) : _("Join the carpool.");
+$header = ($hasRide) ? _("Hello again, ") . htmlspecialchars($contact_Name) : _("Join the carpool.");
 echo View_Header::render($header); 
 ?>
 <div id="content">
@@ -169,8 +174,8 @@ echo View_Header::render($header);
 		</fieldset>	
 		<fieldset>
 			<legend><?php echo _('Submit')?></legend>
-			<input type="submit" value="<?php echo ($isLogged) ? _('Update') : _('Go!') ?>" />
-			<?php if ($isLogged): ?>
+			<input type="submit" value="<?php echo ($hasRide) ? _('Update') : _('Go!') ?>" />
+			<?php if ($hasRide): ?>
 			<input type="button" id="deleteButton" value="<?php echo _('Delete')?>!" />
 			<input type="button" id="activateToggleButton" value="<?php echo ($isActive ? _("Deactivate") : _("Activate"))?>" />
 			<?php endif; ?>
