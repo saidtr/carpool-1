@@ -193,7 +193,8 @@ View_Php_To_Js::putTranslations(array(
 	'Could not add ride',
 	'Could not update ride',
 	'Sorry, something went wrong.',
-	'Congrats! You broke everything!'
+	'Congrats! You broke everything!',
+    'Working...'
 )); 
 View_Php_To_Js::putVariable('cities', $db->getCities());
 echo View_Php_To_Js::render();
