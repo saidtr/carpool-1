@@ -2,32 +2,7 @@
 
 require_once "testenv.php";
 require_once "PHPUnit.php";
-
-// Dummy implementation of the LDAP functions
-
-function ldap_connect($domain, $port = 439) {
-    return true;
-}
-
-function ldap_error($con) {
-    return "NOT IMPLEMENTED";
-}
-
-function ldap_errno($con) {
-    return 48;
-}
-
-function ldap_err2str($errCode) {
-    return "NOT IMPLEMENTED";
-}
-
-function ldap_bind($con, $user, $password) {
-    return ($user === $password);
-}
-
-function ldap_unbind($con) {
-    return true;
-}
+require_once "Mock_Ldap.php";
 
 class Test_AuthenticationHelperLdap extends PHPUnit_TestCase {
 
