@@ -41,11 +41,12 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
         assert('isset($params["user"]) && isset($params["password"])');
     
         $con = false;
-        if (($domain = getConfiguration('auth.ldap.domain', 'Unspecified domain')) !== false) {
-            $con = ldap_connect($domain, getConfiguration('auth.ldap.port', self::LDAP_DEFAULT_PORT));
+        if (($domain = getConfiguration('auth.ldap.domain')) !== false) {
+            $port = (int) getConfiguration('auth.ldap.port', self::LDAP_DEFAULT_PORT);
+            $con = ldap_connect($domain, $port);
         }
         if ($con === false) {
-            throw new Exception(__METHOD__ . ": Failed to connect to $domain");
+            throw new Exception(__METHOD__ . ": Failed to connect to $domain in port $port");
         }
         
         $authUser = $user = $this->ldap_escape($params['user']);

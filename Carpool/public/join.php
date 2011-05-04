@@ -34,7 +34,6 @@ if ($contact) {
 	
 	$rideData = $db->getRideProvidedByContactId($contact_Id);
 	
-	// Assume that we don't have logged-in contacts without a ride
 	if ($rideData !== false) { 	
 	    $hasRide = true;
         extract($rideData, EXTR_PREFIX_ALL, 'ride');
@@ -141,7 +140,7 @@ echo View_Header::render($header);
 					<input class="textInput" id="email" name="email" type="text" size=20 value="<?php echo (isset($contact_Email) ? $contact_Email : '')?>" />
 					<?php 
 					if ($domainUsersMode) {
-					    echo '@' . getConfiguration('domain');
+					    echo '@' . getConfiguration('default.domain');
 					    echo '<p class="description">' . _('Please use your company email, without the domain suffix.') . '</p>';   
 					}	
 					?>

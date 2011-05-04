@@ -67,9 +67,10 @@ if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
     } 
 }
 
-$isUpdate = (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED);
+$isUpdateContact = ((AuthHandler::getRole() == ROLE_IDENTIFIED) || (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED));
+$isUpdateRide = (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED);
 
-$action = ($isUpdate) ? 'update' : 'add';
+$action = ($isUpdateRide) ? 'update' : 'add';
 
 if ($valid) {
 
@@ -77,12 +78,16 @@ if ($valid) {
     
     try {
     
-        if ($isUpdate) {
+        if ($isUpdateContact) {
             $contactId = AuthHandler::getLoggedInUserId();
+        } else {
+            $contactId = false;
+        }
+        
+        if ($isUpdateRide) {
             $ride = $server->getRideProvidedByContactId($contactId);   
             $rideId = $ride['Id'];
         } else {
-            $contactId = false;
             $rideId = false;
         }
         
@@ -107,7 +112,7 @@ if ($valid) {
         }
 
         try {
-            if ($isUpdate) {
+            if ($isUpdateContact) {
                 $server->updateContact($contactId, $name, $phone, $email);
             } else {               
                 // If it is a new ride - register this contact
@@ -123,7 +128,7 @@ if ($valid) {
         }
 
         // Add or update ride
-        if ($isUpdate) {
+        if ($isUpdateRide) {
             if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo, $notify)) {
                 GlobalMessage::setGlobalMessage(_("Ride successfully updated."));
             } else {
@@ -143,7 +148,7 @@ if ($valid) {
         
         $server->commit();
         
-        if (!$isUpdate && getConfiguration('notify.immediate') == 1) {
+        if (!$isUpdateRide && getConfiguration('notify.immediate') == 1) {
             Service_ShowInterest::run($rideId);
         }
         
