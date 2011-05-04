@@ -2,6 +2,8 @@
 
 class MailHelper {
     
+    // TODO: Problematic now; need to fix this and use it over the application
+    
     private static function buildAuthenticationUrl($page, $contact) {
         assert ($page === 'optout' || $page === 'auth'); 
         return Utils::buildLocalUrl("$page.php", array('c' => $contact['Id'], 'i' => $contact['Identifier']));
@@ -12,7 +14,8 @@ class MailHelper {
         $body = new ViewRenderer($script);
         $body->assign($params);
         if ($contact !== null) {
-            $layout->optoutUrl = self::buildAuthenticationUrl('optout', $contact);   
+            // Commented out to remove the opt-out link while it's broken
+            // $layout->optoutUrl = self::buildAuthenticationUrl('optout', $contact);   
             $body->contact = $contact;
         }
         $layout->body = $body;
