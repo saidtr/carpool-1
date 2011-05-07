@@ -13,11 +13,17 @@ class AuthHandler {
     const AUTH_MODE_TOKEN = 0;
     const AUTH_MODE_LDAP  = 1;
     const AUTH_MODE_PASS  = 2;
-    
+
     public static function init() {
+        $lifetime = TWO_WEEKS;
+        // Make sure the session will not be marked as garbage
+        ini_set("session.gc_maxlifetime", $lifetime);
+        session_name('Carpool');
         if (!session_start()) {
             warn("Could not initialize session");
         }
+        // Set session to last two weeks (as session_set_cookie_params do not update the time)
+        setcookie(session_name(), session_id(), time() + $lifetime, getConfiguration('public.path') . '/');
     }
     
     public static function getRole() {
@@ -54,8 +60,6 @@ class AuthHandler {
     }
     
     public static function authenticate($authHelper, $params) {
-        //$authHelper = self::getAuthenticationHelper($mode);
-
         // In case we already have a logged-in user, we'll first log-out
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {           
             self::logout();
@@ -104,7 +108,9 @@ class AuthHandler {
     
     public static function getAuthMode() {
         $mode = getConfiguration('auth.mode');
-        assert('$mode !== false');
+        if ($mode === false) {
+            throw new Exception('Mandatory configuration value auth.mode is not defined in the configuration file.');
+        }
         return $mode;
     }
     
