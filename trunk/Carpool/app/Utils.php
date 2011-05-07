@@ -112,11 +112,12 @@ class Utils {
 	 * further code
 	 * 
 	 * @param string $page Public page name
+	 * @param array $params Parameters to put in the request
 	 */
-	public static function redirect($page) {
+	public static function redirect($page, $params = null) {
 	    // debug(__METHOD__ . ": $page");
 	    
-		header('Location: ' . self::buildLocalUrl($page));
+		header('Location: ' . self::buildLocalUrl($page, $params));
 		// We want to make sure that no additional code is executed
 		die();
 	}

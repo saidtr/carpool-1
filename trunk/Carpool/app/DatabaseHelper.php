@@ -22,28 +22,24 @@ class DatabaseHelper {
 		return self::$_instance;
 	}
 
-    private function __construct() {
-    	$dsn = str_replace('%DATAPATH%', DATA_PATH, getConfiguration('database.dsn'));
-    	$user = getConfiguration('database.user');
-    	$pass = getConfiguration('database.pass');
-    	
-    	info('Connecting to DB: ' . $dsn);
-    	try {
-            $this->_db = new PDO($dsn, $user, $pass);
-            // Use exceptions as error handling
-            $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            if (!$this->_db) {
-                err('DB Connection failed: ' . Utils::errorInfoToString($this->_db->errorCode()));    
-            }
-            if (($initCode = getConfiguration('database.init')) !== false)
-            {
-                $this->_db->query($initCode);
-            }
-    	} catch (PDOException $e) {
-        	logException($e);
-        }
-    }  
-    
+	private function __construct() {
+	    $dsn = str_replace('%DATAPATH%', DATA_PATH, getConfiguration('database.dsn'));
+	    $user = getConfiguration('database.user');
+	    $pass = getConfiguration('database.pass');
+	     
+	    info('Connecting to DB: ' . $dsn);
+	    $this->_db = new PDO($dsn, $user, $pass);
+	    if (!$this->_db) {
+	        throw new Exception('DB Connection failed: ' . Utils::errorInfoToString($this->_db->errorCode()));
+	    }
+	    // Use exceptions as error handling
+	    $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    if (($initCode = getConfiguration('database.init')) !== false)
+	    {
+	        $this->_db->query($initCode);
+	    }
+	}
+
     /**
      * Returns the PDO object holding the DB connection. For testing purpose only 
      * 
