@@ -54,7 +54,7 @@ if (empty($phone)) $phone = null;
 if (empty($notify)) $notify = 0;
 
 $password = null;
-if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
+if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_PASS) {
     if (empty($passw1) || empty($passw2)) {
         $valid = false;
         $messages[] = _("Please fill in password and confirmation");        
@@ -69,6 +69,8 @@ if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
 
 $isUpdateContact = ((AuthHandler::getRole() == ROLE_IDENTIFIED) || (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED));
 $isUpdateRide = (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED);
+
+$canUpdateEmail = (AuthHandler::getAuthMode() != AuthHandler::AUTH_MODE_LDAP);
 
 $action = ($isUpdateRide) ? 'update' : 'add';
 
@@ -113,7 +115,7 @@ if ($valid) {
 
         try {
             if ($isUpdateContact) {
-                $server->updateContact($contactId, $name, $phone, $email);
+                $server->updateContact($contactId, $name, $phone, ($canUpdateEmail ? $email : null));
             } else {               
                 // If it is a new ride - register this contact
                 $contactId = $server->addContact($name, $phone, $email, $password);

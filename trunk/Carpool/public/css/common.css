@@ -286,7 +286,7 @@ p#loadingNotice {
 /* Join page */
 
 #addRideForm {
-
+	margin-bottom: 20px;
 }
 
 #addRideForm fieldset:FIRST-CHILD {
@@ -299,7 +299,6 @@ p#loadingNotice {
 #addRideForm legend {
 	padding-right: 15px;
 	display: none;
-	/*font-size: large;*/
 }
 
 /* Thank you page */

@@ -22,6 +22,8 @@ $isActive = false;
 $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 // In "domain users" mode, only internal mail addresses are allowed
 $domainUsersMode = (getConfiguration('mode.domain.users', 0) == 1);
+// In LDAP authentication, the email cannot be changed
+$canUpdateEmail = (AuthHandler::getAuthMode() != AuthHandler::AUTH_MODE_LDAP);
 
 if ($contact) {
     $isLogged = true;
@@ -137,12 +139,17 @@ echo View_Header::render($header);
 				</dd>
 				<dd class="mandatory">
 					<label for="email"><?php echo _('Email')?></label>
-					<input class="textInput" id="email" name="email" type="text" size=20 value="<?php echo (isset($contact_Email) ? $contact_Email : '')?>" />
+					<input class="textInput" id="email" name="email" type="text" size=20 value="<?php echo (isset($contact_Email) ? $contact_Email : '')?>" <?php if (!$canUpdateEmail) echo 'readonly'?> />
 					<?php 
+					
 					if ($domainUsersMode) {
 					    echo '@' . getConfiguration('default.domain');
-					    echo '<p class="description">' . _('Please use your company email, without the domain suffix.') . '</p>';   
-					}	
+					}
+					if (!$canUpdateEmail) {
+					    echo '<p class="description">' . _('Authentication policy does not allow you to change email account.') . '</p>';   
+					} else if ($domainUsersMode) {
+					    echo '<p class="description">' . _('Please use your company email, without the domain suffix.') . '</p>';
+					}
 					?>
 				</dd>
 				<?php if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_PASS): ?>
@@ -163,8 +170,7 @@ echo View_Header::render($header);
 					<label for="comment"><?php echo _('Comments')?></label>
 					<textarea id="comment" name="comment" rows=2 cols=40><?php echo (isset($ride_Comment) ? $ride_Comment : '')?></textarea>
 				</dd>
-				<dd>
-					
+				<dd>				
 					<label for="notify"><?php echo _('Notify me by mail about new rides that may be relevant to me')?>
 						<input type="checkbox" id="notify" name="notify" value="1" <?php if (isset($ride_Notify) && $ride_Notify !== '0') echo 'checked="checked"'; ?> >
 					</label>
