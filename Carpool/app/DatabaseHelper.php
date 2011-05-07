@@ -169,14 +169,19 @@ class DatabaseHelper {
     	} 
     }
     
-    function updateContact($contactId, $name, $phone, $email) {
+    function updateContact($contactId, $name, $phone, $email = null) {
     	debug(__METHOD__ . "($contactId, $name, $phone, $email)");
     	
     	try {  		
-
-	        $stmt = $this->_db->prepare('UPDATE Contacts SET name=:name, email=:email, phone=:phone WHERE id=:contactId');
+            if ($email !== null) { 
+	            $stmt = $this->_db->prepare('UPDATE Contacts SET name=:name, email=:email, phone=:phone WHERE id=:contactId');
+            } else {
+                $stmt = $this->_db->prepare('UPDATE Contacts SET name=:name, phone=:phone WHERE id=:contactId');
+            }
 	        $stmt->bindParam(':name', $name);
-	        $stmt->bindParam(':email', $email);
+	        if ($email !== null) {
+	            $stmt->bindParam(':email', $email);
+	        }
 	        $stmt->bindParam(':phone', $phone);
 	        $stmt->bindParam(':contactId', $contactId);
 	        
@@ -188,7 +193,7 @@ class DatabaseHelper {
 			throw $e;
     	} 
     }
-    
+        
     function deleteContact($contactId) {
         debug(__METHOD__ . "($contactId)");
         try {
