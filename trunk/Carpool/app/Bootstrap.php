@@ -30,6 +30,9 @@ define('SESSION_KEY_AUTH_ROLE', 'role');
 define('SESSION_KEY_RUNNING', 'running');
 define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
 
+// Two weeks (in seconds) - 60 * 60 * 24 * 14
+define('TWO_WEEKS', 1209600);
+
 // Random visitor
 define('ROLE_GUEST', 1);
 // Authorized but not identified. Useful when there's an organization-wide password,
@@ -66,6 +69,17 @@ if (ENV === ENV_DEVELOPMENT) {
 	assert_options(ASSERT_ACTIVE, 0); 
 }
 
+// Handle uncaught exceptions:  
+//   Show error page with a relevant message
+function uncaughtExceptionHandler($e) {
+    logException($e);
+    ob_end_clean(); 
+    header('HTTP/1.1 500 Internal Server Error');
+    ViewRenderer::render('views/errorPage.php', array('exception' => $e));
+}
+
+set_exception_handler('uncaughtExceptionHandler');
+
 // Simple auto loading:
 //   View classes (name starts with View) - look in app/views
 //   Standard classes - look in app/
@@ -83,7 +97,7 @@ function __autoload($className) {
 $globalConf = parse_ini_file(CONF_PATH . '/' . CONF_FILE, false);
 if (!$globalConf) {
 	// We can't really do anything without that
-	die('Could not parse configuration file. Aborting.');
+	throw Exception('Could not parse configuration file ' . (CONF_PATH . '/' . CONF_FILE));
 }
 
 $GLOBALS['conf'] = $globalConf;
@@ -162,7 +176,7 @@ if (ENV === ENV_DEVELOPMENT) {
     $acl->addResource(ROLE_GUEST, 'webres.php');    
 }
 
-$acl->addResource(ROLE_GUEST, array('auth.php', 'optout.php', 'webres.php'));
+$acl->addResource(ROLE_GUEST, array('auth.php', 'optout.php'));
 if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
     $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'AddRideAll.php'));
 } else if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_TOKEN) {
@@ -176,9 +190,9 @@ $role = AuthHandler::getRole();
 $resource = Utils::getRunningScript();
 
 if (!$acl->isAllowed($role, $resource)) {
-    GlobalMessage::setGlobalMessage(_('Please login to access this page'), GlobalMessage::ERROR);
+    //GlobalMessage::setGlobalMessage(_('Please login to access this page'), GlobalMessage::ERROR);
     if ($acl->isAllowed($role, 'auth.php')) {
-        Utils::redirect('auth.php?ref=' . $resource);
+        Utils::redirect('auth.php', array('ref' =>  $resource));
     } else {
         die ('<p>' . _('Sorry, you are not allowed to use this application.') . '</p>');
     }
