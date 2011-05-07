@@ -49,13 +49,15 @@ class LocaleManager {
 	    
 		if (isset($_GET['lang']) && array_key_exists($_GET['lang'], $this->locales)) {
 			$this->locale = $this->locales[$_GET['lang']];
-			// Set the cookie for 30 days, available to the whole domain
-			if (!setcookie('lang', $_GET['lang'], time() + 60 * 60 * 24 * 30, '/')) {
+			// Set the cookie for 14 days
+			if (!setcookie('lang', $_GET['lang'], time() + 60 * 60 * 24 * 14, getConfiguration('public.path') . '/')) {
 				warn(__METHOD__ . ': Could not set cookie for user! Output already exists.');
 			}
 			unset($_GET['lang']);
 		} else if (isset($_COOKIE['lang']) && array_key_exists($_COOKIE['lang'], $this->locales)) {
 			$this->locale = $this->locales[$_COOKIE['lang']];
+			// Update cookie expiry time
+			setcookie('lang', $_COOKIE['lang'], time() + TWO_WEEKS, getConfiguration('public.path') . '/');
 		} else {
 			$this->locale = $this->locales[self::getDefaultLocale()];
 		}
