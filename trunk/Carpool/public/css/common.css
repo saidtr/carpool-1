@@ -112,7 +112,7 @@ textarea {
 input[type="checkbox"] {
 	float: left;
 	margin-right: 5px;
-	background: url(../img/checkbox.png) no-repeat;
+	display: block;
 }
 
 input[type="radio"] {
