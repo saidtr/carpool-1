@@ -6,9 +6,14 @@ function FilterCriteria(key, value, filterFunc) {
 		
 }
 
-// TODO: Inner function? 
 function filterEquals(a, b) { 
 	return a == b; 
+}
+
+function filterStartsWith(a, b) {
+	if ((typeof a !== 'string') || (typeof b !== 'string')) 
+		return false;
+	return a.toLowerCase().indexOf(b.toLowerCase()) === 0;
 }
 
 function Filter(params) {
@@ -31,19 +36,24 @@ Filter.prototype.filter = function (/* Array */ data) {
 	
 	var res = [];
 	for (r in data) {		
-		var passedCriteria = true;
+		var passedCriteria = false;
 		var record = data[r];
 		
 		for (k in this.criteria) {
-			var key = this.criteria[k].key; 
+			var keys;
+			if (typeof this.criteria[k].key === 'string')
+				keys = [ this.criteria[k].key ];
+			else
+				keys = this.criteria[k].key;
 			var val = this.criteria[k].value;
 			
-			if (typeof record[key] != 'undefined') {
-				if (!this.criteria[k].filterFunc(record[key], val)) {	
-					passedCriteria = false;
-					break;
-				}
+			for (key in keys) {
+				passedCriteria |= this.criteria[k].filterFunc(record[keys[key]], val);
 			}
+			
+			// No need to keep looking if we already not there
+			if (!passedCriteria)
+				break;
 		}
 		if (passedCriteria)
 			res.push(record);

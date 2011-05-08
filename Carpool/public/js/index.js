@@ -105,10 +105,8 @@ function buildSearchResults(/* JSON */ data) {
 }
 
 function doFilter() {
-	//if (!searchResults) 
-		//return;
-
 	var filter = new Filter();
+	/*
 	var srcId = $('#srcCity').val();
 	if (srcId != Constants.LOCATION_DONT_CARE)
 		filter.addCriteria(new FilterCriteria('SrcCityId', srcId, filterEquals));
@@ -118,6 +116,7 @@ function doFilter() {
 		if (destId != Constants.LOCATION_DONT_CARE)            	
 		    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
 	}
+	*/
 	var wantTo = $('#wantTo').val();
 	if (wantTo != Constants.STATUS_DONT_CARE)
 		filter.addCriteria(new FilterCriteria('Status', wantTo, filterEquals));
@@ -125,6 +124,20 @@ function doFilter() {
 	buildSearchResults(filter.filter(searchResults));
 	
 	updateShowInterestText();
+}
+
+function doSearchAsYouType() {
+	var filter = new Filter();
+	var srcCity = $('#srcCityFilter').val();
+	var destCity = $('#destCityFilter').val();
+	
+	if (srcCity !== '')
+		filter.addCriteria(new FilterCriteria(['SrcCity', 'SrcLocation'], srcCity, filterStartsWith));
+
+	if (destCity !== '')
+		filter.addCriteria(new FilterCriteria(['DestCity', 'DestLocation'], destCity, filterStartsWith));
+
+	buildSearchResults(filter.filter(searchResults));	
 }
 
 function positionShowInterest() {
@@ -152,6 +165,9 @@ $(document).ready(function() {
 		}
 		$("#srcCity").change(doFilter);
 	}, 'json');
+	
+	$("#srcCityFilter").keyup(doSearchAsYouType);
+	$("#destCityFilter").keyup(doSearchAsYouType);
 
 	// Ajax form
 	var showInterestFormOptions = { 
