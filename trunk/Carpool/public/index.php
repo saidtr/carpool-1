@@ -7,10 +7,8 @@ $db = DatabaseHelper::getInstance();
 
 AuthHandler::putUserToken();
 
-//$availableDestCities = $db->getAvailableCities('Dest');
-//$availableSrcCities = $db->getAvailableCities('Src');
-$availableDestCities = $db->getCities();
-$availableSrcCities = $db->getCities();
+$availableDestCities = $db->getAvailableCities('Dest');
+$availableSrcCities = $db->getAvailableCities('Src');
 
 $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 
@@ -43,6 +41,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 						<option value="<?php echo STATUS_LOOKING  ?>"><?php echo _('People looking for a ride')?></option>
 					</select>
 				</dd>
+				<!-- 
 				<dd>
 					<label for="srcCity"><?php echo _('From')?>&nbsp;</label>
 					<select id="srcCity" name="srcCity">
@@ -62,6 +61,17 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 						<?php endforeach; ?>
 					</select>
 				</dd>	
+				<?php endif; ?>
+				 -->
+				<dd>
+					<label for="srcCityFilter"><?php echo _('From')?>&nbsp;</label>
+					<input type="text" id="srcCityFilter" name="srcCityFilter" />
+				</dd>
+				<?php if ($displayDest): ?>
+				<dd>
+					<label for="destCityFilter"><?php echo _('To')?>&nbsp;</label>
+					<input type="text" id="destCityFilter" name="destCityFilter" />
+				</dd>
 				<?php endif; ?>
 				<dd class="hidden">
 					<input type="submit"/>
