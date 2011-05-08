@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         if (!$authHelper->validateForm($_POST)) {
             GlobalMessage::setGlobalMessage(_('Failed to authenticate') . ': ' . _('Please fill in all the required details.'), GlobalMessage::ERROR);        
-        } else if (AuthHandler::authenticate($authHelper, $_POST)) {
+        } else if (AuthHandler::authenticate($authHelper, $_POST) !== false) {
             // Redirect to original page
             if (!isset($ref)) {
                 $ref = 'index.php';
