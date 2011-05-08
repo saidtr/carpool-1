@@ -98,6 +98,7 @@ _('Help');
 _('Feedback');
 _('Logout');
 _('My Profile');
+_('Login');
 
 // Javascript
 _('Loading...');
