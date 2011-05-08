@@ -123,13 +123,13 @@ class DatabaseHelper {
         	return false;
         }
         try {
-            $rs = $this->_db->query('SELECT DISTINCT ' . $opt . 'CityId AS id, Cities.Name AS name FROM Ride, Cities WHERE ' . $opt . 'CityId = Cities.Id');
+            $rs = $this->_db->query('SELECT DISTINCT ' . $opt . 'CityId AS Id, Cities.Name AS Name FROM Ride, Cities WHERE ' . $opt . 'CityId = Cities.Id');
 			
      	    if ($rs) {
                 $res = $rs->fetchAll(PDO::FETCH_ASSOC);
         		// Apply translations
         		foreach ($res as &$record) {
-        			$record['name'] = _($record['name']);
+        			$record['Name'] = _($record['Name']);
         		}
             } else {
                 // Return empty array
