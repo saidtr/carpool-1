@@ -2,11 +2,11 @@
 
 class Logger {
     
-    const LOG_DEBUG = 0;
-    const LOG_INFO  = 1;
+    const LOG_DEBUG = 4;
+    const LOG_INFO  = 3;
     const LOG_WARN  = 2;
-    const LOG_ERR   = 3;
-    const LOG_NONE  = 4;
+    const LOG_ERR   = 1;
+    const LOG_NONE  = 0;
 	
 	private $_writer;
 	private $_logLevel;
@@ -26,7 +26,7 @@ class Logger {
 	}
 	
 	public function doLog($level, $str) {
-		if ($this->_writer && $level >= $this->_logLevel) {
+		if ($this->_writer && $level <= $this->_logLevel) {
 		    flock($this->_writer, LOCK_EX);		      	            
 		    $line = '[ ' . self::translateLogLevel($level) . ' ] ' . $_SERVER['REMOTE_ADDR'] . ' ' . date('d/m/y H:i:s') . ' [ ' . Utils::getRunningScript() . ' ] ' . preg_replace("/[\n\r]/", "", $str);
 			fwrite($this->_writer, $line . PHP_EOL);
@@ -36,7 +36,7 @@ class Logger {
 	
 	public function __construct($logFile, $logLevel = self::LOG_WARN) {
 	    $this->_logLevel = $logLevel;
-	    if ($this->_logLevel < self::LOG_NONE) {
+	    if ($this->_logLevel > self::LOG_NONE) {
 		    $this->_writer = @fopen($logFile, 'a');
 		    if (!$this->_writer) {
 		        throw new Exception('Could not create logger');
