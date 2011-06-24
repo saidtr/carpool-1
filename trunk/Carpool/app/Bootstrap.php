@@ -117,7 +117,7 @@ $logger = null;
 $logLevel = getConfiguration('log.level');
 
 try {
-    if ($logLevel < Logger::LOG_NONE) {
+    if ($logLevel > Logger::LOG_NONE) {
         $logger = new Logger(str_replace("~", BASE_PATH, getConfiguration('log.file')), $logLevel);
     }
 } catch (Exception $e) {
