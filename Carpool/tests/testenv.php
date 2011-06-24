@@ -20,7 +20,7 @@ class TestUtils {
     static function createSimpleRide($from, $to, $status, $notify = 1) {
         $db = DatabaseHelper::getInstance();
         
-        $testContact = $db->addContact('test' . self::$ridesCounter, '1234', 'test' . self::$ridesCounter . '@test.com');
+        $testContact = $db->addContact('test' . self::$ridesCounter, '1234', 'test' . self::$ridesCounter . '@test.com', ROLE_IDENTIFIED_REGISTERED);
         if (!$testContact) {
             return false;
         }

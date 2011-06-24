@@ -13,13 +13,19 @@ require_once 'Test_Service_ShowInterest.php';
 require_once 'Test_AuthenticationHelperLdap.php';
 require_once 'Test_AuthenticationHelperPassword.php';
 require_once 'Test_SimpleAcl.php';
+require_once 'Test_QueryBuilder.php';
 
 $unit = new PHPUnit();
+/*
 $tests = array(
 	'Test_Service_ShowInterest', 
 	'Test_AuthenticationHelperLdap',
     'Test_AuthenticationHelperPassword',
     'Test_SimpleAcl'
+);
+*/
+$tests = array(
+    'Test_QueryBuilder'
 );
 
 foreach ($tests as $test) {

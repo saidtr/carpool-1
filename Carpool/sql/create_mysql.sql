@@ -18,6 +18,7 @@ CREATE TABLE Contacts (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(128) COLLATE utf8_bin NOT NULL,
   `Phone` varchar(24) COLLATE utf8_bin DEFAULT NULL,
+  `Role` tinyint(4) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Email` (`Email`)
 );
