@@ -1,5 +1,7 @@
 <?php
 
+require_once 'QueryBuilder.php';
+
 /**
  * 
  * Serves as a global database access class
@@ -68,7 +70,47 @@ class DatabaseHelper {
         debug(__METHOD__);
         return $this->_db->commit();
     }
-    
+
+    public function insert($table, $colsAndValues = null) {
+        $query = new QueryInsert($table);
+        $query->setColumns(array_keys($colsAndValues));
+
+        $stmt = $this->_db->prepare($query);
+        $index = 1;
+        foreach ($colsAndValues as $column => $value) {
+            $stmt->bindValue($index++, $value);
+        }
+
+        return $stmt->execute();
+    }
+
+    public function update($table, $colsAndValues, $condText = null, $condValues = null) {
+        $query = new QueryUpdate($table);
+        $query->setColumns(array_keys($colsAndValues))->setCondition($condText);
+        /*
+        $condition = null;
+        if ($condText !== null) {
+            $condition = new Condition($condText, $condValues);
+            $query->setCondition($condition);
+        }
+        */
+
+        $stmt = $this->_db->prepare($query);
+        $index = 1;
+        foreach ($colsAndValues as $column => $value) {
+            $stmt->bindValue($index++, $value);
+        }
+
+        // If we have condition parameters to bind
+        if ($condText !== null && $condValues !== null) {
+            foreach ($condValues as $value) {
+                $stmt->bindValue($index++, $value);
+            }
+        }
+
+        return $stmt->execute();
+    }
+
     function addCity($name) {
     	debug(__METHOD__ . "($name)");
     	try {
@@ -142,8 +184,8 @@ class DatabaseHelper {
         }
     }
     
-    function addContact($name, $phone, $email, $identifier = null) {
-    	debug(__METHOD__ . "($name, $phone, $email)");
+    function addContact($name, $phone, $email, $role, $identifier = null) {
+    	debug(__METHOD__ . "($name, $phone, $email, $role)");
     	
     	try {
     		
@@ -151,10 +193,11 @@ class DatabaseHelper {
     		    $identifier = uniqid('', true);
     	    } 
     		
-	        $stmt = $this->_db->prepare('INSERT INTO Contacts(name, email, phone, identifier) VALUES (:name, :email, :phone, :identifier)');
+	        $stmt = $this->_db->prepare('INSERT INTO Contacts(name, email, phone, role, identifier) VALUES (:name, :email, :phone, :role, :identifier)');
 	        $stmt->bindParam(':name', $name);
 	        $stmt->bindParam(':email', $email);
 	        $stmt->bindParam(':phone', $phone);
+	        $stmt->bindParam(':role', $role);
 	        $stmt->bindParam(':identifier', $identifier);
 	        
 	        $stmt->execute();
@@ -169,15 +212,12 @@ class DatabaseHelper {
     	} 
     }
     
-    function updateContact($contactId, $name, $phone, $email = null) {
-    	debug(__METHOD__ . "($contactId, $name, $phone, $email)");
+    function updateContact($contactId, $name, $phone, $role, $email = null) {
+    	debug(__METHOD__ . "($contactId, $name, $phone, $role, $email)");
     	
-    	try {  		
-            if ($email !== null) { 
-	            $stmt = $this->_db->prepare('UPDATE Contacts SET name=:name, email=:email, phone=:phone WHERE id=:contactId');
-            } else {
-                $stmt = $this->_db->prepare('UPDATE Contacts SET name=:name, phone=:phone WHERE id=:contactId');
-            }
+    	try {  	
+    	    $sql = 	'UPDATE Contacts SET name=:name, email=:email, phone=:phone WHERE id=:contactId'; 
+	        $stmt = $this->_db->prepare($sql);
 	        $stmt->bindParam(':name', $name);
 	        if ($email !== null) {
 	            $stmt->bindParam(':email', $email);
@@ -505,7 +545,7 @@ class DatabaseHelper {
    function getContactByEmail($email) {
         debug(__METHOD__ . "($email)");
         try {
-            $stmt = $this->_db->prepare('SELECT Id, Name, Phone, Identifier FROM Contacts WHERE Email=:email');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Phone, Identifier, Role FROM Contacts WHERE Email=:email');
             
 			$stmt->bindParam(':email', $email);
 			
