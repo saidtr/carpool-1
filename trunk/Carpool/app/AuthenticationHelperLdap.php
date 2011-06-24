@@ -1,6 +1,6 @@
 <?php
 
-class AuthenticationHelperLdap implements IAuthenticationHelper {
+class AuthenticationHelperLdap implements IAuthenticationHelperInteractive {
     
     const LDAP_DEFAULT_PORT = 389;
     
@@ -70,7 +70,7 @@ class AuthenticationHelperLdap implements IAuthenticationHelper {
             } else {
                 // Contact is not in the database - we better create it
                 // TODO: Put the option to read data
-                return DatabaseHelper::getInstance()->addContact('', '', $email);
+                return DatabaseHelper::getInstance()->addContact('', '', $email, ROLE_IDENTIFIED);
             }           
         } else {
             $errCode = ldap_errno($con);
