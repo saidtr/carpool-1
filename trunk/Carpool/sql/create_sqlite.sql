@@ -1,9 +1,9 @@
-DROP TABLE Cities;
-DROP TABLE Contacts;
-DROP TABLE Languages;
-DROP TABLE QuestionsAnswers;
-DROP TABLE Ride;
-DROP TABLE ShowInterestNotifier;
+DROP TABLE IF EXISTS Cities;
+DROP TABLE IF EXISTS Contacts;
+DROP TABLE IF EXISTS Languages;
+DROP TABLE IF EXISTS QuestionsAnswers;
+DROP TABLE IF EXISTS Ride;
+DROP TABLE IF EXISTS ShowInterestNotifier;
 
 CREATE TABLE Cities (Id INTEGER PRIMARY KEY, Name TEXT);
 CREATE TABLE Contacts (Identifier TEXT, Email TEXT, Id INTEGER PRIMARY KEY, Name TEXT, Phone TEXT, Role NUMERIC);
