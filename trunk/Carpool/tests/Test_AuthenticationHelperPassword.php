@@ -19,7 +19,7 @@ class Test_AuthenticationHelperPassword extends PHPUnit_TestCase {
     
     function testFailedLogon() {
         TestUtils::clearDatabase(); 
-        DatabaseHelper::getInstance()->addContact('user1', '', 'user1@mail.com', Utils::hashPassword('pass1'));
+        DatabaseHelper::getInstance()->addContact('user1', '', 'user1@mail.com', ROLE_IDENTIFIED, Utils::hashPassword('pass1'));
         
         // User exists, but password is wrong
         $params1 = array('email' => 'user1@mail.com', 'password' => 'PASS1');
@@ -40,7 +40,7 @@ class Test_AuthenticationHelperPassword extends PHPUnit_TestCase {
     
     function testSuccessLogonNewUser() {
         TestUtils::clearDatabase(); 
-        DatabaseHelper::getInstance()->addContact('user2', '', 'user2@mail.com', Utils::hashPassword('---longpassword123---'));
+        DatabaseHelper::getInstance()->addContact('user2', '', 'user2@mail.com', ROLE_IDENTIFIED, Utils::hashPassword('---longpassword123---'));
         
         // First let's fail
         $params1 = array('email' => 'user2@mail.com', 'password' => '---longpassword12---');

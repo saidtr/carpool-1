@@ -118,7 +118,7 @@ if ($valid) {
                 $server->updateContact($contactId, $name, $phone, ($canUpdateEmail ? $email : null));
             } else {               
                 // If it is a new ride - register this contact
-                $contactId = $server->addContact($name, $phone, $email, $password);
+                $contactId = $server->addContact($name, $phone, $email, ROLE_IDENTIFIED_REGISTERED, $password);
 
                 AuthHandler::authByContactId($contactId);
             }
