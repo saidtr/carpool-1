@@ -66,7 +66,7 @@ class AuthenticationHelperLdap implements IAuthenticationHelperInteractive {
             // Fetch contact
             $contact = DatabaseHelper::getInstance()->getContactByEmail($email);
             if ($contact !== false) {
-                return $contact['Id'];    
+                return array('Id' => $contact['Id'], 'Role' => $contact['Role']);    
             } else {
                 // Contact is not in the database - we better create it
                 // TODO: Put the option to read data

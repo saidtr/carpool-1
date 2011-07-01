@@ -184,16 +184,25 @@ if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
 }
 $acl->addResource(ROLE_IDENTIFIED, array('join.php', 'help.php', 'index.php', 'feedback.php', 'logout.php', 'thanks.php', 'SearchRides.php', 'AddRideAll.php'));
 $acl->addResource(ROLE_IDENTIFIED_REGISTERED, array('ActivateToggle.php', 'DeleteRide.php', 'ShowInterest.php'));
+// Content management
+$acl->addResource(ROLE_ADMINISTRATOR, array('translations.php'));
 
 // Enfore access control
 $role = AuthHandler::getRole();
 $resource = Utils::getRunningScript();
 
-if (!$acl->isAllowed($role, $resource)) {
-    //GlobalMessage::setGlobalMessage(_('Please login to access this page'), GlobalMessage::ERROR);
-    if ($acl->isAllowed($role, 'auth.php')) {
+if (!$acl->isAllowed($role, $resource)) {    
+    if (($role == ROLE_GUEST) && $acl->isAllowed($role, 'auth.php')) {
+        // Not allowed: if not logged in and allowed to - redirect to login page
+        GlobalMessage::setGlobalMessage(_('Please login to access this page'), GlobalMessage::ERROR);
         Utils::redirect('auth.php', array('ref' =>  $resource));
+    } else if ($acl->isAllowed($role, 'auth.php')) {
+        // User is logged in but not permitted to use this page
+        header("HTTP/1.1 401 Unauthorized");
+        die ('<p>' . _('Access Denied') . '</p>');
     } else {
+        // User is not logged-in and not allowed to do that - totally forbidden
+        header("HTTP/1.1 403 Forbidden");
         die ('<p>' . _('Sorry, you are not allowed to use this application.') . '</p>');
     }
 }

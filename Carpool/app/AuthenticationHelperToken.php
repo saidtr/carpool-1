@@ -15,7 +15,7 @@ class AuthenticationHelperToken implements IAuthenticationHelper {
         $contact = DatabaseHelper::getInstance()->getContactByIdentifier($contactId, $identifier);
         if ($contact) {
             info(__METHOD__ . ': Contact ' . $contact['Id'] . ' succesfully authenticated');
-            return $contact;
+            return array('Id' => $contact['Id'], 'Role' => $contact['Role']);
         } else {
             warn(__METHOD__ . ': Authentication failed for contact "' . $contactId . '" and token "' . $identifier . '"');
             return false;
