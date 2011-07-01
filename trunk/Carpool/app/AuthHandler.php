@@ -65,16 +65,13 @@ class AuthHandler {
             self::logout();
         }       
         
-        $contactId = $authHelper->authenticate($params);
-        if ($contactId !== false) {
+        $res = $authHelper->authenticate($params);
+        if ($res !== false) {
+            $contactId = $res['Id'];
+            $role = $res['Role'];            
             $_SESSION[SESSION_KEY_AUTH_USER] = $contactId;
             info('Contact ' . $contactId . ' successfully authenticated');
-            
-            if (DatabaseHelper::getInstance()->getRideProvidedByContactId($contactId) !== false) {
-                self::setRole(ROLE_IDENTIFIED_REGISTERED);    
-            } else {
-                self::setRole(ROLE_IDENTIFIED);
-            }          
+            self::setRole($role);
             
             return $contactId;            
         } else {

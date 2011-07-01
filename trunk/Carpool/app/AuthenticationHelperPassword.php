@@ -18,7 +18,7 @@ class AuthenticationHelperPassword implements IAuthenticationHelperInteractive {
         if ($contact !== false) {
             if ($contact['Identifier'] === $hashed) {
                 info(__METHOD__ . ': Contact ' . $contact['Id'] . ' succesfully authenticated');
-                return $contact['Id'];
+                return array('Id' => $contact['Id'], 'Role' => $contact['Role']);
             } else {
                 warn(__METHOD__ . ': Contact ' . $contact['Id'] . ' failed to authorize: wrong password');
             }

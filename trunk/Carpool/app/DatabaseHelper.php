@@ -87,13 +87,6 @@ class DatabaseHelper {
     public function update($table, $colsAndValues, $condText = null, $condValues = null) {
         $query = new QueryUpdate($table);
         $query->setColumns(array_keys($colsAndValues))->setCondition($condText);
-        /*
-        $condition = null;
-        if ($condText !== null) {
-            $condition = new Condition($condText, $condValues);
-            $query->setCondition($condition);
-        }
-        */
 
         $stmt = $this->_db->prepare($query);
         $index = 1;
@@ -508,7 +501,7 @@ class DatabaseHelper {
     function getContactByIdentifier($contactId, $identifier) {
         debug(__METHOD__ . "($contactId, $identifier)");
         try {
-            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone FROM Contacts WHERE Id=:id AND identifier=:identifier');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone, Role FROM Contacts WHERE Id=:id AND identifier=:identifier');
 			$stmt->bindParam(':id', $contactId);
 			$stmt->bindParam(':identifier', $identifier);
             
@@ -527,7 +520,7 @@ class DatabaseHelper {
     function getContactById($id) {
         debug(__METHOD__ . "($id)");
         try {
-            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone, Identifier FROM Contacts WHERE Id=:id');
+            $stmt = $this->_db->prepare('SELECT Id, Name, Email, Phone, Identifier, Role FROM Contacts WHERE Id=:id');
 			$stmt->bindParam(':id', $id);
             
      	    if ($stmt->execute()) {
