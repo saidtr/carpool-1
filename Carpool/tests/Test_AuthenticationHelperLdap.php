@@ -47,11 +47,11 @@ class Test_AuthenticationHelperLdap extends PHPUnit_TestCase {
         
         $this->assertEquals(0, $this->contactsCount());
         
-        $contactId = $this->helper->authenticate($params);
-        $this->assertTrue(($contactId !== false));
+        $contact = $this->helper->authenticate($params);
+        $this->assertTrue(($contact !== false));
                 
         // We should've created a contact for this user now
-        $this->assertTrue($this->contactExists($contactId));
+        $this->assertTrue($this->contactExists($contact['Id']));
         $this->assertEquals(1, $this->contactsCount());
     }
     
@@ -64,16 +64,16 @@ class Test_AuthenticationHelperLdap extends PHPUnit_TestCase {
         
         $this->assertEquals(0, $this->contactsCount());
         
-        $contactId = $this->helper->authenticate($params);
-        $this->assertTrue(($contactId !== false));    
+        $contact = $this->helper->authenticate($params);
+        $this->assertTrue(($contact !== false));    
                 
         // A new user should be created
-        $this->assertTrue($this->contactExists($contactId));
+        $this->assertTrue($this->contactExists($contact['Id']));
         $this->assertEquals(1, $this->contactsCount());
         
         // Now, let's authenticate the same user
-        $contactId2 = $this->helper->authenticate($params);
-        $this->assertTrue(($contactId === $contactId2));
+        $contact2 = $this->helper->authenticate($params);
+        $this->assertTrue(($contact['Id'] === $contact2['Id']));
     }
     
 }
