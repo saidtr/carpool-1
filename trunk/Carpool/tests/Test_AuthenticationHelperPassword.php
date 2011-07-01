@@ -40,7 +40,7 @@ class Test_AuthenticationHelperPassword extends PHPUnit_TestCase {
     
     function testSuccessLogonNewUser() {
         TestUtils::clearDatabase(); 
-        DatabaseHelper::getInstance()->addContact('user2', '', 'user2@mail.com', ROLE_IDENTIFIED, Utils::hashPassword('---longpassword123---'));
+        $id = DatabaseHelper::getInstance()->addContact('user2', '', 'user2@mail.com', ROLE_IDENTIFIED, Utils::hashPassword('---longpassword123---'));
         
         // First let's fail
         $params1 = array('email' => 'user2@mail.com', 'password' => '---longpassword12---');
@@ -48,7 +48,10 @@ class Test_AuthenticationHelperPassword extends PHPUnit_TestCase {
         
         // This should work
         $params2 = array('email' => 'user2@mail.com', 'password' => '---longpassword123---');
-        $this->assertTrue($this->helper->authenticate($params2));        
+        $contact = $this->helper->authenticate($params2);
+        $this->assertTrue($contact !== false);        
+        $this->assertEquals($id, $contact['Id']);
+        $this->assertEquals(ROLE_IDENTIFIED, $contact['Role']);
     }
     
 }
