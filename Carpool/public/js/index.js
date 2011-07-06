@@ -45,6 +45,7 @@ function statusCodeToText(/* Integer */status) {
 	switch (status) {
 	case Constants.STATUS_LOOKING: return _('Looking');
 	case Constants.STATUS_OFFERED: return _('Providing');
+	case Constants.STATUS_SHARING: return _('Sharing');
 	default: 
 		console.log('Illegal status code: ' + status);
 		return '';
@@ -119,7 +120,7 @@ function doFilter() {
 	*/
 	var wantTo = $('#wantTo').val();
 	if (wantTo != Constants.STATUS_DONT_CARE)
-		filter.addCriteria(new FilterCriteria('Status', wantTo, filterEquals));
+		filter.addCriteria(new FilterCriteria('Status', wantTo, filterAnd));
 
 	buildSearchResults(filter.filter(searchResults));
 	
