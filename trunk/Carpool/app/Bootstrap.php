@@ -15,6 +15,7 @@
 define('STATUS_DONT_CARE', 0);
 define('STATUS_LOOKING', 1);
 define('STATUS_OFFERED', 2);
+define('STATUS_SHARING', STATUS_LOOKING | STATUS_OFFERED);
 
 define('RIDE_INACTIVE', 0);
 define('RIDE_ACTIVE', 1);

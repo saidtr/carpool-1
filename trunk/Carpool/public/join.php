@@ -43,10 +43,11 @@ if ($contact) {
 	}
 }
 
-$defaultSrcCity       = getConfiguration('default.src.city');
-$defaultSrcLocation   = getConfiguration('default.src.loc');
-$defaultDestCity      = getConfiguration('default.dest.city');
-$defaultDestLocation  = getConfiguration('default.dest.loc');
+// Default values, if set in the configuration file
+$defaultSrcCity       = getConfiguration('default.src.city', LOCATION_NOT_FOUND);
+$defaultSrcLocation   = getConfiguration('default.src.loc', '');
+$defaultDestCity      = getConfiguration('default.dest.city', LOCATION_NOT_FOUND);
+$defaultDestLocation  = getConfiguration('default.dest.loc', '');
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -76,6 +77,7 @@ echo View_Header::render($header);
 			<ul class="radioSelectorHolder">
     			<li><input type="radio" name="wantTo" <?php if (!isset($ride_Status) || (isset($ride_Status) && $ride_Status == STATUS_LOOKING)) echo 'checked="checked"' ?> value="<?php echo STATUS_LOOKING ?>" /><?php echo _('I want to join a ride')?></li>
     			<li><input type="radio" name="wantTo" <?php if (isset($ride_Status) && $ride_Status == STATUS_OFFERED) echo 'checked="checked"' ?> value="<?php echo STATUS_OFFERED ?>" /><?php echo _('I want to provide a ride')?></li>
+    			<li><input type="radio" name="wantTo" <?php if (isset($ride_Status) && $ride_Status == STATUS_SHARING) echo 'checked="checked"' ?> value="<?php echo STATUS_SHARING ?>" /><?php echo _('I want to share a ride')?></li>
 			</ul>
 		</fieldset>
 		<fieldset>
@@ -91,7 +93,7 @@ echo View_Header::render($header);
 				</dd>
 			</dl>
 			<div class="clearFloat"></div>
-			<input id="srcCityId" name="srcCityId" type="hidden" value="<?php echo (isset($ride_SrcCityId) ? $ride_SrcCityId : ($defaultSrcCity ? $defaultSrcCity : LOCATION_NOT_FOUND)) ?>"/>
+			<input id="srcCityId" name="srcCityId" type="hidden" value="<?php echo (isset($ride_SrcCityId) ? $ride_SrcCityId : $defaultSrcCity) ?>"/>
 			<?php if ($displayDest): ?>
 			<dl>
 				<dd class="mandatory">
@@ -100,10 +102,10 @@ echo View_Header::render($header);
 				</dd>
 				<dd class="optional">
 					<label for="destLocation"><?php echo _('Location')?></label>
-					<input id="destLocation" name="destLocation" type="text" size=30 value="<?php echo (isset($ride_destLocation) ? $ride_destLocation : $defaultDestLocation) ?>"/>
+					<input id="destLocation" name="destLocation" type="text" size=30 value="<?php echo (isset($ride_DestLocation) ? $ride_DestLocation : $defaultDestLocation) ?>"/>
 				</dd>
 			</dl>
-			<input id="destCityId" name="destCityId" type="hidden" value="<?php echo (isset($ride_DestCityId) ? $ride_DestCityId : ($defaultDestCity ? $defaultDestCity : LOCATION_NOT_FOUND)) ?>"/>
+			<input id="destCityId" name="destCityId" type="hidden" value="<?php echo (isset($ride_DestCityId) ? $ride_DestCityId : $defaultDestCity) ?>"/>
 			<?php endif; ?>
 			<div class="clearFloat"></div>
 			<dl>
