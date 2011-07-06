@@ -49,6 +49,10 @@ $defaultSrcLocation   = getConfiguration('default.src.loc', '');
 $defaultDestCity      = getConfiguration('default.dest.city', LOCATION_NOT_FOUND);
 $defaultDestLocation  = getConfiguration('default.dest.loc', '');
 
+// Just in case we have those in the configuration, but values are not set
+if (empty($defaultSrcCity)) $defaultSrcCity = LOCATION_NOT_FOUND;
+if (empty($defaultDestCity)) $defaultDestCity = LOCATION_NOT_FOUND;
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
