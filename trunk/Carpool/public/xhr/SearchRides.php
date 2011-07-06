@@ -21,13 +21,11 @@ if (isset($destCityId) && !empty($destCityId) && !($destCityId == LOCATION_DONT_
 }
 
 if (isset($wantTo) && !empty($wantTo)) {
-    $params['status'] = $wantTo;
+    $params['status'] = array($wantTo, STATUS_SHARING);
 } else {
     // We need to avoid displaying of inactive rides
-    $params['status'] = array(STATUS_LOOKING, STATUS_OFFERED);
+    $params['status'] = array(STATUS_LOOKING, STATUS_OFFERED, STATUS_SHARING);
 }
-
-//$params['status'] = STATUS_OFFERED;
 
 $server = DatabaseHelper::getInstance();
 

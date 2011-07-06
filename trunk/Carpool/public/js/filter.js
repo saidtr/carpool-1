@@ -10,6 +10,10 @@ function filterEquals(a, b) {
 	return a == b; 
 }
 
+function filterAnd(a, b) {
+	return (a & b);
+}
+
 function filterStartsWith(a, b) {
 	if ((typeof a !== 'string') || (typeof b !== 'string')) 
 		return false;
