@@ -141,6 +141,35 @@ class Test_QueryBuilder extends PHPUnit_TestCase {
         $this->assertEquals(ROLE_GUEST, $contact['Role']);
     }
 
-
+    public function testUpdate3() {
+        TestUtils::clearDatabase();
+        DatabaseHelper::getInstance()->insert(
+        	'Contacts', 
+            array(
+                	'Email' => 'test1@email.com',
+                    'Phone' => '123',
+            		'Name' => 'test1',
+                    'Role' => ROLE_GUEST
+            ));
+            
+        $contact = DatabaseHelper::getInstance()->getContactByEmail('test1@email.com');
+        $this->assertTrue($contact !== false);
+        $this->assertEquals('test1', $contact['Name']);
+        $updatedData = array(
+            'Phone' => '987',
+            'Name'  => null,
+            'Role'  => ROLE_ADMINISTRATOR,
+            'Email' => null
+        );
+        DatabaseHelper::getInstance()->update('Contacts', $updatedData, 'id=?', array($contact['Id']), true);
+  
+        // Make sure only the relevant fields were changed
+        $contact = DatabaseHelper::getInstance()->getContactByEmail('test1@email.com');
+        $this->assertTrue($contact !== false);
+        $this->assertEquals('test1', $contact['Name']);
+        $this->assertEquals('987', $contact['Phone']);
+        $this->assertEquals(ROLE_ADMINISTRATOR, $contact['Role']);
+    }
+    
 
 }
