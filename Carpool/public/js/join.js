@@ -31,6 +31,7 @@ function initAutocomplete() {
 	});
 	$("#srcCity").result(function(event, item) {
 		if (item) {
+			$("#srcCity").val(htmlUnescape(item.Name));
 			$("#srcCityId").val(item.Id);
 		} else {
 			$("#srcCityId").val(Constants.LOCATION_NOT_FOUND);
@@ -38,6 +39,7 @@ function initAutocomplete() {
 	});
 	$("#destCity").result(function(event, item) {
 		if (item) {
+			$("#destCity").val(htmlUnescape(item.Name));
 			$("#destCityId").val(item.Id);
 		} else {
 			$("#destCityId").val(Constants.LOCATION_NOT_FOUND);

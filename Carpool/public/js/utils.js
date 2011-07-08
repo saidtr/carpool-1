@@ -16,6 +16,12 @@ function htmlEnc(str) {
 	return str;
 }
 
+// Translate HTML entities to the corresponding characters. Use with caution! 
+function htmlUnescape(str) {
+	// Use the browser DOM capabilities for a simple translation
+	return $('<div/>').html(str).text(); 
+}
+
 function refresh(timeout) {
 	if (typeof (timeout) !== 'undefined') {
 		setTimeout("refresh()", timeout);
