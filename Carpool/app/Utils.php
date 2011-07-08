@@ -6,6 +6,10 @@
 class Utils {
     
     const MAIL_EOL = "\r\n";
+    
+    static function is_not_null($val) {
+        return !is_null($val);
+    }
         
     static function IsXhrRequest() {
         return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
@@ -61,7 +65,7 @@ class Utils {
 	    
 		if ($replyTo == null || $replyToName == null) {
 		    // Default reply to values
-	        $replyTo = 'no.reply@checkpoint.com';
+	        $replyTo = Utils::buildEmail('no.reply');
 	        $replyToName = 'No Reply';
 		}
 	     
