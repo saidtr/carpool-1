@@ -16,8 +16,8 @@ feedback.from      =
 feedback.from.name = Carpool Feedback
 
 [logging]
-; Log level: 0 - very verbose, 4 - no logging. Recommended for production: 3
-log.level          = 0
+; Log level: 0 - no logging, 4 - very verbose. Recommended for production: 2
+log.level          = 2
 ; Log file. Use "~" as reference to BASE_PATH
 log.file           = "~/carpool.log"
 
@@ -43,8 +43,8 @@ mode.single.dest   = 0
 mode.domain.users  = 0
 
 [authentication]
-; Authentication mode: 0 - Use token (default), 1 - Use LDAP, 2 - Use password
-auth.mode          = 0
+; Authentication mode: 1 - Use token (default), 2 - Use LDAP, 3 - Use password
+auth.mode          = 1
 ; For password authenticaion - password salt
 auth.pass.salt     = 
 ; For LDAP based authentication - LDAP domain
