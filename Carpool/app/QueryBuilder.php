@@ -10,43 +10,6 @@ abstract class QueryBase {
     
 }
 
-class Condition {
-    
-    private $_condText;
-    private $_condValues;
-    private $_variablesMapping;
-    
-    public function __construct($condText, $condValues = null) {
-        $this->_condText = $condText;
-        $this->_condValues = $condValues;
-    }
-    
-    public function __toString() {
-        $res = $this->_condText;
-        $counter = 1;
-        if (isset($this->_condValues)) {
-            $this->_variablesMapping = array();
-            foreach ($this->_condValues as $val) {
-                $varName = ':_cond_' . $counter;
-                $res = preg_replace('/\\?/', $varName, $res, 1, $count);
-                assert('$count == 1');
-                $this->_variablesMapping[$varName] = $val;
-                ++$counter;
-            }
-        }
-        return $res;
-    }
-    
-    public function getVariables() {
-        return $this->_variablesMapping;
-    }
-    
-    public function hasVariables() {
-        return isset($this->_variablesMapping);
-    }
-    
-}
-
 class QueryInsert extends QueryBase {
     
     private $_columns;
@@ -61,7 +24,6 @@ class QueryInsert extends QueryBase {
         
         $sql = 
             'INSERT INTO ' . $this->_table . '(' . implode(',', $this->_columns) . ') ' .
-            //'VALUES(:' . implode(',:', $this->_columns) . ')';
             'VALUES(';
         for ($i = 0; $i < count($this->_columns); ++$i) {
             $sql .= '?,';
@@ -96,7 +58,6 @@ class QueryUpdate extends QueryBase {
             'UPDATE ' . $this->_table . ' SET ';
         
         foreach ($this->_columns as $column) {
-            //$sql .= $column . '=:' . $column . ','; 
             $sql .= $column . '=?,';
         }
         $sql = substr($sql, 0, -1);
