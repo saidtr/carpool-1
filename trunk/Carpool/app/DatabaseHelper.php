@@ -84,8 +84,12 @@ class DatabaseHelper {
         return $stmt->execute();
     }
 
-    public function update($table, $colsAndValues, $condText = null, $condValues = null) {
+    public function update($table, $colsAndValues, $condText = null, $condValues = null, $ignoreNulls = true) {
         $query = new QueryUpdate($table);
+        if ($ignoreNulls) {
+            $colsAndValues = array_filter($colsAndValues, 'Utils::is_not_null'); 
+        }
+        
         $query->setColumns(array_keys($colsAndValues))->setCondition($condText);
 
         $stmt = $this->_db->prepare($query);
@@ -205,20 +209,11 @@ class DatabaseHelper {
     	} 
     }
     
-    function updateContact($contactId, $name, $phone, $role, $email = null) {
-    	debug(__METHOD__ . "($contactId, $name, $phone, $role, $email)");
+    function updateContact($updateParams, $contactId) {
+    	debug(__METHOD__ . "($contactId)");
     	
     	try {  	
-    	    $sql = 	'UPDATE Contacts SET name=:name, email=:email, phone=:phone WHERE id=:contactId'; 
-	        $stmt = $this->_db->prepare($sql);
-	        $stmt->bindParam(':name', $name);
-	        if ($email !== null) {
-	            $stmt->bindParam(':email', $email);
-	        }
-	        $stmt->bindParam(':phone', $phone);
-	        $stmt->bindParam(':contactId', $contactId);
-	        
-	        $stmt->execute();  	        
+    	    $this->update('Contacts', $updateParams, 'id=?', array($contactId), true);       
     	    info("Contact number $contactId updated");
 	        
     	} catch (PDOException $e) {
@@ -467,6 +462,24 @@ class DatabaseHelper {
             logException($e);
             return false;
         }    
+    }
+    
+    function countRidesForContactId($contactId) {
+        debug(__METHOD__ . "($contactId)");
+        $sql = 'SELECT COUNT(Id) As RideCount FROM Ride r WHERE r.ContactId = :contactId LIMIT 1';
+        try {
+            $stmt = $this->_db->prepare($sql);
+            $stmt->bindParam(':contactId', $contactId);
+            $stmt->execute();
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($res) {
+                return $res['RideCount'];
+            } 
+            return 0;
+        } catch (PDOException $e) {
+            logException($e);
+            return 0;
+        }                      
     }
     
     /**
