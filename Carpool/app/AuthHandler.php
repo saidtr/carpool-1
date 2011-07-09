@@ -10,9 +10,9 @@
  */
 class AuthHandler {
     
-    const AUTH_MODE_TOKEN = 0;
-    const AUTH_MODE_LDAP  = 1;
-    const AUTH_MODE_PASS  = 2;
+    const AUTH_MODE_TOKEN = 1;
+    const AUTH_MODE_LDAP  = 2;
+    const AUTH_MODE_PASS  = 3;
 
     public static function init() {
         $lifetime = TWO_WEEKS;
