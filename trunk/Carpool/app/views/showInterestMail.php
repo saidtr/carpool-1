@@ -12,6 +12,7 @@
 #rides th {
 	font-weight: bold;
 	padding: 5px 3px;
+	text-align: left;
 }
 
 tr.even {
@@ -20,8 +21,8 @@ tr.even {
 
 </style>
 <body>
-<h1><?php echo _('Thanks for showing interest!')?></h1>
-<p><?php echo sprintf(_('%d new rides were found for you:'), count($this->rides))?></p>
+<h1><?php echo _('New Potential Rides From')?>&nbsp;<?php echo getConfiguration('app.name')?></h1>
+<p><?php echo sprintf(_('%d new potential rides, matching the source and destination towns you specified, were found for you:'), count($this->rides))?></p>
 <table id="rides">
 	<tr>
 		<th id="resultsFrom"><?php echo _('From')?></th>
@@ -49,3 +50,6 @@ foreach ($this->rides as $ride):
 	</tr>
 <?php endforeach; ?>
 </table>
+<p style="font-size: x-small; margin-top: 15px">
+<?php echo _('You got this mail since you asked to be notified about new potential rides. If you do not want to receive those mails any more, please go to "My Profile" page and change your preferences.')?>
+</p>
