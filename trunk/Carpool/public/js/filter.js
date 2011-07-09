@@ -2,8 +2,7 @@
 function FilterCriteria(key, value, filterFunc) {
 	this.key = key;
 	this.value = value;
-	this.filterFunc = filterFunc;
-		
+	this.filterFunc = filterFunc;	
 }
 
 function filterEquals(a, b) { 
@@ -11,7 +10,8 @@ function filterEquals(a, b) {
 }
 
 function filterAnd(a, b) {
-	return (a & b);
+	console.log('FilterAnd: ' + a + '&' + b + ': ' + (a&b));
+	return (a & b) != 0;
 }
 
 function filterStartsWith(a, b) {
@@ -33,14 +33,17 @@ Filter.prototype.addCriteria = function(/* FilterCriteria */ cr) {
 	this.criteria.push(cr);
 };
 
-Filter.prototype.filter = function (/* Array */ data) {
+Filter.prototype.filter = function (/* Array */ data, /* Boolean */ mustMatchAll) {
 	// Null criteria - simply return the whole data set
 	if (this.criteria.length === 0)
 		return data;
 	
 	var res = [];
 	for (r in data) {		
-		var passedCriteria = false;
+		// Is this record passing?
+		// In "must match all" mode, we start with "yes" and fail on mismatch.
+		// Otherwise, we'll start with "no" and look for match
+		var passedCriteria = mustMatchAll;
 		var record = data[r];
 		
 		for (k in this.criteria) {
@@ -52,11 +55,14 @@ Filter.prototype.filter = function (/* Array */ data) {
 			var val = this.criteria[k].value;
 			
 			for (key in keys) {
-				passedCriteria |= this.criteria[k].filterFunc(record[keys[key]], val);
+				if (mustMatchAll)
+					passedCriteria &= this.criteria[k].filterFunc(record[keys[key]], val);
+				else
+					passedCriteria |= this.criteria[k].filterFunc(record[keys[key]], val);
 			}
 			
 			// No need to keep looking if we already not there
-			if (!passedCriteria)
+			if (passedCriteria === !mustMatchAll)
 				break;
 		}
 		if (passedCriteria)
