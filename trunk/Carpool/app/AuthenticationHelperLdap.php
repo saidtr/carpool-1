@@ -70,7 +70,7 @@ class AuthenticationHelperLdap implements IAuthenticationHelperInteractive {
             } else {
                 // Contact is not in the database - we better create it
                 // TODO: Put the option to read data
-                return DatabaseHelper::getInstance()->addContact('', '', $email, ROLE_IDENTIFIED);
+                return array('Id' => DatabaseHelper::getInstance()->addContact('', '', $email, ROLE_IDENTIFIED), ROLE_IDENTIFIED);
             }           
         } else {
             $errCode = ldap_errno($con);
