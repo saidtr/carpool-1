@@ -67,24 +67,21 @@ if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_PASS) {
     } 
 }
 
-$isUpdateContact = ((AuthHandler::getRole() == ROLE_IDENTIFIED) || (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED));
-$isUpdateRide = (AuthHandler::getRole() == ROLE_IDENTIFIED_REGISTERED);
+$contactId = AuthHandler::getLoggedInUserId();
+// If this contact already exists, it must be an update
+$isUpdateContact = ($contactId !== false);
+// If there are any rides assigned with this contact, it is an update 
+$isUpdateRide = $contactId && (DatabaseHelper::getInstance()->countRidesForContactId($contactId) > 0);
 
 $canUpdateEmail = (AuthHandler::getAuthMode() != AuthHandler::AUTH_MODE_LDAP);
 
-$action = ($isUpdateRide) ? 'update' : 'add';
+$action = ($isUpdateContact) ? 'update' : 'add';
 
 if ($valid) {
 
     $server = DatabaseHelper::getInstance();
     
     try {
-    
-        if ($isUpdateContact) {
-            $contactId = AuthHandler::getLoggedInUserId();
-        } else {
-            $contactId = false;
-        }
         
         if ($isUpdateRide) {
             $ride = $server->getRideProvidedByContactId($contactId);   
@@ -115,7 +112,9 @@ if ($valid) {
 
         try {
             if ($isUpdateContact) {
-                $server->updateContact($contactId, $name, $phone, ($canUpdateEmail ? $email : null));
+                $updateParams = array('name' => $name, 'phone' => $phone);
+                $updateParams['email'] = ($canUpdateEmail ? $email : null);
+                $server->updateContact($updateParams, $contactId);
             } else {               
                 // If it is a new ride - register this contact
                 $contactId = $server->addContact($name, $phone, $email, ROLE_IDENTIFIED_REGISTERED, $password);
