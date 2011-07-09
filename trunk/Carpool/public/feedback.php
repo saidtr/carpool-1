@@ -3,6 +3,14 @@
 include "env.php";
 include APP_PATH . "/Bootstrap.php";
 
+$feedbackOptions = array(
+    1 => _("Report a bug"),
+    2 => _("Ask a question"),
+    3 => _("Request a feature"),
+    4 => _("Contact"),
+    5 => _("Other")
+);
+
 // This is a post - form submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
@@ -13,15 +21,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     extract($_POST);
     if (!Utils::isEmptyString($feedback)) {
-        $mail = new View_FeedbackMail();
-        $body = $mail->render($wantTo, $feedback, $email);
+        $mailHelper = new MailHelper();
+        $wantToStr = isset($wantTo) && isset($feedbackOptions[$wantTo]) ? $feedbackOptions[$wantTo] : _("Other");
+        
+        $params = array(
+            'wantTo'   => $wantToStr,
+            'feedback' => $feedback,
+            'email'    => $email
+        );
+        $body = $mailHelper->render('views/feedbackMail.php', $params);
         
         $to       = getConfiguration('feedback.mail');
         $toName   = getConfiguration('feedback.to.name');
         $from     = getConfiguration('feedback.from');
         $fromName = getConfiguration('feedback.from.name');
+        $replyTo  = Utils::isEmptyString($email) ? null : Utils::buildEmail($email);
         
-        Utils::sendMail($to, $toName, $from, 'Carpool feedback', 'New carpool feedback', $body);
+        Utils::sendMail($to, $toName, $from, 'Carpool feedback', 'New carpool feedback', $body, $replyTo, $replyTo);
         GlobalMessage::setGlobalMessage(_('Thanks for the feedback!'));
     } else {
         GlobalMessage::setGlobalMessage(_('Please write something.'), GlobalMessage::ERROR);
@@ -54,11 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<dd class="mandatory">
 		<label for="wantTo"><?php echo _('I want to...')?></label>
 		<select id="wantTo" name="wantTo">
-			<option value="<?php echo View_FeedbackMail::REPORT_BUG ?>"><?php echo View_FeedbackMail::categoryToString(View_FeedbackMail::REPORT_BUG) ?></option>
-			<option value="<?php echo View_FeedbackMail::ASK_QUESTION ?>"><?php echo View_FeedbackMail::categoryToString(View_FeedbackMail::ASK_QUESTION) ?></option>
-			<option value="<?php echo View_FeedbackMail::REQUEST_FEATURE ?>"><?php echo View_FeedbackMail::categoryToString(View_FeedbackMail::REQUEST_FEATURE) ?></option>
-			<option value="<?php echo View_FeedbackMail::CONTACT ?>"><?php echo View_FeedbackMail::categoryToString(View_FeedbackMail::CONTACT) ?></option>
-			<option value="<?php echo View_FeedbackMail::OTHER ?>"><?php echo View_FeedbackMail::categoryToString(View_FeedbackMail::OTHER) ?></option>
+		<?php foreach ($feedbackOptions as $key => $feedbackOption): ?>
+			<option value="<?php echo $key?>"><?php echo $feedbackOption?></option>
+		<?php endforeach; ?>
 		</select>
 	</dd>
 	<dd class="mandatory">
