@@ -41,7 +41,6 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 						<option value="<?php echo STATUS_LOOKING  ?>"><?php echo _('People looking for a ride')?></option>
 					</select>
 				</dd>
-				<!-- 
 				<dd>
 					<label for="srcCity"><?php echo _('From')?>&nbsp;</label>
 					<select id="srcCity" name="srcCity">
@@ -62,7 +61,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 					</select>
 				</dd>	
 				<?php endif; ?>
-				 -->
+				<!-- 
 				<dd>
 					<label for="srcCityFilter"><?php echo _('From')?>&nbsp;</label>
 					<input type="text" id="srcCityFilter" name="srcCityFilter" />
@@ -73,6 +72,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 					<input type="text" id="destCityFilter" name="destCityFilter" />
 				</dd>
 				<?php endif; ?>
+				 -->
 				<dd class="hidden">
 					<input type="submit"/>
 				</dd>	

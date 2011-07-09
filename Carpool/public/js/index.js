@@ -77,7 +77,6 @@ function buildSearchResults(/* JSON */ data) {
 	// Clean all existing results
 	$('#resultsTable tr:first').siblings().remove();
 	$('#resultsMessage').text('');
-
 	if (!data || data.length === 0) {
 		// Well, nothing
 		$('#resultsTable').hide();
@@ -107,7 +106,6 @@ function buildSearchResults(/* JSON */ data) {
 
 function doFilter() {
 	var filter = new Filter();
-	/*
 	var srcId = $('#srcCity').val();
 	if (srcId != Constants.LOCATION_DONT_CARE)
 		filter.addCriteria(new FilterCriteria('SrcCityId', srcId, filterEquals));
@@ -117,12 +115,11 @@ function doFilter() {
 		if (destId != Constants.LOCATION_DONT_CARE)            	
 		    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
 	}
-	*/
 	var wantTo = $('#wantTo').val();
 	if (wantTo != Constants.STATUS_DONT_CARE)
 		filter.addCriteria(new FilterCriteria('Status', wantTo, filterAnd));
 
-	buildSearchResults(filter.filter(searchResults));
+	buildSearchResults(filter.filter(searchResults, true));
 	
 	updateShowInterestText();
 }
@@ -167,8 +164,8 @@ $(document).ready(function() {
 		$("#srcCity").change(doFilter);
 	}, 'json');
 	
-	$("#srcCityFilter").keyup(doSearchAsYouType);
-	$("#destCityFilter").keyup(doSearchAsYouType);
+	//$("#srcCityFilter").keyup(doSearchAsYouType);
+	//$("#destCityFilter").keyup(doSearchAsYouType);
 
 	// Ajax form
 	var showInterestFormOptions = { 
