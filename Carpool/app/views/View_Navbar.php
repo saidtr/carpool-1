@@ -50,7 +50,7 @@ class View_Navbar {
     		// Put the right ref on the logout link
     		$pages[4]['params'] = array('ref' => Utils::getRunningScript());
     		// If we have no ride yet, the name of join.php is still "Join"
-    		if (AuthHandler::getRole() !== ROLE_IDENTIFIED_REGISTERED) {
+    		if (!AuthHandler::isRideRegistered()) {
     		    $pages[1]['name'] = 'Join';
     		}
     	} else {
