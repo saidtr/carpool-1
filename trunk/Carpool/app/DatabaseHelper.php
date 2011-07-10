@@ -115,20 +115,13 @@ class DatabaseHelper {
 	        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
 			
 	        $res = $stmt->execute();
-	        if (!$res) {
-	        	err("City insert failed: " . Utils::errorInfoToString($stmt->errorCode()));
-	        	return false;
-	        }
-	        
 	        $inserted = $this->_db->lastInsertId();
-	        
 	        info("City $name inserted: $inserted");
 	        
 	        return $inserted; 
-        
     	} catch(PDOException $e) {
     		logException($e);
-    		return false;
+    		throw $e;
     	}
     	
     }
@@ -401,7 +394,7 @@ class DatabaseHelper {
         } 
         // Order - show newer first
         $sql .= ' ORDER BY r.Id DESC';
-        info(__METHOD__ . ": $sql");
+        debug(__METHOD__ . ": $sql");
         try {
             $rs = $this->_db->query($sql);
             if ($rs) {
