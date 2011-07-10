@@ -71,7 +71,7 @@ $contactId = AuthHandler::getLoggedInUserId();
 // If this contact already exists, it must be an update
 $isUpdateContact = ($contactId !== false);
 // If there are any rides assigned with this contact, it is an update 
-$isUpdateRide = $contactId && (DatabaseHelper::getInstance()->countRidesForContactId($contactId) > 0);
+$isUpdateRide = AuthHandler::isRideRegistered();
 
 $canUpdateEmail = (AuthHandler::getAuthMode() != AuthHandler::AUTH_MODE_LDAP);
 
@@ -103,23 +103,35 @@ if ($valid) {
             }
         }
         
-        if ($srcCityId == LOCATION_NOT_FOUND && $srcCityId !== $destCityId) {
-            $srcCityId = $server->addCity($srcCity);
-            if (!$srcCityId) {
-                throw new Exception("Could not insert city $destCity");
+        if ($srcCityId == LOCATION_NOT_FOUND) {
+            // Now need make sure that we didn't already insert this city
+            if ($srcCity !== $destCity) {
+                $srcCityId = $server->addCity($srcCity);
+                if (!$srcCityId) {
+                    throw new Exception("Could not insert city $destCity");
+                }
+            } else {
+                $srcCityId = $destCityId;
             }
         }
 
         try {
             if ($isUpdateContact) {
                 $updateParams = array('name' => $name, 'phone' => $phone);
+                // In some scenarios, contact might exist before having a ride - 
+                // we need to set their role now 
+                $currentRole = AuthHandler::getRole();
+                if ($currentRole === ROLE_IDENTIFIED) {
+                    $updateParams['role'] = ROLE_IDENTIFIED_REGISTERED;
+                    AuthHandler::setRole(ROLE_IDENTIFIED_REGISTERED);
+                }
                 $updateParams['email'] = ($canUpdateEmail ? $email : null);
                 $server->updateContact($updateParams, $contactId);
             } else {               
                 // If it is a new ride - register this contact
                 $contactId = $server->addContact($name, $phone, $email, ROLE_IDENTIFIED_REGISTERED, $password);
-
                 AuthHandler::authByContactId($contactId);
+                AuthHandler::setRole(ROLE_IDENTIFIED_REGISTERED);
             }
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) {
@@ -140,12 +152,9 @@ if ($valid) {
             if (!$rideId) {
             	throw new Exception("Could not add ride");
             }
-            $mailBody = ViewRenderer::renderToString(VIEWS_PATH . '/registrationMail.php', array('contact' => $server->getContactById($contactId))); 
-            Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), 'Carpool registration', $mailBody);          
+            $mailBody = MailHelper::render(VIEWS_PATH . '/registrationMail.php', array('contact' => $server->getContactById($contactId)));
+            Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), getConfiguration('app.name') . ' Registration', $mailBody);        
         }
-        
-        // Finally, our new user gets their role
-        AuthHandler::setRole(ROLE_IDENTIFIED_REGISTERED);
         
         $server->commit();
         
