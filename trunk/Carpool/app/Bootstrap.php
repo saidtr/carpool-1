@@ -30,6 +30,7 @@ define('SESSION_KEY_AUTH_USER', 'user');
 define('SESSION_KEY_AUTH_ROLE', 'role');
 define('SESSION_KEY_RUNNING', 'running');
 define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
+define('SESSION_KEY_RIDE_REGISTERED', 'ride_registered');
 
 // Two weeks (in seconds) - 60 * 60 * 24 * 14
 define('TWO_WEEKS', 1209600);
@@ -174,7 +175,7 @@ $acl->addRole(ROLE_IDENTIFIED_REGISTERED, ROLE_IDENTIFIED);
 $acl->addRole(ROLE_ADMINISTRATOR, ROLE_IDENTIFIED_REGISTERED);
 
 if (ENV === ENV_DEVELOPMENT) {
-    $acl->addResource(ROLE_GUEST, 'webres.php');    
+    $acl->addResource(ROLE_GUEST, array('webres.php', 'test.php'));    
 }
 
 $acl->addResource(ROLE_GUEST, array('auth.php', 'optout.php'));

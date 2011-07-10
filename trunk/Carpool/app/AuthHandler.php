@@ -44,6 +44,18 @@ class AuthHandler {
     public static function isSessionExisting() {
         return isset($_SESSION) && isset($_SESSION[SESSION_KEY_RUNNING]);
     }
+    
+    public static function isRideRegistered() {
+        if (!isset($_SESSION[SESSION_KEY_RIDE_REGISTERED])) {
+            $contactId = self::getLoggedInUserId();
+            if ($contactId && DatabaseHelper::getInstance()->countRidesForContactId($contactId) > 0) {
+                $_SESSION[SESSION_KEY_RIDE_REGISTERED] = true;    
+            } else {
+                $_SESSION[SESSION_KEY_RIDE_REGISTERED] = false;
+            }
+        }
+        return $_SESSION[SESSION_KEY_RIDE_REGISTERED];
+    }
 
     public static function getLoggedInUser() {
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
@@ -110,17 +122,18 @@ class AuthHandler {
         }
         return $mode;
     }
-    
+
     public static function logout() {
         debug(__METHOD__);
-        if (isset($_SESSION[SESSION_KEY_AUTH_ROLE])) {
-            unset($_SESSION[SESSION_KEY_AUTH_ROLE]);
-        }
-        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
-            unset($_SESSION[SESSION_KEY_AUTH_USER]);
-        }
+
+        $params = session_get_cookie_params();
+        // Destroy the cookie associated with that session
+        setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+
+        // Finally, destroy the session.
+        session_destroy();
     }
-    
+
     /**
      * Factory method for authentication helpers 
      * 
