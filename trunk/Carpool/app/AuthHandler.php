@@ -56,6 +56,11 @@ class AuthHandler {
         }
         return $_SESSION[SESSION_KEY_RIDE_REGISTERED];
     }
+    
+    public static function updateRegisteredRideStatus($newStatus) {
+        debug(__METHOD__ . ': Set ride registered: ' . ($newStatus ? 'true' : 'false'));
+        $_SESSION[SESSION_KEY_RIDE_REGISTERED] = $newStatus;
+    }
 
     public static function getLoggedInUser() {
         if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
