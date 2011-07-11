@@ -33,7 +33,6 @@
 				<include name="public/**" />
 				<include name="lang/**" />
 				<include name="scripts/**" />
-				<include name="${conf.dir}/*.ini" />
 				<!-- 
 				  env.php contains domain-related configuration and
 				  should stay the same in most cases.
