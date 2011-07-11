@@ -75,7 +75,7 @@ $isUpdateRide = AuthHandler::isRideRegistered();
 
 $canUpdateEmail = (AuthHandler::getAuthMode() != AuthHandler::AUTH_MODE_LDAP);
 
-$action = ($isUpdateContact) ? 'update' : 'add';
+$action = ($isUpdateRide) ? 'update' : 'add';
 
 if ($valid) {
 
@@ -152,6 +152,7 @@ if ($valid) {
             if (!$rideId) {
             	throw new Exception("Could not add ride");
             }
+            AuthHandler::updateRegisteredRideStatus(true);
             $mailBody = MailHelper::render(VIEWS_PATH . '/registrationMail.php', array('contact' => $server->getContactById($contactId)));
             Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), getConfiguration('app.name') . ' Registration', $mailBody);        
         }
