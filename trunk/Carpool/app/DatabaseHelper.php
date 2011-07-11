@@ -155,7 +155,7 @@ class DatabaseHelper {
         	return false;
         }
         try {
-            $rs = $this->_db->query('SELECT DISTINCT ' . $opt . 'CityId AS Id, Cities.Name AS Name FROM Ride, Cities WHERE ' . $opt . 'CityId = Cities.Id');
+            $rs = $this->_db->query('SELECT DISTINCT ' . $opt . 'CityId AS Id, Cities.Name AS Name FROM Ride, Cities WHERE ' . $opt . 'CityId = Cities.Id ORDER BY Name');
 			
      	    if ($rs) {
                 $res = $rs->fetchAll(PDO::FETCH_ASSOC);
