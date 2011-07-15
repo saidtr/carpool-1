@@ -6,7 +6,7 @@ class Service_ShowInterest {
     	return ($from == LOCATION_DONT_CARE ? '*' : $from) . '-' . ($to == LOCATION_DONT_CARE ? '*' : $to);
     }
     
-    private static function notify($contactId, $allRides, $potentialRideIds) {
+    private static function notify($contactId, &$allRides, $potentialRideIds) {
         debug(__METHOD__ . "($contactId, " . json_encode($potentialRideIds) . ")");
         $toNotify = array();
         foreach ($allRides as $ride) {
@@ -20,11 +20,27 @@ class Service_ShowInterest {
         Utils::sendMail(Utils::buildEmail($contact['Email']), $contact['Email'], getConfiguration('mail.addr'), getConfiguration('mail.display'), 'New rides from carpool', $mailBody);
     }
     
+    // Returns the "opposite" status for the status provided, where the meaning of 
+    // opposite is - ride status that will be a potential match for the provided one.
+    // For example: the opposite of "looking" is "providing" and "sharing"
+    private static function getOppositeStatus($status) {
+        switch($status) {
+            case STATUS_LOOKING: return array(STATUS_OFFERED, STATUS_SHARING); 
+            case STATUS_OFFERED: return array(STATUS_LOOKING, STATUS_SHARING); 
+            case STATUS_SHARING: return array(STATUS_LOOKING, STATUS_OFFERED, STATUS_SHARING);
+            // Should never get here!
+            default: assert(false); 
+        }        
+        return false;
+    }
+    
+    // This function returns the list of all rides that might be relevant
+    // to rides with the provided status.
     public static function findPotentialRides($status) {
         $db = DatabaseHelper::getInstance();
         
         $searchParams = array();
-        $searchParams['status'] = $status;
+        $searchParams['status'] = self::getOppositeStatus($status);
         
         $lastRun = $db->getLastShowInterestNotifier();
         if ($lastRun !== false && $lastRun > 0) {
@@ -39,16 +55,19 @@ class Service_ShowInterest {
         return $allRides;
     }
     
+    // This function returns the list of rides that we want to notify.
+    // Practically this means: rides with the provided status, who asked to
+    // be notified
     public static function findRidesToNotify($status) {
         $searchParams = array(
-            'status' => $status,
-            'notify' => 1    
+        	'notify' => 1,
+            'status' => $status
         );
         
         return DatabaseHelper::getInstance()->searchRides($searchParams);
     }
     
-    public static function searchForMatchingRides($potentialRides, $ridesToNotify) {
+    public static function searchForMatchingRides(&$potentialRides, &$ridesToNotify) {
         // List all rides and create an index.
         // For each ride from X to Y, we create the following pointer:
         // X to Y -> Ride ID
@@ -93,22 +112,27 @@ class Service_ShowInterest {
                     $results[$ride['ContactId']] = array();
                 }
                 $results[$ride['ContactId']] = array_unique(array_merge($results[$ride['ContactId']], $rideIdx[$index]));
+                // Now make sure that contact is not shown in their own result list
+                // (could happen for rides with "Sharing" status)
+                if (($pos = array_search($ride['ContactId'], $results[$ride['ContactId']])) !== false) {
+                    unset ($results[$ride['ContactId']][$pos]);
+                    
+                }
+                
             } 
         }    
 
         return $results;
     } 
     
-    
     public static function run($rideId = null) {
         info('ShowInterestNotifier: started');
         
         if ($rideId === null) {
-            $status1 = STATUS_OFFERED;
-            $status2 = STATUS_LOOKING;
-            for ($i = 0; $i < 2; $status1 = STATUS_LOOKING, $status2 = STATUS_OFFERED, ++$i) {
-                $potentialRides = self::findPotentialRides($status1);
-                $ridesToNotify = self::findRidesToNotify($status2);
+            $statuses = array(STATUS_LOOKING, STATUS_OFFERED, STATUS_SHARING);
+            foreach ($statuses as $status) {
+                $potentialRides = self::findPotentialRides($status);
+                $ridesToNotify = self::findRidesToNotify($status);
                 
                 $results = self::searchForMatchingRides($potentialRides, $ridesToNotify);
                      
@@ -119,7 +143,7 @@ class Service_ShowInterest {
         } else {
             $newRide = array(0 => DatabaseHelper::getInstance()->getRideById($rideId));
             $newRideStatus = $newRide[0]['Status'];
-            $ridesToNotify = self::findRidesToNotify($newRideStatus == STATUS_LOOKING ? STATUS_OFFERED : STATUS_LOOKING);
+            $ridesToNotify = self::findRidesToNotify(self::getOppositeStatus($newRideStatus));
 
             $results = self::searchForMatchingRides($newRide, $ridesToNotify);
              
