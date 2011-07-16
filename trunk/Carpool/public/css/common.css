@@ -218,8 +218,12 @@ p#loadingNotice {
 	width: 100%;
 }
 
+#resultsTable tr:first-child {
+	border-bottom: 1px solid #4D4D4D;
+}
+
 #resultsTable tr {
-	border-bottom: 3px solid black;	
+	border-bottom: 1px solid #c0c0c0;	
 }
 
 #resultsTable th {
