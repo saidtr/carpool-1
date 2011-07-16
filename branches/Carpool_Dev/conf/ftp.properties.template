@@ -1,0 +1,8 @@
+# FTP host name, for exmple: ftp.mysite.com
+ftp.server         = 
+# FTP user name. Password is prompted each time
+ftp.user           = 
+# Public directory on the remote site: the public content will be put here
+ftp.public.dir     = 
+# Application directory on the remote site: all non-public content will be there
+ftp.app.dir        = 
