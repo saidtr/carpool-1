@@ -116,8 +116,12 @@ function doFilter() {
 		    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
 	}
 	var wantTo = $('#wantTo').val();
+	var statuses = [ wantTo ];
+	if (wantTo != Constants.STATUS_SHARING) {
+		statuses.push(Constants.STATUS_SHARING);
+	}
 	if (wantTo != Constants.STATUS_DONT_CARE)
-		filter.addCriteria(new FilterCriteria('Status', wantTo, filterAnd));
+		filter.addCriteria(new FilterCriteria('Status', statuses, filterInArray));
 
 	buildSearchResults(filter.filter(searchResults, true));
 	
