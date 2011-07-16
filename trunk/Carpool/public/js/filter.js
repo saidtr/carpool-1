@@ -9,8 +9,15 @@ function filterEquals(a, b) {
 	return a == b; 
 }
 
+function filterInArray(a, b) {
+	var len = b.length;
+	for(var i = 0; i < len; i++) {
+		if(b[i] == a) return true;
+	}
+	return false;
+}
+
 function filterAnd(a, b) {
-	console.log('FilterAnd: ' + a + '&' + b + ': ' + (a&b));
 	return (a & b) != 0;
 }
 
