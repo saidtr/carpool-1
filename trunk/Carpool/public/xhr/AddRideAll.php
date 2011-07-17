@@ -121,7 +121,7 @@ if ($valid) {
                 // In some scenarios, contact might exist before having a ride - 
                 // we need to set their role now 
                 $currentRole = AuthHandler::getRole();
-                if ($currentRole === ROLE_IDENTIFIED) {
+                if ($currentRole == ROLE_IDENTIFIED) {
                     $updateParams['role'] = ROLE_IDENTIFIED_REGISTERED;
                     AuthHandler::setRole(ROLE_IDENTIFIED_REGISTERED);
                 }
