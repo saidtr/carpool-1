@@ -51,18 +51,22 @@ class Test_Service_ShowInterest extends PHPUnit_TestCase {
         
         // Grab all potential rides - we should now have both
         DatabaseHelper::getInstance()->updateLastShowInterestNotifier(1);
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING);         
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING, 1);         
         $this->assertRidesContainIds($potentials, array($ride3, $ride4));
         
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_OFFERED);
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_OFFERED, 1);
         $this->assertRidesContainIds($potentials, array($ride1, $ride2, $ride4));
 
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_SHARING);       
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_SHARING, 1);       
         $this->assertRidesContainIds($potentials, array($ride1, $ride2, $ride3, $ride4));
      
+        // Make sure we don't look in the wrong regions
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING, 2);     
+        $this->assertEquals(0, count($potentials));
+        
         // Now let's update the last run and make sure those rides won't be counted
         DatabaseHelper::getInstance()->updateLastShowInterestNotifier(time() + 1000);
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING);     
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING, 1);     
         $this->assertEquals(0, count($potentials));
     }
     
@@ -77,13 +81,13 @@ class Test_Service_ShowInterest extends PHPUnit_TestCase {
         DatabaseHelper::getInstance()->updateRideActive($ride5, RIDE_INACTIVE);
         $ride6 = TestUtils::createSimpleRide(5, 6, STATUS_SHARING, 1);
         
-        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_LOOKING);
+        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_LOOKING, 1);
         $this->assertRidesContainIds($toNotify, array($ride1));
         
-        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_OFFERED);
+        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_OFFERED, 1);
         $this->assertRidesContainIds($toNotify, array($ride3));       
 
-        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_SHARING);
+        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_SHARING, 1);
         $this->assertRidesContainIds($toNotify, array($ride6));               
     }
     
@@ -101,8 +105,8 @@ class Test_Service_ShowInterest extends PHPUnit_TestCase {
         $ride4 = TestUtils::createSimpleRide(3, 4, STATUS_OFFERED);
         $ride5 = TestUtils::createSimpleRide(1, 7, STATUS_OFFERED);
         
-        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_LOOKING);
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING);
+        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_LOOKING, 1);
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING, 1);
         $matching = Service_ShowInterest::searchForMatchingRides($potentials, $toNotify);
         
         $expectedResults = array (
@@ -117,8 +121,8 @@ class Test_Service_ShowInterest extends PHPUnit_TestCase {
         // One for the sharing
         $ride8 = TestUtils::createSimpleRide(1, 2, STATUS_SHARING);
         
-        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_LOOKING);
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING);
+        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_LOOKING, 1);
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_LOOKING, 1);
         $matching = Service_ShowInterest::searchForMatchingRides($potentials, $toNotify);
         
         // We should now have 3 results:
@@ -133,8 +137,8 @@ class Test_Service_ShowInterest extends PHPUnit_TestCase {
         $this->assertMatchingResults($matching, $expectedResults, "TestSearchForMatchingRides: Test 2");
         
         // Now test the other way
-        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_OFFERED);
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_OFFERED);
+        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_OFFERED, 1);
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_OFFERED, 1);
         $matching = Service_ShowInterest::searchForMatchingRides($potentials, $toNotify);
         
         // We should now have (wildcards in the rides to notify are not supported yet):
@@ -146,8 +150,8 @@ class Test_Service_ShowInterest extends PHPUnit_TestCase {
         $this->assertMatchingResults($matching, $expectedResults, "TestSearchForMatchingRides: Test 3");
 
         // And what happens when they share
-        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_SHARING);
-        $potentials = Service_ShowInterest::findPotentialRides(STATUS_SHARING);
+        $toNotify = Service_ShowInterest::findRidesToNotify(STATUS_SHARING, 1);
+        $potentials = Service_ShowInterest::findPotentialRides(STATUS_SHARING, 1);
         $matching = Service_ShowInterest::searchForMatchingRides($potentials, $toNotify);
         
         // We should now have the following results:

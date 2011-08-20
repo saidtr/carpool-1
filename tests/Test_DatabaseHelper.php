@@ -21,13 +21,13 @@ class Test_DatabaseHelper extends PHPUnit_TestCase {
         $count = $this->dbh->countRidesForContactId($testContact);
         $this->assertEquals(0, $count);
         
-        $testRide1 = $this->dbh->addRide(1, 'city_1', 2, 'city_2', TIME_IRRELEVANT, TIME_IRRELEVANT, $testContact, '', RIDE_ACTIVE, 0);
+        $testRide1 = $this->dbh->addRide(1, 'city_1', 2, 'city_2', TIME_IRRELEVANT, TIME_IRRELEVANT, $testContact, '', RIDE_ACTIVE, 0, 1);
         if (!$testRide1) {
             $this->fail('addRide failed');
         }
         $count = $this->dbh->countRidesForContactId($testContact);
         $this->assertEquals(1, $count);
-        $testRide2 = $this->dbh->addRide(1, 'city_1', 2, 'city_2', TIME_IRRELEVANT, TIME_IRRELEVANT, $testContact, '', RIDE_INACTIVE, 0);
+        $testRide2 = $this->dbh->addRide(1, 'city_1', 2, 'city_2', TIME_IRRELEVANT, TIME_IRRELEVANT, $testContact, '', RIDE_INACTIVE, 0, 1);
         if (!$testRide2) {
             $this->fail('addRide failed');
         }
