@@ -9,7 +9,9 @@ if (ENV !== ENV_DEVELOPMENT && (!Utils::IsXhrRequest() || !AuthHandler::isSessio
 
 extract($_GET, EXTR_SKIP);
 
-$params = array();
+$region = RegionManager::getInstance()->getCurrentRegionId();
+
+$params = array('region' => $region);
 
 if (isset($srcCityId) && !empty($srcCityId) && !($srcCityId == LOCATION_DONT_CARE)) {
 	info("SrcCityId $srcCityId");

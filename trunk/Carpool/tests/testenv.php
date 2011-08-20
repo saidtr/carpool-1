@@ -17,14 +17,14 @@ class TestUtils {
         $con->query('UPDATE ShowInterestNotifier SET LastRun = 0');
     }
     
-    static function createSimpleRide($from, $to, $status, $notify = 1) {
+    static function createSimpleRide($from, $to, $status, $notify = 1, $region = 1) {
         $db = DatabaseHelper::getInstance();
         
         $testContact = $db->addContact('test' . self::$ridesCounter, '1234', 'test' . self::$ridesCounter . '@test.com', ROLE_IDENTIFIED_REGISTERED);
         if (!$testContact) {
             return false;
         }
-        $testRide = $db->addRide($from, 'city_' . $from, $to, 'city_' . $to, TIME_IRRELEVANT, TIME_IRRELEVANT, $testContact, '', $status, $notify);
+        $testRide = $db->addRide($from, 'city_' . $from, $to, 'city_' . $to, TIME_IRRELEVANT, TIME_IRRELEVANT, $testContact, '', $status, $notify, $region);
         if (!$testRide) {
             return false;
         }

@@ -78,6 +78,7 @@ function uncaughtExceptionHandler($e) {
     ob_end_clean(); 
     header('HTTP/1.1 500 Internal Server Error');
     ViewRenderer::render('views/errorPage.php', array('exception' => $e));
+    die();
 }
 
 set_exception_handler('uncaughtExceptionHandler');
@@ -98,8 +99,11 @@ function __autoload($className) {
 // Global configuration
 $globalConf = parse_ini_file(CONF_PATH . '/' . CONF_FILE, false);
 if (!$globalConf) {
-	// We can't really do anything without that
-	throw Exception('Could not parse configuration file ' . (CONF_PATH . '/' . CONF_FILE));
+	// We can't really do anything without having the configuration
+	ob_end_clean(); 
+    header('HTTP/1.1 500 Internal Server Error');
+    ViewRenderer::render('views/errorPage.php');
+    die(); 
 }
 
 $GLOBALS['conf'] = $globalConf;
@@ -157,10 +161,10 @@ function logException(Exception $e) {
     global $logger;
     $logger->logException($e);
 }
- 
-// Locale
-$localeManager = LocaleManager::getInstance();
-$localeManager->init();
+
+// Initialize locale and region objects
+LocaleManager::init();
+RegionManager::init();
 
 // Start session
 AuthHandler::init();
@@ -180,11 +184,11 @@ if (ENV === ENV_DEVELOPMENT) {
 
 $acl->addResource(ROLE_GUEST, array('auth.php', 'optout.php'));
 if (getConfiguration('auth.mode') == AuthHandler::AUTH_MODE_PASS) {
-    $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'AddRideAll.php'));
+    $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'AddRideAll.php', 'GetRegionConfiguration.php'));
 } else if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_TOKEN) {
-    $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'index.php', 'AddRideAll.php', 'feedback.php', 'SearchRides.php'));
+    $acl->addResource(ROLE_GUEST, array('join.php', 'help.php', 'index.php', 'AddRideAll.php', 'feedback.php', 'SearchRides.php', 'GetRegionConfiguration.php'));
 }
-$acl->addResource(ROLE_IDENTIFIED, array('join.php', 'help.php', 'index.php', 'feedback.php', 'logout.php', 'thanks.php', 'SearchRides.php', 'AddRideAll.php'));
+$acl->addResource(ROLE_IDENTIFIED, array('join.php', 'help.php', 'index.php', 'feedback.php', 'logout.php', 'thanks.php', 'SearchRides.php', 'AddRideAll.php', 'GetRegionConfiguration.php'));
 $acl->addResource(ROLE_IDENTIFIED_REGISTERED, array('ActivateToggle.php', 'DeleteRide.php', 'ShowInterest.php'));
 // Content management
 $acl->addResource(ROLE_ADMINISTRATOR, array('translations.php'));

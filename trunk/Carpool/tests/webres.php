@@ -9,26 +9,19 @@
 
 require_once 'testenv.php';
 require_once 'PHPUnit.php';
-require_once 'Test_Service_ShowInterest.php';
-require_once 'Test_AuthenticationHelperLdap.php';
-require_once 'Test_AuthenticationHelperPassword.php';
-require_once 'Test_SimpleAcl.php';
-require_once 'Test_QueryBuilder.php';
 
 $unit = new PHPUnit();
-/*
 $tests = array(
-	'Test_Service_ShowInterest', 
-	'Test_AuthenticationHelperLdap',
-    'Test_AuthenticationHelperPassword',
-    'Test_SimpleAcl'
-);
-*/
-$tests = array(
-    'Test_QueryBuilder'
+	'Test_Service_ShowInterest' => true, 
+	'Test_AuthenticationHelperLdap' => true,
+    'Test_AuthenticationHelperPassword' => true,
+    'Test_SimpleAcl' => true,
+	'Test_DatabaseHelper' => true
 );
 
-foreach ($tests as $test) {
+foreach ($tests as $test => $shouldRunTest) {
+    if (!$shouldRunTest) continue;
+    require "$test.php";
     $suite  = new PHPUnit_TestSuite($test);
     $result = $unit->run($suite);
     echo "<h1>$test</h1>";

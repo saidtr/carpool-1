@@ -24,6 +24,10 @@ class Utils {
     	}
     }
     
+    static function notNull($param, $default) {
+        return is_null($param) ? $default : $param;
+    }
+    
     static function getParam($name, $defaultValue = false) {
     	if (isset($_GET[$name])) {
     		return $_GET[$name];

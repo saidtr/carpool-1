@@ -85,13 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		<span class="description"><?php echo _('Optional, if you want a response.')?></span>
 	</dd>
 	<dd>
-		<input type="submit" value="<?php echo _('Submit')?>" />
+		<input type="submit" class="btn primary" value="<?php echo _('Submit')?>" />
 	</dd>
 	</dl>
 </form>
 </div>
 </div>
-<script type="text/javascript" src="lib/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.6.2.min.js"></script>
 <?php echo View_Php_To_Js::render();?>
 <script type="text/javascript" src="js/utils.js"></script>
 </body>

@@ -54,7 +54,4 @@ auth.ldap.port     =
 auth.ldap.domain.name = 
 
 [localization]
-default.src.city   =
-default.src.loc    =
-default.dest.city  = 
-default.dest.loc   = 
+default.region     =
