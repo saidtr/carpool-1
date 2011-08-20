@@ -21,7 +21,7 @@ $content = DatabaseHelper::getInstance()->getQuestionsAnswersByLang(LocaleManage
 <body>
 <div id="bd">
 <?php echo View_Navbar::buildNavbar()?>
-<?php echo View_Header::render(_('Okay, just a quick question.'))?>
+<?php echo View_Header::render(null)?>
 <div id="content">
 <?php if ($content): ?>
 <ul id="questionsHolder">
@@ -37,7 +37,7 @@ $content = DatabaseHelper::getInstance()->getQuestionsAnswersByLang(LocaleManage
 <?php endif;?>
 </div>
 </div>
-<script type="text/javascript" src="lib/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.6.2.min.js"></script>
 <?php echo View_Php_To_Js::render();?>
 <script type="text/javascript" src="js/utils.js"></script>
 </body>

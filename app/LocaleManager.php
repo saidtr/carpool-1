@@ -16,6 +16,10 @@ class LocaleManager {
 		return self::$_instance;
 	}
 	
+	public static function init() {
+	    self::getInstance()->initInternal();
+	}
+	
 	private $locales;
 	private $locale;
 	
@@ -44,13 +48,19 @@ class LocaleManager {
 	    return (isset($this->locale['Direction']) && $this->locale['Direction'] == self::DIRECTION_RTL);
 	}
 
-	public function init() {
+	// Initialize the current locale. Must be called before any text is displayed
+	// to the end user, as it initializes the global locale for the gettext component
+	// Determines the locale to use by looking in the following order:
+	// 1. Request (meaning the user replaced 
+	// 2. Existing cookie
+	// 3. Deafult locale set in the configuration
+	private function initInternal() {
 	    $this->locales = DatabaseHelper::getInstance()->getLocales();
 	    
 		if (isset($_GET['lang']) && array_key_exists($_GET['lang'], $this->locales)) {
 			$this->locale = $this->locales[$_GET['lang']];
 			// Set the cookie for 14 days
-			if (!setcookie('lang', $_GET['lang'], time() + 60 * 60 * 24 * 14, getConfiguration('public.path') . '/')) {
+			if (!setcookie('lang', $_GET['lang'], time() + TWO_WEEKS, getConfiguration('public.path') . '/')) {
 				warn(__METHOD__ . ': Could not set cookie for user! Output already exists.');
 			}
 			unset($_GET['lang']);

@@ -54,9 +54,9 @@ CREATE TABLE Ride (
   `TimeMorning` decimal(10,0) DEFAULT NULL,
   `ContactId` decimal(10,0) DEFAULT NULL,
   `DestCityId` decimal(10,0) DEFAULT NULL,
-  `DestLocation` varchar(512) COLLATE utf8_bin DEFAULT NULL,
+  `DestLocation` varchar(256) COLLATE utf8_bin DEFAULT NULL,
   `SrcCityId` decimal(10,0) DEFAULT NULL,
-  `SrcLocation` varchar(512) COLLATE utf8_bin DEFAULT NULL,
+  `SrcLocation` varchar(256) COLLATE utf8_bin DEFAULT NULL,
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`Id`)
 );

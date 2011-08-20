@@ -3,8 +3,7 @@ var citiesMapper = null;
 var isWorking = false;
 
 function disableButtons(disable) {
-	var action = (disable) ? 'disabled' : '';
-	$('input[type="button"],input[type="submit"]').attr('disabled', action);
+	$('input[type="button"],input[type="submit"]').attr('disabled', disable);
 	isWorking = disable;
 	if (disable)
 		$('#submitStatus').text(_('Working...'));
@@ -23,7 +22,10 @@ function deleteRide() {
 	} 
 }
 
-function initAutocomplete() {
+function initAutocomplete(firstTime) {
+	if (!firstTime) {
+		$("#srcCity, #destCity").flushCache();
+	}
 	$("#srcCity, #destCity").autocomplete(cities, {
 		formatItem: function(item) {
 			return htmlEnc(item.Name);
@@ -63,16 +65,36 @@ function doActivateToggle() {
 	}, 'json');
 }
 
-$(document).ready(function() {
+function updateRegionConfiguration() {
+	// Disable all relevant elements
+	$('#region, #srcCityId, #srcLocation, #destCityId, #destLocation').attr('disabled', true);
+	var region = $('#region').val();
+	$.get(Constants.xhr['GET_REGION_CONF'], { 'regionId' : region }, function(xhr) {
+		if (xhr.status === 'ok') {
+			var regionConfiguration = xhr.results.regionConfiguration;
+			cities = xhr.results.cities;
+			var srcCity = regionConfiguration.DefaultSrcCityId !== null ? regionConfiguration.DefaultSrcCityId : Constants.LOCATION_NOT_FOUND;
+			var srcLocation = regionConfiguration.DefaultSrcLocation !== null ? regionConfiguration.DefaultSrcLocation : '';
+			var destCity = regionConfiguration.DefaultDestCityId !== null ? regionConfiguration.DefaultDestCityId : Constants.LOCATION_NOT_FOUND;
+			var destLocation = regionConfiguration.DefaultDestLocation !== null ? regionConfiguration.DefaultDestLocation : '';
+			$('#srcCityId').val(srcCity);
+			$('#srcLocation').val(srcLocation);
+			$('#destCityId').val(destCity);
+			$('#destLocation').val(destLocation);
+			
+			initCities(false);
+		} else {
+			showError(_('Failed to fetch region information: ' + xhr.msg));
+		}
+		$('#region, #srcCityId, #srcLocation, #destCityId, #destLocation').attr('disabled', false);
+	}, 'json');	
+}
 
-	initAutocomplete();
-
+function initCities(firstTime) {
 	citiesMapper = [];
 	for (city in cities) {
 		citiesMapper[cities[city].Id] = cities[city].Name;
 	}
-
-	// Set the cities names according to the city id
 	
 	if ($("#srcCityId").val() !== Constants.LOCATION_NOT_FOUND) {
 		$("#srcCity").val(citiesMapper[$("#srcCityId").val()]);
@@ -80,7 +102,12 @@ $(document).ready(function() {
 
 	if ($("#destCityId").val() !== Constants.LOCATION_NOT_FOUND) {
 		$("#destCity").val(citiesMapper[$("#destCityId").val()]);
-	}	
+	}		
+	initAutocomplete(firstTime);
+}
+
+$(document).ready(function() {
+	initCities(true);
 	
 	$("#addRideForm").unbind('submit');
 	$("#addRideForm").attr('action', Constants.xhr['ADD_RIDE']);
@@ -141,6 +168,8 @@ $(document).ready(function() {
 	$("#addRideForm").ajaxForm(addRideFormOptions);
 
 	$("#activateToggleButton").click(doActivateToggle);
+	
+	$("#region").change(updateRegionConfiguration);
 
 	// Register ajax error handler
 	$(document).ajaxError(function(evt, xhr, settings, exception) {

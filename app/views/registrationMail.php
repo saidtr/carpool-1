@@ -5,7 +5,7 @@ $authUrl = Utils::buildLocalUrl('auth.php', array('c' => $this->contact['Id'], '
 ?>
 <h1><?php printf(_('Thanks, %s'), htmlspecialchars($this->contact['Name'])) ?>!</h1>
 <div id="content">
-<p><?php echo _('You sucssfully joined') ?> <?php echo getConfiguration('app.name')?>.</p>
+<p><?php echo _('You successfully joined') ?> <?php echo getConfiguration('app.name')?>.</p>
 <?php if (AuthHandler::getAuthMode() == AuthHandler::AUTH_MODE_TOKEN): ?>
     <p><?php echo _('You can always update or delete your account by browsing to the following link')?>:</p>
     <p id="authLink"><a href="<?php echo htmlspecialchars($authUrl) ?>"><?php echo htmlspecialchars($authUrl) ?></a></p>

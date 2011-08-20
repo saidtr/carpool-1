@@ -12,8 +12,14 @@ The application cannot work due to an internal error.<br />
 Details of this error have been logged. If the problem persists, please contact the site administrators.
 </h3>
 <?php if (ENV === ENV_DEVELOPMENT): ?>
-<p><b>Message:</b>&nbsp;<?php echo $this->exception->getMessage() ?></p>
-<pre><?php echo $this->exception->getTraceAsString() ?></pre>
+    <?php if ($lastError = error_get_last()): ?>
+    <p>Error <?php echo $lastError['type']?> in file <?php echo $lastError['file']?>, line <?php echo $lastError['line']?></p>
+    <p><b>Details:</b>&nbsp;<?php echo $lastError['message']?></p>    
+    <?php endif; ?>
+    <?php if (isset($this->exception)): ?>
+    <p><b>Message:</b>&nbsp;<?php echo $this->exception->getMessage() ?></p>
+    <pre><?php echo $this->exception->getTraceAsString() ?></pre>
+    <?php endif;?>    
 <?php endif; ?>
 </div>
 </body>

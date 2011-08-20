@@ -7,8 +7,9 @@ $db = DatabaseHelper::getInstance();
 
 AuthHandler::putUserToken();
 
-$availableDestCities = $db->getAvailableCities('Dest');
-$availableSrcCities = $db->getAvailableCities('Src');
+$currentRegion = RegionManager::getInstance()->getCurrentRegionId();
+$availableDestCities = $db->getAvailableCities('Dest', $currentRegion);
+$availableSrcCities = $db->getAvailableCities('Src', $currentRegion);
 
 $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 
@@ -26,7 +27,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 <body>
 <div id="bd">
 <?php echo View_Navbar::buildNavbar()?>
-<?php echo View_Header::render(_('Lookin\' for a ride?'), _('The colleagues, listed below, may be able to provide a ride both to and from the listed locations'))?>
+<?php echo View_Header::render(null, _('The colleagues, listed below, may be able to provide a ride both to and from the listed locations'))?>
 <div id="content">
 	<div id="searchFormHolder">
 		<form id="searchForm" action="xhr/SearchRides.php">
@@ -83,7 +84,23 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 			</dl>
 			</fieldset>
 		</form>
+		<form id="regionSelectorForm">
+			<dl>
+    			<dd>
+        			<label for="regionSelector"><?php echo _('Region')?>&nbsp;</label>
+        			<select id="regionSelector" name="regionSelector">
+        			<?php foreach (RegionManager::getInstance()->getRegions() as $regionId => $region): ?>
+        				<option value="<?php echo $regionId ?>" <?php echo ($regionId == $currentRegion) ? 'selected="selected"' : ''?>><?php echo _($region['Abbrev'])?></option>
+        			<?php endforeach; ?>					
+        			</select>
+    			</dd>
+    			<dd class="hidden">
+    				<input type="submit"/>
+    			</dd>
+			</dl>	
+		</form>
 	</div>
+	<div class="clearFloat"></div>
 	<div id="results">
 		<table id="resultsTable">
 			<tr>
@@ -105,7 +122,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 </div>
 </div>
 <?php 
-View_Php_To_Js::putVariable('cities', $db->getCities());
+View_Php_To_Js::putVariable('cities', $db->getCities($currentRegion));
 View_Php_To_Js::putConstant('DEFAULT_DOMAIN', getConfiguration('default.domain'));
 View_Php_To_Js::putConstant('APP_NAME', _(getConfiguration('app.name')));
 View_Php_To_Js::putConstant('DISPLAY_DEST', $displayDest ? '1' : '0');
@@ -125,7 +142,7 @@ View_Php_To_Js::putTranslations(
 );
 echo View_Php_To_Js::render();
 ?>
-<script type="text/javascript" src="lib/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.6.2.min.js"></script>
 <script type="text/javascript" src="lib/form/jquery.form.min.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/filter.js"></script>

@@ -40,5 +40,40 @@ class Test_DatabaseHelper extends PHPUnit_TestCase {
         $this->assertEquals(0, $count);
     }
     
+    public function testGetRegionConfigration() {
+        DatabaseHelper::getConnection()->query('DELETE FROM Regions');
+        $this->dbh->insert('Regions', array(
+            'Name' => 'Region1',
+            'Abbrev' => 'rg1',
+            'DefaultSrcCityId' => 1,
+            'DefaultSrcLocation' => 'DefaultSrc1'
+        ));
+        $id = DatabaseHelper::getConnection()->lastInsertId();
+        
+        $conf = $this->dbh->getRegionConfiguration($id);
+        $this->assertNotNull($conf);
+        $this->assertEquals(1, $conf['DefaultSrcCityId']);   
+        $this->assertEquals('DefaultSrc1', $conf['DefaultSrcLocation']);   
+        $this->assertNull($conf['DefaultDestLocation']);
+        
+        $this->dbh->insert('Regions', array(
+            'Name' => 'Region2',
+            'Abbrev' => 'rg2',
+            'DefaultSrcCityId' => 71,
+            'DefaultSrcLocation' => 'DefaultSrc2',
+        	'DefaultDestCityId' => 70,
+        	'DefaultDestLocation' => 'DefaultDest2'
+        
+        ));
+        $id = DatabaseHelper::getConnection()->lastInsertId();
+        
+        $conf = $this->dbh->getRegionConfiguration($id);
+        $this->assertNotNull($conf);
+        $this->assertEquals(71, $conf['DefaultSrcCityId']);   
+        $this->assertEquals('DefaultSrc2', $conf['DefaultSrcLocation']);   
+        $this->assertEquals(70, $conf['DefaultDestCityId']);   
+        $this->assertEquals('DefaultDest2', $conf['DefaultDestLocation']);   
+    }
+    
     
 }
