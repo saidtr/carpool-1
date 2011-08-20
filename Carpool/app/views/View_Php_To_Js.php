@@ -16,16 +16,17 @@ class View_Php_To_Js {
             'DEL_RIDE'        => 'xhr/DeleteRide.php',
     		'GET_CITIES'      => 'xhr/GetCities.php',
     		'SEARCH_RIDES'    => 'xhr/SearchRides.php',
-            'TOGGLE_ACTIVATE' => 'xhr/ActivateToggle.php'
+            'TOGGLE_ACTIVATE' => 'xhr/ActivateToggle.php',
+    		'GET_REGION_CONF' => 'xhr/GetRegionConfiguration.php'
     		),
-        'LOCATION_NOT_FOUND' => LOCATION_NOT_FOUND,
-        'LOCATION_DONT_CARE' => LOCATION_DONT_CARE,
-    	'STATUS_DONT_CARE'   => STATUS_DONT_CARE,
-    	'STATUS_LOOKING'     => STATUS_LOOKING,
-    	'STATUS_OFFERED'     => STATUS_OFFERED,
-    	'STATUS_SHARING'     => STATUS_SHARING,
-        'TIME_IRRELAVANT' => TIME_IRRELEVANT,
-        'TIME_DIFFER' => TIME_DIFFERS
+        'LOCATION_NOT_FOUND'  => LOCATION_NOT_FOUND,
+        'LOCATION_DONT_CARE'  => LOCATION_DONT_CARE,
+    	'STATUS_DONT_CARE'    => STATUS_DONT_CARE,
+    	'STATUS_LOOKING'      => STATUS_LOOKING,
+    	'STATUS_OFFERED'      => STATUS_OFFERED,
+    	'STATUS_SHARING'      => STATUS_SHARING,
+        'TIME_IRRELAVANT'     => TIME_IRRELEVANT,
+        'TIME_DIFFER'         => TIME_DIFFERS
     );
     
     static $vars = array();

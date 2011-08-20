@@ -29,18 +29,19 @@ class Service_ShowInterest {
             case STATUS_OFFERED: return array(STATUS_LOOKING, STATUS_SHARING); 
             case STATUS_SHARING: return array(STATUS_LOOKING, STATUS_OFFERED, STATUS_SHARING);
             // Should never get here!
-            default: assert(false); 
+            default: assert(false, "getOppositeStatus is $status"); 
         }        
         return false;
     }
     
     // This function returns the list of all rides that might be relevant
     // to rides with the provided status.
-    public static function findPotentialRides($status) {
+    public static function findPotentialRides($status, $region) {
         $db = DatabaseHelper::getInstance();
         
         $searchParams = array();
         $searchParams['status'] = self::getOppositeStatus($status);
+        $searchParams['region'] = $region;
         
         $lastRun = $db->getLastShowInterestNotifier();
         if ($lastRun !== false && $lastRun > 0) {
@@ -58,10 +59,11 @@ class Service_ShowInterest {
     // This function returns the list of rides that we want to notify.
     // Practically this means: rides with the provided status, who asked to
     // be notified
-    public static function findRidesToNotify($status) {
+    public static function findRidesToNotify($status, $region) {
         $searchParams = array(
         	'notify' => 1,
-            'status' => $status
+            'status' => $status,
+            'region' => $region
         );
         
         return DatabaseHelper::getInstance()->searchRides($searchParams);
@@ -131,8 +133,9 @@ class Service_ShowInterest {
         if ($rideId === null) {
             $statuses = array(STATUS_LOOKING, STATUS_OFFERED, STATUS_SHARING);
             foreach ($statuses as $status) {
-                $potentialRides = self::findPotentialRides($status);
-                $ridesToNotify = self::findRidesToNotify($status);
+                foreach(array_keys(RegionManager::getInstance()->getRegions()) as $region)
+                $potentialRides = self::findPotentialRides($status, $region);
+                $ridesToNotify = self::findRidesToNotify($status, $region);
                 
                 $results = self::searchForMatchingRides($potentialRides, $ridesToNotify);
                      

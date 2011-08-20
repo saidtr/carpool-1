@@ -87,6 +87,13 @@ $(document).ready(function() {
 	$('#lang').change(function() {
 		$('#langSelectorForm').submit();
 	});
+	
+	/*
+	// Region selector
+	$('#region').change(function() {
+		$('#regionSelectorForm').submit();
+	});
+	*/
 });
 
 

@@ -16,9 +16,8 @@
 </p>
 <p id="results"></p>
 </div>
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/JSConstants.js"></script>
-<script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="../public/lib/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../public/js/utils.js"></script>
 <script type="text/javascript">
 
 var dataDesc = [
@@ -31,7 +30,8 @@ var dataDesc = [
 	{ name : 'destLocation', type : 'str', minLength: 3, maxLength: 15, optional : true },
 	{ name : 'timeMorning', type : 'int', min: 5, max: 10, optional : true },
 	{ name : 'timeEvening', type : 'int', min: 15, max: 22, optional : true },
-	{ name : 'comment', type : 'str', minLength: 1, maxLength: 128, optional : true }	
+	{ name : 'comment', type : 'str', minLength: 1, maxLength: 128, optional : true },
+	{ name : 'wantTo', type: 'int', min: 1, max: 2 }	
 ];
 
 function generateInt(min, max) {
@@ -71,7 +71,8 @@ function doGenerate() {
         		}
         		params[field.name] = res;
     		}
-    		$.post(Constants.xhr['ADD_RIDE'], params, function(xhr) {
+    		
+    		$.post('http://localhost/pdt/Carpool/public/xhr/AddRideAll.php', params, function(xhr) {
     			status = xhr.status;
     			action = xhr.action;
     			if (status === 'ok') {
@@ -89,14 +90,22 @@ function doGenerate() {
     				putResult('Could not ' + action + ' ride: Internal error. ' + (status.msg ? status.msg : ""), false);
     			} else {
     				putResult('Congrats! You broke everything!', false);
-    			}				
+    			}		
+    			$.get('http://localhost/pdt/Carpool/public/auth.php?action=logout', {} ,function(xhr) {
+    			});		
     		}, 'json');
+
+    		
     	}
 	}
 	
 }
 
 $(document).ready(function() {
+	$.ajaxSetup({
+		async : false
+	});
+	
 	$('#doGenerateButton').click(doGenerate);
 });
 

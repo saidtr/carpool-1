@@ -97,7 +97,7 @@ if ($valid) {
         // Assumes we already verified that the names are not empty
         
         if ($destCityId == LOCATION_NOT_FOUND) {
-            $destCityId = $server->addCity($destCity);
+            $destCityId = $server->addCity($destCity, $region);
             if (!$destCity) {
             	throw new Exception("Could not insert city $destCity");
             }
@@ -106,7 +106,7 @@ if ($valid) {
         if ($srcCityId == LOCATION_NOT_FOUND) {
             // Now need make sure that we didn't already insert this city
             if ($srcCity !== $destCity) {
-                $srcCityId = $server->addCity($srcCity);
+                $srcCityId = $server->addCity($srcCity, $region);
                 if (!$srcCityId) {
                     throw new Exception("Could not insert city $destCity");
                 }
@@ -114,6 +114,12 @@ if ($valid) {
                 $srcCityId = $destCityId;
             }
         }
+        
+        // Update the region
+        if (!RegionManager::getInstance()->setRegion($region)) {
+            throw new Exception("Failed to update region");
+        }
+        
 
         try {
             if ($isUpdateContact) {
@@ -141,14 +147,26 @@ if ($valid) {
         }
 
         // Add or update ride
+        $rideParams = array(
+            'SrcCityId'     => $srcCityId,
+            'SrcLocation'   => $srcLocation,
+            'DestCityId'    => $destCityId,
+            'DestLocation'  => $destLocation,
+            'TimeMorning'   => $timeMorning,
+            'TimeEvening'   => $timeEvening,
+            'Comment'       => $comment,
+            'Notify'        => $notify,
+            'Status'        => $wantTo,
+            'Region'        => $region
+        );
         if ($isUpdateRide) {
-            if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo, $notify)) {
+            if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo, $notify, $region)) {
                 GlobalMessage::setGlobalMessage(_("Ride successfully updated."));
             } else {
                 throw new Exception("Could not update ride");
             }
         } else {
-            $rideId = $server->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo, $notify);
+            $rideId = $server->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo, $notify, $region);
             if (!$rideId) {
             	throw new Exception("Could not add ride");
             }
