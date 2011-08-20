@@ -108,11 +108,12 @@ class DatabaseHelper {
         return $stmt->execute();
     }
 
-    function addCity($name) {
-    	debug(__METHOD__ . "($name)");
+    function addCity($name, $region) {
+    	debug(__METHOD__ . "($name, $region)");
     	try {
-	        $stmt = $this->_db->prepare('INSERT INTO Cities(name) VALUES(:name)');
+	        $stmt = $this->_db->prepare('INSERT INTO Cities(name, region) VALUES(:name, :region)');
 	        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+	        $stmt->bindParam(':region', $region, PDO::PARAM_INT);
 			
 	        $res = $stmt->execute();
 	        $inserted = $this->_db->lastInsertId();
@@ -126,21 +127,21 @@ class DatabaseHelper {
     	
     }
 
-    function getCities() {
+    function getCities($region = null) {
         debug(__METHOD__);
         try {
-        	$rs = $this->_db->query('SELECT Id, Name FROM Cities');
-        	if ($rs) {
-        		$res = $rs->fetchAll(PDO::FETCH_ASSOC);
-        		 
-        		// Apply translations
-        		foreach ($res as &$record) {
-        			$record['Name'] = _($record['Name']);
-        		}
-        	} else {
-        		// Return empty array
-        		$res = array();
+            $sql = 'SELECT Id, Name FROM Cities';
+        	if (!is_null($region)) {
+        	    $sql .= ' WHERE Region = ' . $this->_db->quote($region);
         	}
+        	$rs = $this->_db->query($sql);
+            $res = $rs->fetchAll(PDO::FETCH_ASSOC);
+        		 
+        	// Apply translations
+        	foreach ($res as &$record) {
+        		$record['Name'] = _($record['Name']);
+        	}
+        	
             return $res;
         } catch (PDOException $e) {
             logException($e);
@@ -148,14 +149,20 @@ class DatabaseHelper {
         }
     }
     
-    function getAvailableCities($opt) {
-        debug(__METHOD__ . "($opt)");
+    function getAvailableCities($opt, $region) {
+        debug(__METHOD__ . "($opt, $region)");
         if (!$opt === 'Src' && !$opt === 'Dest') {
         	err("Illegal access to method " . __METHOD__ . ": $opt");
         	return false;
         }
         try {
-            $rs = $this->_db->query('SELECT DISTINCT ' . $opt . 'CityId AS Id, Cities.Name AS Name FROM Ride, Cities WHERE ' . $opt . 'CityId = Cities.Id ORDER BY Name');
+            $rs = $this->_db->query('
+            	SELECT DISTINCT ' . $opt . 'CityId AS Id, c.Name AS Name 
+            	FROM Ride r, Cities c 
+            	WHERE ' . $opt . 'CityId = c.Id
+            	AND c.Region = ' . $this->_db->quote($region) . '
+            	AND r.Region = ' . $this->_db->quote($region) . ' 
+            	ORDER BY Name');
 			
      	    if ($rs) {
                 $res = $rs->fetchAll(PDO::FETCH_ASSOC);
@@ -235,13 +242,13 @@ class DatabaseHelper {
     
     function addRide(
         $srcCityId, $srcLocation, $destCityId, $destLocation, 
-        $timeMorning, $timeEvening, $contactId, $comment, $status, $notify) {
-        debug(__METHOD__ . "($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $status, $notify)");
+        $timeMorning, $timeEvening, $contactId, $comment, $status, $notify, $region) {
+        debug(__METHOD__ . "($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $status, $notify, $region)");
 
         try {
             $stmt = $this->_db->prepare(
-            	'INSERT INTO Ride(srcCityId, srcLocation, destCityId, destLocation, timeMorning, timeEvening, contactId, comment, status, timeCreated, timeUpdated, Active, Notify) ' . 
-            	'VALUES (:srcCityId, :srcLocation, :destCityId, :destLocation, :timeMorning, :timeEvening, :contactId, :comment, :status, :timeCreated, :timeUpdated, :active, :notify)');
+            	'INSERT INTO Ride(srcCityId, srcLocation, destCityId, destLocation, timeMorning, timeEvening, contactId, comment, status, timeCreated, timeUpdated, Active, Notify, Region) ' . 
+            	'VALUES (:srcCityId, :srcLocation, :destCityId, :destLocation, :timeMorning, :timeEvening, :contactId, :comment, :status, :timeCreated, :timeUpdated, :active, :notify, :region)');
             $stmt->bindParam(':srcCityId', $srcCityId);
             $stmt->bindParam(':srcLocation', $srcLocation);
             $stmt->bindParam(':destCityId', $destCityId);
@@ -257,6 +264,7 @@ class DatabaseHelper {
             $active = RIDE_ACTIVE;
             $stmt->bindParam(':active', $active);
             $stmt->bindParam(':notify', $notify);
+            $stmt->bindParam(':region', $region);
             
             if ($stmt->execute()) {
                $inserted = $this->_db->lastInsertId();
@@ -274,11 +282,11 @@ class DatabaseHelper {
 
     function updateRide(
         $rideId, $srcCityId, $srcLocation, $destCityId, $destLocation,
-        $timeMorning, $timeEvening, $comment, $status, $notify) {
+        $timeMorning, $timeEvening, $comment, $status, $notify, $region) {
         debug(__METHOD__ . "($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $status, $notify)");
 
         try {
-            $stmt = $this->_db->prepare('UPDATE Ride SET srcCityId=:srcCityId, srcLocation=:srcLocation, destCityId=:destCityId, destLocation=:destLocation, timeMorning=:timeMorning, timeEvening=:timeEvening, comment=:comment, status=:status, timeUpdated=:timeUpdated, notify=:notify WHERE id=:rideId');
+            $stmt = $this->_db->prepare('UPDATE Ride SET srcCityId=:srcCityId, srcLocation=:srcLocation, destCityId=:destCityId, destLocation=:destLocation, timeMorning=:timeMorning, timeEvening=:timeEvening, comment=:comment, status=:status, timeUpdated=:timeUpdated, notify=:notify, Region=:region WHERE id=:rideId');
             $stmt->bindParam(':srcCityId', $srcCityId);
             $stmt->bindParam(':srcLocation', $srcLocation);
             $stmt->bindParam(':destCityId', $destCityId);
@@ -291,6 +299,7 @@ class DatabaseHelper {
             $stmt->bindParam(':timeUpdated', $curTime);
             $stmt->bindParam(':rideId', $rideId);
             $stmt->bindParam(':notify', $notify);
+            $stmt->bindParam(':region', $region);
             
             if ($stmt->execute()) {
                info("Ride $rideId successfully updated");
@@ -391,6 +400,9 @@ class DatabaseHelper {
             if (isset ($params['notify'])) {
                 $sql .= ' AND r.notify = ' . $this->_db->quote($params['notify']);
             }
+            if (isset ($params['region'])) {
+                $sql .= ' AND r.region = ' . $this->_db->quote($params['region']);
+            }
         } 
         // Order - show newer first
         $sql .= ' ORDER BY r.Id DESC';
@@ -401,7 +413,7 @@ class DatabaseHelper {
             	$res = $rs->fetchAll(PDO::FETCH_ASSOC);
             	
             	// Now, take care of the cities
-            	$cities = $this->getCities();
+            	$cities = $this->getCities(isset($params['region']) ? $params['region'] : null);
             	$citiesMapper = array();
             	foreach ($cities as $city) {
             		$citiesMapper[$city['Id']] = $city['Name'];
@@ -438,7 +450,7 @@ class DatabaseHelper {
      */
     function getRideProvidedByContactId($contactId) {
         debug(__METHOD__ . "($contactId)");
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.Active, r.Notify   
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.Active, r.Notify, r.Region   
                 FROM Ride r 
                 WHERE r.ContactId = :contactId LIMIT 1';        
         try {
@@ -601,6 +613,37 @@ class DatabaseHelper {
                 $locales[$locale['Id']] = $locale;
             }
             return $locales;
+        } catch (PDOException $e) {
+            logException($e);
+            return false;
+        }
+    }
+    
+    function getRegions() {
+        debug(__METHOD__ . "()");
+        
+        try {
+            $stmt = $this->_db->query('SELECT Id, Name, Abbrev FROM Regions');
+            $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $regions = array();
+            foreach ($res as $region) {
+                $regions[$region['Id']] = $region;
+            }
+            return $regions;
+        } catch (PDOException $e) {
+            logException($e);
+            return false;
+        }
+    }
+    
+    function getRegionConfiguration($regionId) {
+        debug(__METHOD__ . "($regionId)");
+        
+        try {
+            $stmt = $this->_db->prepare('SELECT Id, DefaultSrcCityId, DefaultSrcLocation, DefaultDestCityId, DefaultDestLocation FROM Regions WHERE Id = :regionId LIMIT 1');
+            $stmt->bindParam(':regionId', $regionId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             logException($e);
             return false;

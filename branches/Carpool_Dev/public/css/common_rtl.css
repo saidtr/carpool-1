@@ -25,6 +25,17 @@ body {
 	border: 0;
 }
 
+#regionHolder {
+	float: left;
+	margin-left: 10px;
+	padding-left: 10px;
+}
+
+#regionHolder select {
+	border: 0;
+}
+
+
 #content {
 	margin: 0 30px;
 }

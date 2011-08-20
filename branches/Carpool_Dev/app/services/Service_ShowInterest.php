@@ -29,7 +29,7 @@ class Service_ShowInterest {
             case STATUS_OFFERED: return array(STATUS_LOOKING, STATUS_SHARING); 
             case STATUS_SHARING: return array(STATUS_LOOKING, STATUS_OFFERED, STATUS_SHARING);
             // Should never get here!
-            default: assert(false); 
+            default: assert(false, "getOppositeStatus is $status"); 
         }        
         return false;
     }

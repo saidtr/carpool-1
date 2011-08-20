@@ -214,6 +214,11 @@ $(document).ready(function() {
 	$('#showInterestClose').click(function() {
 		displayShowInterestDialog(false);
 	});
+	
+	// Region selector
+	$('#regionSelector').change(function() {
+		$('#regionSelectorForm').submit();
+	});
 
 	// Register ajax error handler
 	$(document).ajaxError(function(evt, xhr, settings, exception) {

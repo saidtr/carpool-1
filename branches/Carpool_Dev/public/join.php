@@ -44,14 +44,18 @@ if ($contact) {
 }
 
 // Default values, if set in the configuration file
-$defaultSrcCity       = getConfiguration('default.src.city', LOCATION_NOT_FOUND);
-$defaultSrcLocation   = getConfiguration('default.src.loc', '');
-$defaultDestCity      = getConfiguration('default.dest.city', LOCATION_NOT_FOUND);
-$defaultDestLocation  = getConfiguration('default.dest.loc', '');
+$regionConfiguration = RegionManager::getInstance()->getRegionConfiguration();
+$defaultSrcCity       = Utils::notNull($regionConfiguration['DefaultSrcCityId'], LOCATION_NOT_FOUND);
+$defaultSrcLocation   = Utils::notNull($regionConfiguration['DefaultSrcLocation'], '');
+$defaultDestCity      = Utils::notNull($regionConfiguration['DefaultDestCityId'], LOCATION_NOT_FOUND);
+$defaultDestLocation  = Utils::notNull($regionConfiguration['DefaultDestLocation'], '');
 
-// Just in case we have those in the configuration, but values are not set
-if (empty($defaultSrcCity)) $defaultSrcCity = LOCATION_NOT_FOUND;
-if (empty($defaultDestCity)) $defaultDestCity = LOCATION_NOT_FOUND;
+// Region to put
+if ($hasRide) { 
+    $selectedRegion = $ride_Region;
+} else {
+    $selectedRegion = RegionManager::getInstance()->getCurrentRegionId();
+}
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -77,7 +81,7 @@ echo View_Header::render($header);
 	<form id="addRideForm" action="#" method="post" onsubmit="return false;"> 
 		<p id="formMessage"></p>
 		<fieldset>
-			<legend>I want to...</legend>
+			<legend><?php echo _('I want to...')?></legend>
 			<ul class="radioSelectorHolder">
     			<li><input type="radio" name="wantTo" <?php if (!isset($ride_Status) || (isset($ride_Status) && $ride_Status == STATUS_LOOKING)) echo 'checked="checked"' ?> value="<?php echo STATUS_LOOKING ?>" /><?php echo _('I want to join a ride')?></li>
     			<li><input type="radio" name="wantTo" <?php if (isset($ride_Status) && $ride_Status == STATUS_OFFERED) echo 'checked="checked"' ?> value="<?php echo STATUS_OFFERED ?>" /><?php echo _('I want to provide a ride')?></li>
@@ -85,7 +89,18 @@ echo View_Header::render($header);
 			</ul>
 		</fieldset>
 		<fieldset>
-			<legend>Ride details</legend>
+			<legend><?php echo _('Ride details')?></legend>
+			<dl>
+				<dd class="mandatory">
+					<label for="region"><?php echo _('Region')?></label>
+					<select id="region" name="region">
+					<?php foreach (RegionManager::getInstance()->getRegions() as $regionId => $region): ?>
+						<option value="<?php echo $regionId ?>" <?php echo ($regionId == $selectedRegion) ? 'selected="selected"' : ''?>><?php echo _($region['Name'])?></option>
+					<?php endforeach; ?>
+					</select>
+				</dd>
+			</dl>
+			<div class="clearFloat"></div>
 			<dl>
 				<dd class="mandatory">
 					<label for="srcCity"><?php echo _('Coming from city')?></label>
@@ -185,10 +200,10 @@ echo View_Header::render($header);
 		</fieldset>	
 		<fieldset>
 			<legend><?php echo _('Submit')?></legend>
-			<input type="submit" value="<?php echo ($hasRide) ? _('Update') : _('Go!') ?>" />
+			<input type="submit" class="btn" value="<?php echo ($hasRide) ? _('Update') : _('Go!') ?>" />
 			<?php if ($hasRide): ?>
-			<input type="button" id="deleteButton" value="<?php echo _('Delete')?>!" />
-			<input type="button" id="activateToggleButton" value="<?php echo ($isActive ? _("Deactivate") : _("Activate"))?>" />
+			<input type="button" class="btn" id="deleteButton" value="<?php echo _('Delete')?>!" />
+			<input type="button" class="btn" id="activateToggleButton" value="<?php echo ($isActive ? _("Deactivate") : _("Activate"))?>" />
 			<?php endif; ?>
 			<span id="submitStatus"></span>
 		</fieldset>
@@ -196,7 +211,7 @@ echo View_Header::render($header);
 	</div>
 </div>
 </div>
-<script type="text/javascript" src="lib/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.6.2.min.js"></script>
 <script type="text/javascript" src="lib/packed/join.pack.js"></script>
 <?php
 View_Php_To_Js::putTranslations(array(
@@ -208,7 +223,7 @@ View_Php_To_Js::putTranslations(array(
 	'Congrats! You broke everything!',
     'Working...'
 )); 
-View_Php_To_Js::putVariable('cities', $db->getCities());
+View_Php_To_Js::putVariable('cities', $db->getCities($selectedRegion));
 echo View_Php_To_Js::render();
 
 ?>

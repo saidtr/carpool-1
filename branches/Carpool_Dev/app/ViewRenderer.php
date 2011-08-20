@@ -52,7 +52,6 @@ class ViewRenderer {
 	 * @param array $params Array with parameters to pass
 	 */
 	public static function render($path, $params = null) {
-		debug(__METHOD__ . "($path, $params)");
 		$view = new ViewRenderer($path);
 		if ($params)
 			$view->assign($params);

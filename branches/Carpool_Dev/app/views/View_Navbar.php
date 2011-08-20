@@ -24,13 +24,32 @@ class View_Navbar {
     	$html .= '<select id="lang" name="lang">' . PHP_EOL;
     	foreach ($localeManager->getLocales() as $langId => $lang) {
     		$html .= '<option value="' . $langId . '"';
-    		if ($lang['Name'] === $localeManager->getSelectedLanaguage()) {
+    		if ($langId == $localeManager->getSelectedLanaguageId()) {
     			$html .= ' selected="selected"';
     		}
     		
     		$html .= '>' . _($lang['Name']) . '</option>';
     	}
     	$html .= '</select><input type="submit" class="hidden" /></p></form></div>';
+    	return $html;
+    }
+    
+    static function buildRegionSelector() {
+        /*
+    	$regionManager = RegionManager::getInstance();
+    	$html = '<div id="regionHolder"><form id="regionSelectorForm" method="get" action="' . $_SERVER['PHP_SELF'] . '"><p>';
+    	$html .= _('Region') . ':&nbsp;<select id="region" name="region">';
+    	foreach ($regionManager->getRegions() as $regionId => $region) {
+    		$html .= '<option value="' . $regionId . '"';
+    		if ($regionId == $regionManager->getCurrentRegionId()) {
+    			$html .= ' selected="selected"';
+    		}
+    		
+    		$html .= '>' . _($region['Name']) . '</option>';
+    	}
+    	$html .= '</select><input type="submit" class="hidden" /></p></form></div>';
+    	*/
+        $html = '';
     	return $html;
     }
 
@@ -69,6 +88,7 @@ class View_Navbar {
         $str .= '</ol>';
         $html .= $str;
         $html .= self::buildLanguageSelector();
+        $html .= self::buildRegionSelector();
         $html .= '<div class="clearFloat"></div></div>';
         return $html;
     }
