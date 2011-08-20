@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<?php $authHelper->putLogonFormFields(); ?>
 	<dd>
 		<input type="hidden" id="ref" name="ref" value="<?php echo htmlspecialchars(Utils::getParam('ref', ''))?>" />
-		<input type="submit" value="<?php echo _('Submit')?>" />
+		<input type="submit" class="btn primary" value="<?php echo _('Submit')?>" />
 	</dd>
 	</dl>
 </form>
