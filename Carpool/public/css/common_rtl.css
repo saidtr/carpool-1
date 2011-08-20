@@ -70,6 +70,14 @@ form dd {
 	float: right;
 }
 
+#searchForm {
+	float: right;
+}
+
+#regionSelectorForm {
+	float: left;
+}
+
 #resultsTable {
 	direction: rtl;
 }
