@@ -91,6 +91,9 @@ _('Yokneam');
 _('English');
 _('Hebrew');
 
+// Regions
+_('Israel');
+
 // Navigation bar
 _('Join');
 _('Search');
@@ -114,3 +117,4 @@ _('Thanks for your interest! You will notified about new rides.');
 _('Looking');
 _('Providing');
 _('Working...');
+_('Sharing');
