@@ -14,9 +14,18 @@ CREATE TABLE Regions (
 
 -- We must put a default value as there are existing values and we want it to be non-null
 -- Better have the deafult value meaningless, otherwise some bugs will be harder to trace
-ALTER TABLE `cities` ADD `Region` INT NOT NULL DEFAULT '0';
-ALTER TABLE `ride` ADD `Region` INT NOT NULL DEFAULT '0';
+ALTER TABLE `Cities` ADD `Region` INT NOT NULL DEFAULT '0';
+ALTER TABLE `Ride` ADD `Region` INT NOT NULL DEFAULT '0';
 
 -- Now, put the default region in the existing data. Assuming default is "1"
-UPDATE `cities` SET Region = 1;
-UPDATE `ride` SET Region = 1;
+UPDATE `Cities` SET Region = 1;
+UPDATE `Ride` SET Region = 1;
+
+-- Update indexes on the Cities table
+ALTER TABLE Cities DROP INDEX Name;
+ALTER TABLE `Cities` ADD UNIQUE (
+	`Name` ,
+	`Region`
+);
+ALTER TABLE `Cities` DROP PRIMARY KEY, ADD PRIMARY KEY ( `Id` , `Region` );
+
