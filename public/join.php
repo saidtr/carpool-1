@@ -41,7 +41,7 @@ if ($contact) {
         extract($rideData, EXTR_PREFIX_ALL, 'ride');
         $isActive = ($ride_Active == RIDE_ACTIVE);
 	}
-}
+} 
 
 // Default values, if set in the configuration file
 $regionConfiguration = RegionManager::getInstance()->getRegionConfiguration();

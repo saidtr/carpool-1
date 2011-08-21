@@ -137,7 +137,8 @@ View_Php_To_Js::putTranslations(
         'Could not add ride',
         'Thanks for showing interest! You will notified about new rides.',
         'Providing',
-        'Looking'
+        'Looking',
+        'Sharing'
     )
 );
 echo View_Php_To_Js::render();
