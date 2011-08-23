@@ -72,23 +72,16 @@ h3 {
 	font-weight: bold;	
 }
 
-#regionHolder {
-	float: right;
-	margin-right: 10px;
-	padding-right: 10px;
-}
-
-#regionHolder select {
-	border: 0;
-}
-
-
 #langHolder {
 	float: right;
 }
 
 #langHolder select {
+	width: 7em;
 	border: 0;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
 }
 
 #content {
@@ -131,12 +124,6 @@ input[type="radio"] {
 	margin-right: 5px;
 }
 
-select {
-	border: 1px solid #c0c0c0;
-	background: none;
-	padding: 3px;	
-}
-
 form input[type=text]:focus, 
 textarea:focus,
 form input[type=password]:focus {
@@ -152,35 +139,35 @@ form input[type=password],
 form textarea,
 form select,
 form .uneditable-input {
-  display: inline-block;
-  margin: 0;
-  padding: 4px;
-  font-size: 13px;
-  line-height: 18px;
-  height: 18px;
-  width: 200px;
-  border: 1px solid #ccc;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+	display: inline-block;
+	margin: 0;
+	padding: 4px;
+	font-size: 13px;
+	line-height: 18px;
+	height: 18px;
+	width: 200px;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
 }
 form select, form input[type=file] {
-  height: 27px;
-  line-height: 27px;
+	height: 27px;
+	line-height: 27px;
 }
 form textarea {
-  height: auto;
+	height: auto;
 }
 form input[type=text],
 form input[type=password],
 form select,
 form textarea {
-  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
-  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
-  transition: border linear 0.2s, box-shadow linear 0.2s;
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+	-moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+	transition: border linear 0.2s, box-shadow linear 0.2s;
+	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 form dd {
@@ -214,81 +201,81 @@ form .shortInput {
 /* Fancy buttons */
 
 .btn {
-  display: inline-block;
-  background-color: #e6e6e6;
-  background-repeat: no-repeat;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(0.25, #ffffff), to(#e6e6e6));
-  background-image: -webkit-linear-gradient(#ffffff, color-stop(0.25, #ffffff), #e6e6e6);
-  background-image: -moz-linear-gradient(#ffffff, color-stop(#ffffff, 0.25), #e6e6e6);
-  padding: 4px 14px;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-  color: #333333;
-  font-size: 13px;
-  line-height: 18px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom-color: rgba(0, 0, 0, 0.25);
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-  -webkit-transition: 0.1s linear all;
-  -moz-transition: 0.1s linear all;
-  transition: 0.1s linear all;
+	display: inline-block;
+	background-color: #e6e6e6;
+	background-repeat: no-repeat;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(0.25, #ffffff), to(#e6e6e6));
+	background-image: -webkit-linear-gradient(#ffffff, color-stop(0.25, #ffffff), #e6e6e6);
+	background-image: -moz-linear-gradient(#ffffff, color-stop(#ffffff, 0.25), #e6e6e6);
+	padding: 4px 14px;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+	color: #333333;
+	font-size: 13px;
+	line-height: 18px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom-color: rgba(0, 0, 0, 0.25);
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-webkit-transition: 0.1s linear all;
+	-moz-transition: 0.1s linear all;
+	transition: 0.1s linear all;
 }
 .btn:hover {
-  background-position: 0 -15px;
-  color: #333333;
-  text-decoration: none;
-  cursor: pointer;
+	background-position: 0 -15px;
+	color: #333333;
+	text-decoration: none;
+	cursor: pointer;
 }
 .btn.primary {
-  background-color: #0064cd;
-  background-repeat: repeat-x;
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
-  background-image: -moz-linear-gradient(#049cdb, #0064cd);
-  background-image: -ms-linear-gradient(#049cdb, #0064cd);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
-  background-image: -webkit-linear-gradient(#049cdb, #0064cd);
-  background-image: -o-linear-gradient(#049cdb, #0064cd);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#0064cd', GradientType=0)";
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#0064cd', GradientType=0);
-  background-image: linear-gradient(#049cdb, #0064cd);
-  color: #fff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	background-color: #0064cd;
+	background-repeat: repeat-x;
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
+	background-image: -moz-linear-gradient(#049cdb, #0064cd);
+	background-image: -ms-linear-gradient(#049cdb, #0064cd);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
+	background-image: -webkit-linear-gradient(#049cdb, #0064cd);
+	background-image: -o-linear-gradient(#049cdb, #0064cd);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#0064cd', GradientType=0)";
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#0064cd', GradientType=0);
+	background-image: linear-gradient(#049cdb, #0064cd);
+	color: #fff;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 .btn.primary:hover {
-  color: #fff;
+	color: #fff;
 }
 .btn.large {
-  font-size: 16px;
-  line-height: 28px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
+	font-size: 16px;
+	line-height: 28px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
 .btn.small {
-  padding-right: 9px;
-  padding-left: 9px;
-  font-size: 11px;
+	padding-right: 9px;
+	padding-left: 9px;
+	font-size: 11px;
 }
 .btn:disabled, .btn.disabled {
-  background-image: none;
-  filter: alpha(opacity=65);
-  -khtml-opacity: 0.65;
-  -moz-opacity: 0.65;
-  opacity: 0.65;
-  cursor: default;
+	background-image: none;
+	filter: alpha(opacity=65);
+	-khtml-opacity: 0.65;
+	-moz-opacity: 0.65;
+	opacity: 0.65;
+	cursor: default;
 }
 .btn:active {
-  -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
-  padding: 0;
-  border: 0;
+	padding: 0;
+	border: 0;
 }
 
 /* Global message */
