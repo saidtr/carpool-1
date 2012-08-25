@@ -1,8 +1,5 @@
 <?php
 
-// TODO: Maybe add a method for "is there more than a single region", to save
-// some UI clutter when there's no need for region selection
-
 class RegionManager {
 		
     private static $_instance;
@@ -30,6 +27,14 @@ class RegionManager {
 	
 	public function getCurrentRegionId() {
 	    return $this->_currentRegion['Id'];
+	}
+	
+	public function isMultiRegion() {
+		return count($this->_regions) > 1;
+	}
+	
+	public function isValidRegion($regionId) {
+		return isset($this->_regions[$regionId]);
 	}
 	
 	public function getRegionConfiguration($regionId = null) {
