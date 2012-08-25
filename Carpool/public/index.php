@@ -86,6 +86,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 		</form>
 		<form id="regionSelectorForm">
 			<dl>
+				<?php if (RegionManager::getInstance()->isMultiRegion()): ?>
     			<dd>
         			<label for="regionSelector"><?php echo _('Region')?>&nbsp;</label>
         			<select id="regionSelector" name="regionSelector">
@@ -97,6 +98,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
     			<dd class="hidden">
     				<input type="submit"/>
     			</dd>
+    			<?php endif; ?>
 			</dl>	
 		</form>
 	</div>

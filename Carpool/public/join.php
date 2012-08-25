@@ -91,6 +91,7 @@ echo View_Header::render($header);
 		<fieldset>
 			<legend><?php echo _('Ride details')?></legend>
 			<dl>
+				<?php if (RegionManager::getInstance()->isMultiRegion()): ?>
 				<dd class="mandatory">
 					<label for="region"><?php echo _('Region')?></label>
 					<select id="region" name="region">
@@ -99,6 +100,7 @@ echo View_Header::render($header);
 					<?php endforeach; ?>
 					</select>
 				</dd>
+				<?php endif; ?>
 			</dl>
 			<div class="clearFloat"></div>
 			<dl>
