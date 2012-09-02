@@ -30,7 +30,12 @@ if (isset($wantTo) && !empty($wantTo)) {
 }
 
 $server = DatabaseHelper::getInstance();
+$rides = $server->searchRides($params);
 
-$res = array('status' => 'ok', 'results' => $server->searchRides($params));
+if ($rides) {
+	$res = array('status' => 'ok', 'results' => $rides);
+} else {
+	$res = array('status' => 'err');
+}
 
 echo json_encode($res);
