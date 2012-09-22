@@ -367,54 +367,40 @@ p#loadingNotice {
 	padding: 5px 3px;
 }
 
-#resultsFrom {
-	width: 12%;
-	min-width: 12%;
-}
-
-#resultsIn {
-	width: 7%;
-	min-width: 7%;
-}
-
-#resultsOut {
-	width: 7%;
-	min-width: 7%;
-}
-
 #resultsWhat {
 	width: 3%;	
 }
 
-#resultsTo {
-	width: 12%;
-	min-width: 12%;
-}
-
 #resultsContact {
-	width: 12%;
-	min-width: 12%;
+	width: 9%;
+	min-width: 9%;
 }
 
-#resultsEmail {
-	width: 16%;	
-	min-width: 16%;
+#resultsFrom {
+	width: 15%;
 }
 
-#resultsPhone {
-	width: 10%;
-	min-width: 10%;
+#resultsTo {
+	width: 15%;
+}
+
+#resultsCommunication {
+	width: 20%;
 }
 
 #resultsComment {
-	width: 20%;
-	min-width: 20%;
-	max-width: 20%;
-	max-width: 20%;
+	width: 38%;
 }
 
-#resultsTable td {
-	padding: 3px;
+#resultsTable .contactDetailHeader {
+	display: block;
+	float: left;
+	width: 5em;
+	font-weight: bold;
+}
+
+#resultsTable .contactDetail {
+	display: block;
 }
 
 #resultsMessage {

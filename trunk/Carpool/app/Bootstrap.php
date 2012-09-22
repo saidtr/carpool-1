@@ -26,12 +26,6 @@ define('TIME_DIFFERS', -1);
 define('LOCATION_NOT_FOUND', -1);
 define('LOCATION_DONT_CARE', -2);
 
-define('SESSION_KEY_AUTH_USER', 'user');
-define('SESSION_KEY_AUTH_ROLE', 'role');
-define('SESSION_KEY_RUNNING', 'running');
-define('SESSION_KEY_GLOBAL_MESSAGE', 'msg');
-define('SESSION_KEY_RIDE_REGISTERED', 'ride_registered');
-
 // Two weeks (in seconds) - 60 * 60 * 24 * 14
 define('TWO_WEEKS', 1209600);
 
