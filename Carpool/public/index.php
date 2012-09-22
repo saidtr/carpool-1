@@ -104,19 +104,16 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 	</div>
 	<div class="clearFloat"></div>
 	<div id="results">
-		<table id="resultsTable">
+		<table id="resultsTable" class="table table-striped">
 			<tr>
-				<th id="resultsWhat"><?php echo _('I\'m')?></th>
-				<th id="resultsFrom"><?php echo _('From')?></th>
+				<th id="resultsWhat"></th>
+				<th id="resultsContact">Name</th>					
+				<th id="resultsFrom">From</th>
 				<?php if ($displayDest): ?>
-				<th id="resultsTo"><?php echo _('To')?></th>
+				<th id="resultsTo">To</th>
 				<?php endif; ?>
-				<th id="resultsIn"><?php echo _('In')?></th>
-				<th id="resultsOut"><?php echo _('Out')?></th>
-				<th id="resultsContact"><?php echo _('Name')?></th>
-				<th id="resultsEmail"><?php echo _('Email')?></th>
-				<th id="resultsPhone"><?php echo _('Phone')?></th>
-				<th id="resultsComment"><?php echo _('Comment')?></th>
+				<th id="resultsCommunication">Contact Details</th>
+				<th id="resultsComment">Comment</th>
 			</tr>
 		</table>
 		<p id="resultsMessage"></p>
@@ -144,7 +141,7 @@ View_Php_To_Js::putTranslations(
 );
 echo View_Php_To_Js::render();
 ?>
-<script type="text/javascript" src="lib/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="lib/jquery-1.8.1.min.js"></script>
 <script type="text/javascript" src="lib/form/jquery.form.min.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/filter.js"></script>

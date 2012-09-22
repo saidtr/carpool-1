@@ -36,6 +36,7 @@ class DatabaseHelper {
 	    }
 	    // Use exceptions as error handling
 	    $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    // If required, run DB initialization code (such as setting codepage to use)
 	    if (($initCode = getConfiguration('database.init')) !== false)
 	    {
 	        $this->_db->query($initCode);
@@ -134,6 +135,7 @@ class DatabaseHelper {
         	if (!is_null($region)) {
         	    $sql .= ' WHERE Region = ' . $this->_db->quote($region);
         	}
+        	$sql .= ' ORDER BY Name';
         	$rs = $this->_db->query($sql);
             $res = $rs->fetchAll(PDO::FETCH_ASSOC);
         		 
@@ -381,7 +383,7 @@ class DatabaseHelper {
      * @return mixed Array with the search results, or false in case of failures
      */
     function searchRides($params = null) {
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.ContactId, co.Name, co.Email, co.Phone ' .         		
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.ContactId, r.TimeUpdated, co.Name, co.Email, co.Phone ' .         		
 				'FROM Ride r, Contacts co ' .         		
 				'WHERE co.Id = r.ContactId AND r.Active = ' . RIDE_ACTIVE; 
         if (!empty($params)) {

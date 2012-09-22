@@ -73,31 +73,41 @@ $isUpdateContact = ($contactId !== false);
 // If there are any rides assigned with this contact, it is an update 
 $isUpdateRide = AuthHandler::isRideRegistered();
 
+// XXX: Policy or something like that for the auth handler
 $canUpdateEmail = (AuthHandler::getAuthMode() != AuthHandler::AUTH_MODE_LDAP);
 
 $action = ($isUpdateRide) ? 'update' : 'add';
 
+if (RegionManager::getInstance()->isMultiRegion()) {
+	if (!RegionManager::getInstance()->isValidRegion($region)) {
+		$messages[] = _("Invalid region");
+		$valid = false;
+	}
+} else {
+	$region = RegionManager::getInstance()->getDefaultRegion();
+}
+
 if ($valid) {
 
-    $server = DatabaseHelper::getInstance();
+    $db = DatabaseHelper::getInstance();
     
     try {
         
         if ($isUpdateRide) {
-            $ride = $server->getRideProvidedByContactId($contactId);   
+            $ride = $db->getRideProvidedByContactId($contactId);   
             $rideId = $ride['Id'];
         } else {
             $rideId = false;
         }
         
         // Put it all in a transaction - we might fail after a few successes
-        $server->beginTransaction();
+        $db->beginTransaction();
         
         // Add destination and source city in case we don't have them in the DB
         // Assumes we already verified that the names are not empty
         
         if ($destCityId == LOCATION_NOT_FOUND) {
-            $destCityId = $server->addCity($destCity, $region);
+            $destCityId = $db->addCity($destCity, $region);
             if (!$destCity) {
             	throw new Exception("Could not insert city $destCity");
             }
@@ -106,7 +116,7 @@ if ($valid) {
         if ($srcCityId == LOCATION_NOT_FOUND) {
             // Now need make sure that we didn't already insert this city
             if ($srcCity !== $destCity) {
-                $srcCityId = $server->addCity($srcCity, $region);
+                $srcCityId = $db->addCity($srcCity, $region);
                 if (!$srcCityId) {
                     throw new Exception("Could not insert city $destCity");
                 }
@@ -132,10 +142,10 @@ if ($valid) {
                     AuthHandler::setRole(ROLE_IDENTIFIED_REGISTERED);
                 }
                 $updateParams['email'] = ($canUpdateEmail ? $email : null);
-                $server->updateContact($updateParams, $contactId);
+                $db->updateContact($updateParams, $contactId);
             } else {               
                 // If it is a new ride - register this contact
-                $contactId = $server->addContact($name, $phone, $email, ROLE_IDENTIFIED_REGISTERED, $password);
+                $contactId = $db->addContact($name, $phone, $email, ROLE_IDENTIFIED_REGISTERED, $password);
                 AuthHandler::authByContactId($contactId);
                 AuthHandler::setRole(ROLE_IDENTIFIED_REGISTERED);
             }
@@ -160,30 +170,31 @@ if ($valid) {
             'Region'        => $region
         );
         if ($isUpdateRide) {
-            if ($server->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo, $notify, $region)) {
+            if ($db->updateRide($rideId, $srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $comment, $wantTo, $notify, $region)) {
                 GlobalMessage::setGlobalMessage(_("Ride successfully updated."));
             } else {
                 throw new Exception("Could not update ride");
             }
         } else {
-            $rideId = $server->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo, $notify, $region);
+            $rideId = $db->addRide($srcCityId, $srcLocation, $destCityId, $destLocation, $timeMorning, $timeEvening, $contactId, $comment, $wantTo, $notify, $region);
             if (!$rideId) {
             	throw new Exception("Could not add ride");
             }
             AuthHandler::updateRegisteredRideStatus(true);
-            $mailBody = MailHelper::render(VIEWS_PATH . '/registrationMail.php', array('contact' => $server->getContactById($contactId)));
+            $mailBody = MailHelper::render(VIEWS_PATH . '/registrationMail.php', array('contact' => $db->getContactById($contactId)));
             Utils::sendMail(Utils::buildEmail($email), $name, getConfiguration('mail.addr'), getConfiguration('mail.display'), getConfiguration('app.name') . ' Registration', $mailBody);        
         }
         
-        $server->commit();
+        $db->commit();
         
+        // XXX: Should show interest even if it's update?
         if (!$isUpdateRide && getConfiguration('notify.immediate') == 1) {
             Service_ShowInterest::run($rideId);
         }
         
         echo json_encode(array('status' => 'ok', 'action' => $action));
     } catch (PDOException $e) {
-        $server->rollBack();
+        $db->rollBack();
         if ($e->getCode() == 23000) {
             // If this is a unique constraint problem - we want to display the correct message
             echo json_encode(array('status' => 'invalid', 'action' => $action, 'messages' => $messages));
@@ -192,7 +203,7 @@ if ($valid) {
             echo json_encode(array('status' => 'err', 'action' => $action));
         }
     } catch (Exception $e) {
-        $server->rollBack();
+        $db->rollBack();
         logException($e);
         if (ENV == ENV_DEVELOPMENT) {
         	echo json_encode(array('status' => 'err', 'action' => $action, 'msg' => $e->getMessage()));

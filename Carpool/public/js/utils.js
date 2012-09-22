@@ -16,6 +16,12 @@ function htmlEnc(str) {
 	return str;
 }
 
+// Convert time derived from PHP's time() function to JS time
+function phpTimeToJsTime(/* unsigned int */ time) {
+	// JS is working with milliseconds while PHP with seconds
+	return time * 1000;
+}
+
 // Translate HTML entities to the corresponding characters. Use with caution! 
 function htmlUnescape(str) {
 	// Use the browser DOM capabilities for a simple translation
@@ -50,11 +56,13 @@ function isRtl() {
 
 function showMessage(msg) {
 	$('#globalMessage').removeClass('error');
+	$('#globalMessage').addClass('info');
 	$('#messageBody').text(msg);
 	$('#globalMessage').show();
 }
 
 function showError(msg) {
+	$('#globalMessage').removeClass('info');
 	$('#globalMessage').addClass('error');
 	$('#messageBody').text(msg);
 	$('#globalMessage').show();

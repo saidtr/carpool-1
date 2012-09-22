@@ -63,9 +63,12 @@ class AuthenticationHelperLdap implements IAuthenticationHelperInteractive {
             // We're assuming that the email used is as the user name
             $email = $email = Utils::buildEmail($user);
             
+            // Close the connection - we don't need it any more
+            ldap_unbind($con);
+            
             // Fetch contact
             $contact = DatabaseHelper::getInstance()->getContactByEmail($email);
-            if ($contact !== false) {
+            if ($contact !== false) {       	
                 return array('Id' => $contact['Id'], 'Role' => $contact['Role']);    
             } else {
                 // Contact is not in the database - we better create it
@@ -82,10 +85,6 @@ class AuthenticationHelperLdap implements IAuthenticationHelperInteractive {
             // Internal error
             throw new Exception(__METHOD__ . " : LDAP error: " . ldap_err2str($errCode));
         }
-        
-        ldap_unbind($con);
-        
-        return true;
     }
     
     function putLogonFormFields() { 

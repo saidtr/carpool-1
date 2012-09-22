@@ -9,6 +9,12 @@
  *
  */
 class AuthHandler {
+	
+	const SESSION_KEY_AUTH_USER = 'user';
+	const SESSION_KEY_AUTH_ROLE = 'role';
+	const SESSION_KEY_RUNNING = 'running';
+	const SESSION_KEY_GLOBAL_MESSAGE = 'msg';
+	const SESSION_KEY_RIDE_REGISTERED = 'ride_registered';
     
     const AUTH_MODE_TOKEN = 1;
     const AUTH_MODE_LDAP  = 2;
