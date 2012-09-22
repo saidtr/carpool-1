@@ -40,12 +40,12 @@ function formatTime(/* String */ hour) {
 	} 
 }
 
-function statusCodeToText(/* Integer */status) {
+function statusCodeToIconElement(/* Integer */status) {
 	status = parseInt(status);
 	switch (status) {
-	case Constants.STATUS_LOOKING: return '<i class="icon-thumbs-up" title="' + _('Would like to join a ride') + '"></i>';
-	case Constants.STATUS_OFFERED: return '<i class="icon-road" title="' + _('Offers a ride') + '"></i>';
-	case Constants.STATUS_SHARING: return '<i class="icon-adjust" title="' + _('Would like to share a ride') + '"></i>';
+	case Constants.STATUS_LOOKING: return '<i class="ride-icon icon-thumbs-up" title="' + _('Would like to join a ride') + '"></i>';
+	case Constants.STATUS_OFFERED: return '<i class="ride-icon icon-road" title="' + _('Offers a ride') + '"></i>';
+	case Constants.STATUS_SHARING: return '<i class="ride-icon icon-adjust" title="' + _('Would like to share a ride') + '"></i>';
 	default: 
 		console.log('Illegal status code: ' + status);
 		return '';
@@ -111,7 +111,7 @@ function buildComment(/* JSON */ ride) {
 
 function buildRideRow(/* JSON */ ride) {
 	var elemStr = '';
-	elemStr += '<td>' + statusCodeToText(ride.Status) + '</td>';
+	elemStr += '<td>' + statusCodeToIconElement(ride.Status) + '</td>';
 	elemStr += '<td><p>' + htmlEnc(ride.Name) + '</p></td>';
 	elemStr += cell(ride.SrcCity + (ride.SrcLocation && ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
 	if (Constants.DISPLAY_DEST === '1') {
@@ -152,7 +152,8 @@ function buildSearchResults(/* JSON */ data) {
 			
 			$('#resultsTable').append(elemStr);
 		}
-		/*$('#resultsTable tr:not([th]):odd').css('background', '#E6E6FA');*/
+		var tooltipPlacement = isRtl() ? 'left' : 'right';
+		$('.ride-icon').tooltip({ placement : tooltipPlacement, delay: { show: 100, hide: 100 } });
 	}
 }
 
