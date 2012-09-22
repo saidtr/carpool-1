@@ -86,6 +86,15 @@ form dd {
 	text-align: right;
 }
 
+#resultsTable tr td {
+	text-align: right;
+}
+
+#resultsTable .contactDetailHeader {
+	float: right;
+}
+
+
 /* Join page */
 
 #addRideForm legend {
