@@ -342,29 +342,12 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 	padding-top: 10px;	
 }
 
-#results {
-
-}
-
 p#loadingNotice {
 	padding: 2px 6px;
 }
 
 #resultsTable {
 	width: 100%;
-}
-
-#resultsTable tr:first-child {
-	border-bottom: 1px solid #4D4D4D;
-}
-
-#resultsTable tr {
-	border-bottom: 1px solid #c0c0c0;	
-}
-
-#resultsTable th {
-	font-weight: bold;
-	padding: 5px 3px;
 }
 
 #resultsWhat {

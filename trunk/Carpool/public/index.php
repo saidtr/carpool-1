@@ -18,6 +18,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="css/reset-fonts.css">
+<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap_custom.min.css">
 <link rel="stylesheet" type="text/css" href="css/common.css">
 <?php if (LocaleManager::getInstance()->isRtl()):?>
 <link rel="stylesheet" type="text/css" href="css/common_rtl.css">
