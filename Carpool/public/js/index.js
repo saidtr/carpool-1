@@ -43,9 +43,9 @@ function formatTime(/* String */ hour) {
 function statusCodeToText(/* Integer */status) {
 	status = parseInt(status);
 	switch (status) {
-	case Constants.STATUS_LOOKING: return _('L');
-	case Constants.STATUS_OFFERED: return _('P');
-	case Constants.STATUS_SHARING: return _('S');
+	case Constants.STATUS_LOOKING: return '<i class="icon-thumbs-up" title="' + _('Would like to join a ride') + '"></i>';
+	case Constants.STATUS_OFFERED: return '<i class="icon-road" title="' + _('Offers a ride') + '"></i>';
+	case Constants.STATUS_SHARING: return '<i class="icon-adjust" title="' + _('Would like to share a ride') + '"></i>';
 	default: 
 		console.log('Illegal status code: ' + status);
 		return '';
@@ -111,7 +111,7 @@ function buildComment(/* JSON */ ride) {
 
 function buildRideRow(/* JSON */ ride) {
 	var elemStr = '';
-	elemStr += cell(statusCodeToText(ride.Status));
+	elemStr += '<td>' + statusCodeToText(ride.Status) + '</td>';
 	elemStr += '<td><p>' + htmlEnc(ride.Name) + '</p></td>';
 	elemStr += cell(ride.SrcCity + (ride.SrcLocation && ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
 	if (Constants.DISPLAY_DEST === '1') {
@@ -145,29 +145,14 @@ function buildSearchResults(/* JSON */ data) {
 	} else {
 		$('#resultsTable').show();
 		for (var res in data) {
-			var ride = data[res];
-			
-			
+			var ride = data[res];					
 			var elemStr = '<tr>';
 			elemStr += buildRideRow(ride);
-			/*
-			elemStr += cell(statusCodeToText(ride.Status));
-			elemStr += cell(ride.SrcCity + (ride.SrcLocation && ride.SrcLocation !== '' ? ", " + ride.SrcLocation : ""));
-			if (Constants.DISPLAY_DEST === '1') {
-				elemStr += cell(ride.DestCity + (ride.DestLocation && ride.DestLocation !== '' ? ", " + ride.DestLocation : ""));
-			}
-			elemStr += cell(formatTime(ride.TimeMorning));
-			elemStr += cell(formatTime(ride.TimeEvening));
-			elemStr += cell(ride.Name);
-			elemStr += cell(mailTo(htmlEnc(ride.Email)), false);
-			elemStr += cell(ride.Phone);
-			elemStr += cell(ride.Comment);
-			*/
 			elemStr += '</tr>';
 			
 			$('#resultsTable').append(elemStr);
 		}
-		$('#resultsTable tr:not([th]):odd').css('background', '#E6E6FA');
+		/*$('#resultsTable tr:not([th]):odd').css('background', '#E6E6FA');*/
 	}
 }
 
