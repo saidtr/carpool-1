@@ -141,6 +141,7 @@ class Utils {
 		    foreach ($params as $name => $val) {
 		        $res .= $name . '=' . $val . '&';
 		    }
+		    // Chop the last '&', which is not required
 		    $res = substr($res, 0, -1);
 		}
 		return $res;

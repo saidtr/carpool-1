@@ -25,7 +25,7 @@ class GlobalMessage {
 	 */
     public static function setGlobalMessage($msg, $type = self::INFO) {
         if (AuthHandler::isSessionExisting()) {
-            $_SESSION[SESSION_KEY_GLOBAL_MESSAGE] = array('msg' => $msg, 'type' => $type);
+            $_SESSION[AuthHandler::SESSION_KEY_GLOBAL_MESSAGE] = array('msg' => $msg, 'type' => $type);
             return true;
         }
         return false;
@@ -36,8 +36,8 @@ class GlobalMessage {
      * @return string The global message, or false if no such exists.
      */
     public static function getGlobalMessage() {
-        if (AuthHandler::isSessionExisting() && isset($_SESSION[SESSION_KEY_GLOBAL_MESSAGE])) {
-            return $_SESSION[SESSION_KEY_GLOBAL_MESSAGE];
+        if (AuthHandler::isSessionExisting() && isset($_SESSION[AuthHandler::SESSION_KEY_GLOBAL_MESSAGE])) {
+            return $_SESSION[AuthHandler::SESSION_KEY_GLOBAL_MESSAGE];
         }
         return false;
     }
@@ -47,7 +47,7 @@ class GlobalMessage {
      * Deletes the global message
      */
     public static function clear() {
-        unset ($_SESSION[SESSION_KEY_GLOBAL_MESSAGE]);
+        unset ($_SESSION[AuthHandler::SESSION_KEY_GLOBAL_MESSAGE]);
     }
     
     
