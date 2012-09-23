@@ -33,58 +33,62 @@ class AuthHandler {
     }
     
     public static function getRole() {
-        if (!isset($_SESSION[SESSION_KEY_AUTH_ROLE])) {
-            $_SESSION[SESSION_KEY_AUTH_ROLE] = ROLE_GUEST;
+        if (!isset($_SESSION[self::SESSION_KEY_AUTH_ROLE])) {
+            $_SESSION[self::SESSION_KEY_AUTH_ROLE] = ROLE_GUEST;
         }
-        return $_SESSION[SESSION_KEY_AUTH_ROLE];
+        return $_SESSION[self::SESSION_KEY_AUTH_ROLE];
     }
 
     public static function setRole($role) {
-        $_SESSION[SESSION_KEY_AUTH_ROLE] = $role;
+        $_SESSION[self::SESSION_KEY_AUTH_ROLE] = $role;
     }
 
     public static function putUserToken() {
-        $_SESSION[SESSION_KEY_RUNNING] = '1';
+        $_SESSION[self::SESSION_KEY_RUNNING] = '1';
     }
     
     public static function isSessionExisting() {
-        return isset($_SESSION) && isset($_SESSION[SESSION_KEY_RUNNING]);
+        return isset($_SESSION) && isset($_SESSION[self::SESSION_KEY_RUNNING]);
     }
     
     public static function isRideRegistered() {
-        if (!isset($_SESSION[SESSION_KEY_RIDE_REGISTERED])) {
+        if (!isset($_SESSION[self::SESSION_KEY_RIDE_REGISTERED])) {
             $contactId = self::getLoggedInUserId();
             if ($contactId && DatabaseHelper::getInstance()->countRidesForContactId($contactId) > 0) {
-                $_SESSION[SESSION_KEY_RIDE_REGISTERED] = true;    
+                $_SESSION[self::SESSION_KEY_RIDE_REGISTERED] = true;    
             } else {
-                $_SESSION[SESSION_KEY_RIDE_REGISTERED] = false;
+                $_SESSION[self::SESSION_KEY_RIDE_REGISTERED] = false;
             }
         }
-        return $_SESSION[SESSION_KEY_RIDE_REGISTERED];
+        return $_SESSION[self::SESSION_KEY_RIDE_REGISTERED];
     }
     
     public static function updateRegisteredRideStatus($newStatus) {
         debug(__METHOD__ . ': Set ride registered: ' . ($newStatus ? 'true' : 'false'));
-        $_SESSION[SESSION_KEY_RIDE_REGISTERED] = $newStatus;
+        $_SESSION[self::SESSION_KEY_RIDE_REGISTERED] = $newStatus;
     }
 
     public static function getLoggedInUser() {
-        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
-            return DatabaseHelper::getInstance()->getContactById($_SESSION[SESSION_KEY_AUTH_USER]);
+        if (isset($_SESSION[self::SESSION_KEY_AUTH_USER])) {
+            return DatabaseHelper::getInstance()->getContactById($_SESSION[self::SESSION_KEY_AUTH_USER]);
         }
         return false;
     }
 
     public static function getLoggedInUserId() {
-        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
-            return $_SESSION[SESSION_KEY_AUTH_USER];
+        if (isset($_SESSION[self::SESSION_KEY_AUTH_USER])) {
+            return $_SESSION[self::SESSION_KEY_AUTH_USER];
         }
         return false;
     }
     
+    public static function isLoggedIn() {
+    	return (isset($_SESSION[self::SESSION_KEY_AUTH_USER]));
+    }
+    
     public static function authenticate($authHelper, $params) {
         // In case we already have a logged-in user, we'll first log-out
-        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {           
+        if (isset($_SESSION[self::SESSION_KEY_AUTH_USER])) {           
             self::logout();
         }       
         
@@ -92,7 +96,7 @@ class AuthHandler {
         if ($res !== false) {
             $contactId = $res['Id'];
             $role = $res['Role'];            
-            $_SESSION[SESSION_KEY_AUTH_USER] = $contactId;
+            $_SESSION[self::SESSION_KEY_AUTH_USER] = $contactId;
             info('Contact ' . $contactId . ' successfully authenticated');
             self::setRole($role);
             
@@ -111,12 +115,12 @@ class AuthHandler {
      * @returns Contact data if authenticated, or false if no such contact exists
      */
     public static function authByContactId($contactId) {
-        if (isset($_SESSION[SESSION_KEY_AUTH_USER])) {
+        if (isset($_SESSION[self::SESSION_KEY_AUTH_USER])) {
             return DatabaseHelper::getInstance()->getContactById($contactId);
         } else {
             $contact = DatabaseHelper::getInstance()->getContactById($contactId);
             if ($contact) {
-                $_SESSION[SESSION_KEY_AUTH_USER] = $contactId;
+                $_SESSION[self::SESSION_KEY_AUTH_USER] = $contactId;
                 info('Contact ' . $contactId . ' automatically authenticated');
                 return $contact;
             } else {
