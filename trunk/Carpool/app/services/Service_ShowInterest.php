@@ -133,20 +133,22 @@ class Service_ShowInterest {
         if ($rideId === null) {
             $statuses = array(STATUS_LOOKING, STATUS_OFFERED, STATUS_SHARING);
             foreach ($statuses as $status) {
-                foreach(array_keys(RegionManager::getInstance()->getRegions()) as $region)
-                $potentialRides = self::findPotentialRides($status, $region);
-                $ridesToNotify = self::findRidesToNotify($status, $region);
-                
-                $results = self::searchForMatchingRides($potentialRides, $ridesToNotify);
-                     
-                foreach ($results as $contactId => $potentialResults) {
-                    self::notify($contactId, $potentialRides, $potentialResults);            
+                foreach(array_keys(RegionManager::getInstance()->getRegions()) as $region) {
+	                $potentialRides = self::findPotentialRides($status, $region);
+	                $ridesToNotify = self::findRidesToNotify($status, $region);
+	                
+	                $results = self::searchForMatchingRides($potentialRides, $ridesToNotify);
+	                     
+	                foreach ($results as $contactId => $potentialResults) {
+	                    self::notify($contactId, $potentialRides, $potentialResults);            
+	                }
                 }
             }
         } else {
             $newRide = array(0 => DatabaseHelper::getInstance()->getRideById($rideId));
             $newRideStatus = $newRide[0]['Status'];
-            $ridesToNotify = self::findRidesToNotify(self::getOppositeStatus($newRideStatus));
+            $region = $newRide[0]['Region'];
+            $ridesToNotify = self::findRidesToNotify(self::getOppositeStatus($newRideStatus), $region);
 
             $results = self::searchForMatchingRides($newRide, $ridesToNotify);
              

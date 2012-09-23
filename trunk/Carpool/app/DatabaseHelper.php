@@ -383,7 +383,7 @@ class DatabaseHelper {
      * @return mixed Array with the search results, or false in case of failures
      */
     function searchRides($params = null) {
-        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.ContactId, r.TimeUpdated, co.Name, co.Email, co.Phone ' .         		
+        $sql = 'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, r.DestCityId, r.DestLocation, r.SrcCityId, r.SrcLocation, r.ContactId, r.TimeUpdated, r.Region, co.Name, co.Email, co.Phone ' .         		
 				'FROM Ride r, Contacts co ' .         		
 				'WHERE co.Id = r.ContactId AND r.Active = ' . RIDE_ACTIVE; 
         if (!empty($params)) {
@@ -397,13 +397,13 @@ class DatabaseHelper {
                 $sql .= ' AND r.DestCityId = ' . $this->_db->quote($params['destCityId']);
             }
             if (isset($params['minTimeCreated'])) {
-            	$sql .= ' AND r.timeCreated >= ' . $this->_db->quote($params['minTimeCreated']);
+            	$sql .= ' AND r.TimeCreated >= ' . $this->_db->quote($params['minTimeCreated']);
             }
             if (isset ($params['notify'])) {
-                $sql .= ' AND r.notify = ' . $this->_db->quote($params['notify']);
+                $sql .= ' AND r.Notify = ' . $this->_db->quote($params['notify']);
             }
             if (isset ($params['region'])) {
-                $sql .= ' AND r.region = ' . $this->_db->quote($params['region']);
+                $sql .= ' AND r.Region = ' . $this->_db->quote($params['region']);
             }
         } 
         // Order - show newer first
@@ -499,7 +499,7 @@ class DatabaseHelper {
      */
     function getRideById($rideId) {
         $sql = 
-        	'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, ci1.Name AS DestCity, r.DestCityId, r.DestLocation, ci2.Name AS SrcCity, r.SrcCityId, r.SrcLocation, co.Name, co.Email, co.Phone ' . 
+        	'SELECT r.Id, r.Comment, r.Status, r.TimeEvening, r.TimeMorning, ci1.Name AS DestCity, r.DestCityId, r.DestLocation, ci2.Name AS SrcCity, r.SrcCityId, r.SrcLocation, r.Region, co.Name, co.Email, co.Phone ' . 
    			'FROM Ride r, Contacts co, Cities ci1, Cities ci2 ' . 
         	'WHERE co.Id = r.ContactId AND r.Id = :rideId AND r.DestCityId = ci1.ID AND r.SrcCityId = ci2.Id';        
         debug(__METHOD__ . "($rideId)");
