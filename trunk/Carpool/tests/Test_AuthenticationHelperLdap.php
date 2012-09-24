@@ -1,10 +1,9 @@
 <?php
 
 require_once "testenv.php";
-require_once "PHPUnit.php";
 require_once "Mock_Ldap.php";
 
-class Test_AuthenticationHelperLdap extends PHPUnit_TestCase {
+class Test_AuthenticationHelperLdap extends PHPUnit_Framework_TestCase {
 
     /**
      * @var AuthenticationHelperLdap
