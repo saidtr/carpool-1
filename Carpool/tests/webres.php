@@ -8,9 +8,9 @@
 <?php
 
 require_once 'testenv.php';
-require_once 'PHPUnit.php';
+require_once 'PHPUnit/Autoload.php';
 
-$unit = new PHPUnit();
+//$unit = new PHPUnit();
 $tests = array(
 	'Test_Service_ShowInterest' => true, 
 	'Test_AuthenticationHelperLdap' => true,
@@ -22,10 +22,14 @@ $tests = array(
 foreach ($tests as $test => $shouldRunTest) {
     if (!$shouldRunTest) continue;
     require "$test.php";
-    $suite  = new PHPUnit_TestSuite($test);
-    $result = $unit->run($suite);
+    
+    $suite  = new PHPUnit_Framework_TestSuite($test);
+    //$result = $unit->run($suite);
+    
     echo "<h1>$test</h1>";
-    echo $result->toHtml();
+    echo "<pre>";
+    PHPUnit_TextUI_TestRunner::run($suite);
+    echo "</pre>";
     echo "<hr />";
 }
 

@@ -1,9 +1,8 @@
 <?php
 
 require_once "testenv.php";
-require_once "PHPUnit.php";
 
-class Test_DatabaseHelper extends PHPUnit_TestCase {
+class Test_DatabaseHelper extends PHPUnit_Framework_TestCase {
     
     private $dbh;
     

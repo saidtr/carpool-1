@@ -1,10 +1,9 @@
 <?php
 
 require_once "testenv.php";
-require_once "PHPUnit.php";
 
 
-class Test_SimpleAcl extends PHPUnit_TestCase {
+class Test_SimpleAcl extends PHPUnit_Framework_TestCase {
 
     function setUp() {
         

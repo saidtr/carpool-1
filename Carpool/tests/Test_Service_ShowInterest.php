@@ -1,9 +1,8 @@
 <?php
 
 require_once "testenv.php";
-require_once "PHPUnit.php";
 
-class Test_Service_ShowInterest extends PHPUnit_TestCase {
+class Test_Service_ShowInterest extends PHPUnit_Framework_TestCase {
 
     function assertRidesContainIds($rides, $ids) {      
         // First test that the number actually match
