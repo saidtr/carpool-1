@@ -32,7 +32,7 @@ if (isset($wantTo) && !empty($wantTo)) {
 $server = DatabaseHelper::getInstance();
 $rides = $server->searchRides($params);
 
-if ($rides) {
+if ($rides !== false) {
 	$res = array('status' => 'ok', 'results' => $rides);
 } else {
 	$res = array('status' => 'err');
