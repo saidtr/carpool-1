@@ -103,7 +103,7 @@ function buildComment(/* JSON */ ride) {
 	
 	if (ride.TimeUpdated) {
 		d = new Date(phpTimeToJsTime(ride.TimeUpdated));
-		elemStr += '<p><b>' + _('Last Updated') + ':</b> ' + d.toLocaleDateString() + '</p>';
+		elemStr += '<p><b>' + _('Last updated') + ':</b> ' + d.toLocaleDateString() + '</p>';
 	}
 	
 	return elemStr;
@@ -120,7 +120,7 @@ function buildRideRow(/* JSON */ ride) {
 	elemStr += '<td>';
 	if (ride.Email) {
 		elemStr += '<p>';
-		elemStr += '<span class="contactDetailHeader">' + _('Mail') + ':</span><span class="contactDetail">' + mailTo(htmlEnc(ride.Email)) + '</span>';
+		elemStr += '<span class="contactDetailHeader">' + _('Email') + ':</span><span class="contactDetail">' + mailTo(htmlEnc(ride.Email)) + '</span>';
 		elemStr += '</p>';
 	}
 	if (ride.Phone) {

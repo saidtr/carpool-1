@@ -2,10 +2,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Carpool\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-21 22:18+0200\n"
+"POT-Creation-Date: 2012-09-29 18:52+0200\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: Itay Pk <itaypk@gmail.com>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,36 +17,27 @@ msgstr ""
 "X-Poedit-SearchPath-0: public\n"
 "X-Poedit-SearchPath-1: app\n"
 
-#: public/auth.php:20
-#: public/auth.php:28
-#: public/auth.php:32
-msgid "Failed to authenticate"
-msgstr "האימות נכשל"
+#: public/logout.php:12
+msgid "Goodbye!"
+msgstr "להתראות!"
 
-#: public/auth.php:20
-msgid "Please fill in all the required details."
-msgstr "אנא מלאו את כל הפרטים הדרושים."
+#: public/optout.php:17
+msgid "Contact successfully deleted."
+msgstr "המנוי נמחק בהצלחה."
 
-#: public/auth.php:28
-msgid "Incorrect credentials."
-msgstr "פרטי ההזדהות שגויים."
-
-#: public/auth.php:32
 #: public/optout.php:19
+#: public/optout.php:22
+msgid "Deletion failed"
+msgstr "המחיקה נכשלה."
+
+#: public/optout.php:19
+#: public/auth.php:32
 msgid "Internal error."
 msgstr "שגיאה פנימית."
 
-#: public/auth.php:51
-#: public/auth.php:56
-msgid "Authentication"
-msgstr "הזדהות"
-
-#: public/auth.php:63
-#: public/feedback.php:88
-#: public/join.php:202
-#: public/cms/translations.php:144
-msgid "Submit"
-msgstr "שליחה"
+#: public/optout.php:22
+msgid "Authentication failed."
+msgstr "האימות נכשל."
 
 #: public/feedback.php:7
 msgid "Report a bug"
@@ -90,15 +82,21 @@ msgid "Your feedback"
 msgstr "תוכן"
 
 #: public/feedback.php:83
-#: public/index.php:115
-#: public/join.php:162
+#: public/join.php:164
 #: public/thanks.php:33
 msgid "Email"
-msgstr "דואר אלקטרוני"
+msgstr "דוא\"ל"
 
 #: public/feedback.php:85
 msgid "Optional, if you want a response."
 msgstr "אפשרי, אם תרצו מענה."
+
+#: public/feedback.php:88
+#: public/join.php:204
+#: public/auth.php:63
+#: public/cms/translations.php:144
+msgid "Submit"
+msgstr "שליחה"
 
 #: public/help.php:30
 msgid "Q"
@@ -111,81 +109,6 @@ msgstr "ת"
 #: public/help.php:36
 msgid "Sorry, no content found."
 msgstr "מצטערים, לא נמצא תוכן מתאים."
-
-#: public/index.php:30
-msgid "The colleagues, listed below, may be able to provide a ride both to and from the listed locations"
-msgstr "העמיתים, המפורטים להלן, עשויים לספק טרמפ הלוך וחזור מהמקומות המצוינים"
-
-#: public/index.php:38
-msgid "Show me"
-msgstr "הצג לי"
-
-#: public/index.php:40
-msgid "Everything"
-msgstr "הכל"
-
-#: public/index.php:41
-msgid "Available rides"
-msgstr "מציעים נסיעה"
-
-#: public/index.php:42
-msgid "Looking for a ride"
-msgstr "מחפשים נסיעה"
-
-#: public/index.php:43
-msgid "Sharing a ride"
-msgstr "חולקים נסיעה"
-
-#: public/index.php:47
-#: public/index.php:68
-#: public/index.php:108
-msgid "From"
-msgstr "מהיכן"
-
-#: public/index.php:49
-#: public/index.php:59
-msgid "Everywhere"
-msgstr "כל מקום"
-
-#: public/index.php:57
-#: public/index.php:73
-#: public/index.php:110
-#: public/join.php:119
-msgid "To"
-msgstr "אל"
-
-#: public/index.php:90
-#: public/join.php:95
-msgid "Region"
-msgstr "איזור"
-
-#: public/index.php:107
-msgid "I'm"
-msgstr "אני"
-
-#: public/index.php:112
-msgid "In"
-msgstr "הלוך"
-
-#: public/index.php:113
-msgid "Out"
-msgstr "חזור"
-
-#: public/index.php:114
-#: public/join.php:158
-#: public/thanks.php:31
-msgid "Name"
-msgstr "שם"
-
-#: public/index.php:116
-#: public/join.php:187
-#: public/thanks.php:36
-msgid "Phone"
-msgstr "טלפון"
-
-#: public/index.php:117
-msgid "Comment"
-msgstr "הערה"
 
 #: public/join.php:76
 msgid "Hello again, "
@@ -211,93 +134,99 @@ msgstr "אני רוצה לחלוק נסיעה"
 msgid "Ride details"
 msgstr "פרטי הנסיעה"
 
-#: public/join.php:106
+#: public/join.php:96
+#: public/index.php:92
+msgid "Region"
+msgstr "איזור"
+
+#: public/join.php:108
 msgid "Coming from city"
 msgstr "מגיע מהעיר"
 
-#: public/join.php:110
-#: public/join.php:123
+#: public/join.php:112
+#: public/join.php:125
 msgid "Location"
 msgstr "מיקום"
 
-#: public/join.php:132
+#: public/join.php:121
+#: public/index.php:58
+#: public/index.php:74
+#: public/index.php:114
+msgid "To"
+msgstr "אל"
+
+#: public/join.php:134
 msgid "Coming"
 msgstr "הגעה"
 
-#: public/join.php:134
-#: public/join.php:144
+#: public/join.php:136
+#: public/join.php:146
 msgid "Not always the same time"
 msgstr "לא תמיד באותה השעה"
 
-#: public/join.php:138
-#: public/join.php:148
+#: public/join.php:140
+#: public/join.php:150
 msgid "Irrelevant"
 msgstr "לא רלוונטי"
 
-#: public/join.php:142
+#: public/join.php:144
 msgid "Leaving"
 msgstr "עזיבה"
 
-#: public/join.php:170
+#: public/join.php:160
+#: public/thanks.php:31
+#: public/index.php:111
+msgid "Name"
+msgstr "שם"
+
+#: public/join.php:172
 msgid "Authentication policy does not allow you to change email account."
 msgstr "מדיניות השימוש אינה מאפשרת לשנות את כתובת הדוא\"ל."
 
-#: public/join.php:172
+#: public/join.php:174
 msgid "Please use your company email, without the domain suffix."
 msgstr "אנא השתמשו בכתובת הדוא\"ל של החברה, ללא הסיומת."
 
-#: public/join.php:178
+#: public/join.php:180
 msgid "Password"
 msgstr "סיסמה"
 
-#: public/join.php:182
+#: public/join.php:184
 msgid "Confirm password"
 msgstr "וידוא סיסמה"
 
-#: public/join.php:191
+#: public/join.php:189
+#: public/thanks.php:36
+msgid "Phone"
+msgstr "טלפון"
+
+#: public/join.php:193
 msgid "Comments"
 msgstr "הערות"
 
-#: public/join.php:195
+#: public/join.php:197
 msgid "Notify me by mail about new rides that may be relevant to me"
 msgstr "ידעו אותי על נסיעות חדשות שעשויות להיות רלוונטיות עבורי"
 
-#: public/join.php:203
+#: public/join.php:205
 msgid "Update"
 msgstr "עדכון"
 
-#: public/join.php:203
+#: public/join.php:205
 msgid "Go!"
 msgstr "שליחה"
 
-#: public/join.php:205
+#: public/join.php:207
 msgid "Delete"
 msgstr "מחיקה"
 
-#: public/join.php:206
+#: public/join.php:208
 msgid "Deactivate"
 msgstr "הקפאה"
 
-#: public/join.php:206
+#: public/join.php:208
 msgid "Activate"
 msgstr "הפעלה"
-
-#: public/logout.php:12
-msgid "Goodbye!"
-msgstr "להתראות!"
-
-#: public/optout.php:17
-msgid "Contact successfully deleted."
-msgstr "המנוי נמחק בהצלחה."
-
-#: public/optout.php:19
-#: public/optout.php:22
-msgid "Deletion failed"
-msgstr "המחיקה נכשלה."
-
-#: public/optout.php:22
-msgid "Authentication failed."
-msgstr "האימות נכשל."
 
 #: public/thanks.php:27
 msgid "Thanks for joining"
@@ -336,6 +265,68 @@ msgstr "אנא שמרו את הקישור הזה - זוהי הדרך היחיד�
 msgid "You can always use \"<a href=\"%s\">My Profile</a>\" page to update or delete your account any time in the future."
 msgstr "תוכלו להיעזר בדף \"<a href=\"%s\">החשבון שלי</a>\" כדי לערוך או למחוק את חשבונכם בכל רגע."
 
+#: public/index.php:31
+msgid "The colleagues, listed below, may be able to provide a ride both to and from the listed locations"
+msgstr "העמיתים, המפורטים להלן, עשויים לספק טרמפ הלוך וחזור מהמקומות המצוינים"
+
+#: public/index.php:39
+msgid "Show me"
+msgstr "הצג לי"
+
+#: public/index.php:41
+msgid "Everything"
+msgstr "הכל"
+
+#: public/index.php:42
+msgid "Available rides"
+msgstr "מציעים נסיעה"
+
+#: public/index.php:43
+msgid "Looking for a ride"
+msgstr "מחפשים נסיעה"
+
+#: public/index.php:44
+msgid "Sharing a ride"
+msgstr "חולקים נסיעה"
+
+#: public/index.php:48
+#: public/index.php:69
+#: public/index.php:112
+msgid "From"
+msgstr "מהיכן"
+
+#: public/index.php:50
+#: public/index.php:60
+msgid "Everywhere"
+msgstr "כל מקום"
+
+#: public/index.php:116
+msgid "Contact Details"
+msgstr "פרטי התקשרות"
+
+#: public/index.php:117
+msgid "Comment"
+msgstr "הערה"
+
+#: public/auth.php:20
+#: public/auth.php:28
+#: public/auth.php:32
+msgid "Failed to authenticate"
+msgstr "האימות נכשל"
+
+#: public/auth.php:20
+msgid "Please fill in all the required details."
+msgstr "אנא מלאו את כל הפרטים הדרושים."
+
+#: public/auth.php:28
+msgid "Incorrect credentials."
+msgstr "פרטי ההזדהות שגויים."
+
+#: public/auth.php:51
+#: public/auth.php:56
+msgid "Authentication"
+msgstr "הזדהות"
+
 #: public/cms/translations.php:61
 msgid "Carpool CMS"
 msgstr "מערכת ניהול תוכן"
@@ -369,6 +360,23 @@ msgstr "הנסיעה הוקפאה. מעתה והלאה, הנסיעה לא תופ
 msgid "Ride activated. You are back in business!"
 msgstr "הנסיעה חזרה להיות פעילה. חזרת לעניינים!"
 
+#: public/xhr/DeleteRide.php:22
+msgid "Ride deleted. Happy now?"
+msgstr "הנסיעה נמחקה. מרוצה?"
+
+#: public/xhr/GetCities.php:21
+msgid "Could not fetch cities list"
+msgstr "נכשל בעת משיכת רשימת הערים"
+
+#: public/xhr/GetCities.php:26
+#: public/xhr/GetRegionConfiguration.php:31
+msgid "Internal Error"
+msgstr "שגיאה פנימית"
+
+#: public/xhr/GetRegionConfiguration.php:27
+msgid "Region not found"
+msgstr "האיזור לא נמצא"
+
 #: public/xhr/AddRideAll.php:19
 msgid "The name is mandatory"
 msgstr "השם הוא הכרחי"
@@ -397,30 +405,17 @@ msgstr "אנא מלאו סיסמה ווידוא סיסמה"
 msgid "Password and confirmation field does not match"
 msgstr "הסיסמה ווידוא הסיסמה אינם תואמים"
 
-#: public/xhr/AddRideAll.php:144
+#: public/xhr/AddRideAll.php:83
+msgid "Invalid region"
+msgstr "איזור לא חוקי"
+
+#: public/xhr/AddRideAll.php:154
 msgid "This email address is already in use"
 msgstr "כתובת הדוא\"ל הזו נמצאת בשימוש"
 
-#: public/xhr/AddRideAll.php:164
+#: public/xhr/AddRideAll.php:174
 msgid "Ride successfully updated."
 msgstr "פרטי הנסיעה עודכנו בהצלחה"
-
-#: public/xhr/DeleteRide.php:22
-msgid "Ride deleted. Happy now?"
-msgstr "הנסיעה נמחקה. מרוצה?"
-
-#: public/xhr/GetCities.php:21
-msgid "Could not fetch cities list"
-msgstr "נכשל בעת משיכת רשימת הערים"
-
-#: public/xhr/GetCities.php:26
-#: public/xhr/GetRegionConfiguration.php:31
-msgid "Internal Error"
-msgstr "שגיאה פנימית"
-
-#: public/xhr/GetRegionConfiguration.php:27
-msgid "Region not found"
-msgstr "האיזור לא נמצא"
 
 #: public/xhr/ShowInterest.php:19
 msgid "No can do"
@@ -430,21 +425,25 @@ msgstr "בלתי אפשרי"
 msgid "Email is mandatory here"
 msgstr "שדה הדוא\"ל הוא הכרחי"
 
-#: app/Bootstrap.php:203
+#: app/DatabaseHelper.php:423
+msgid "N/A"
+msgstr "לא רלוונטי"
+
+#: app/Utils.php:42
+msgid "Differs"
+msgstr "זה משתנה"
+
+#: app/Bootstrap.php:204
 msgid "Please login to access this page"
 msgstr "אנא הזדהו על מנת שתוכלו לגשת לדף"
 
-#: app/Bootstrap.php:208
+#: app/Bootstrap.php:209
 msgid "Access Denied"
 msgstr "הכניסה אסורה"
 
-#: app/Bootstrap.php:212
+#: app/Bootstrap.php:213
 msgid "Sorry, you are not allowed to use this application."
 msgstr "מצטערים, אינכם רשאים להשתמש ביישום."
-
-#: app/DatabaseHelper.php:421
-msgid "N/A"
-msgstr "לא רלוונטי"
 
 #: app/StringDummies.php:12
 msgid "Acre"
@@ -763,110 +762,142 @@ msgid "Hebrew"
 msgstr "עברית"
 
 #: app/StringDummies.php:95
-msgid "Israel"
-msgstr "ישראל"
-
-#: app/StringDummies.php:98
 msgid "Join"
 msgstr "הצטרפות"
 
-#: app/StringDummies.php:99
+#: app/StringDummies.php:96
 msgid "Search"
 msgstr "חיפוש"
 
-#: app/StringDummies.php:100
+#: app/StringDummies.php:97
 msgid "Help"
 msgstr "עזרה"
 
-#: app/StringDummies.php:101
+#: app/StringDummies.php:98
 msgid "Feedback"
 msgstr "פידבק"
 
-#: app/StringDummies.php:102
+#: app/StringDummies.php:99
 msgid "Logout"
 msgstr "יציאה מהמערכת"
 
-#: app/StringDummies.php:103
+#: app/StringDummies.php:100
 msgid "My Profile"
 msgstr "הפרופיל שלי"
 
-#: app/StringDummies.php:104
+#: app/StringDummies.php:101
 msgid "Login"
 msgstr "התחברות"
 
-#: app/StringDummies.php:107
+#: app/StringDummies.php:104
 msgid "Loading..."
 msgstr "טוען..."
 
-#: app/StringDummies.php:108
+#: app/StringDummies.php:105
 msgid "Sorry, something went wrong. Request could not be completed."
 msgstr "משהו השתבש. לא ניתן להשלים את הבקשה."
 
-#: app/StringDummies.php:109
+#: app/StringDummies.php:106
 msgid "Are you sure you want to completely, fully, eternally delete your ride?"
 msgstr "חשבונכם ימחק לעולמי עד בלי שום אפשרות לשחזור. בטוחים?"
 
-#: app/StringDummies.php:110
+#: app/StringDummies.php:107
 msgid "An error occured."
 msgstr "התרחשה שגיאה."
 
-#: app/StringDummies.php:111
+#: app/StringDummies.php:108
 msgid "Could not add ride"
 msgstr "לא ניתן להוסיף את הנסיעה"
 
-#: app/StringDummies.php:112
+#: app/StringDummies.php:109
 msgid "Could not update ride"
 msgstr "לא ניתן לעדכן את הנסיעה"
 
-#: app/StringDummies.php:113
+#: app/StringDummies.php:110
 msgid "Sorry, something went wrong."
 msgstr "משהו השתבש. לא ניתן להשלים את הבקשה."
 
-#: app/StringDummies.php:114
+#: app/StringDummies.php:111
 msgid "Sorry, no results found."
 msgstr "מצטערים, לא נמצאו תוצאות מתאימות."
 
-#: app/StringDummies.php:115
+#: app/StringDummies.php:112
 msgid "Congrats! You broke everything!"
 msgstr "עכשיו הרסתם הכל. תתביישו."
 
-#: app/StringDummies.php:116
+#: app/StringDummies.php:113
 msgid "Thanks for your interest! You will notified about new rides."
 msgstr "תודה שהראיתם עניין! כאשר נסיעות רלוונטיות יהיו זמינות, תישלח אלייך הודעה."
 
-#: app/StringDummies.php:117
+#: app/StringDummies.php:114
 msgid "Looking"
 msgstr "מחפש"
 
-#: app/StringDummies.php:118
+#: app/StringDummies.php:115
 msgid "Providing"
 msgstr "מציע"
 
-#: app/StringDummies.php:119
+#: app/StringDummies.php:116
 msgid "Working..."
 msgstr "עובד..."
 
-#: app/StringDummies.php:120
-msgid "Sharing"
-msgstr "חולק"
+#: app/StringDummies.php:117
+msgid "Would like to join a ride"
+msgstr "מעוניינים להצטרף לנסיעה"
 
-#: app/Utils.php:42
-msgid "Differs"
-msgstr "זה משתנה"
+#: app/StringDummies.php:118
+msgid "Offers a ride"
+msgstr "מציעים נסיעה"
+
+#: app/StringDummies.php:119
+msgid "Would like to share a ride"
+msgstr "מעוניינים לחלוק נסיעה"
+
+#: app/StringDummies.php:120
+msgid "Last updated"
+msgstr "עדכון אחרון"
+
+#: app/StringDummies.php:121
+msgid "Arrival ride is not relevant"
+msgstr "הנסיעה הלוך אינה רלוונטית"
+
+#: app/StringDummies.php:122
+msgid "Usually leaves home at"
+msgstr "הנסיעה הלוך יוצאת בסביבות"
+
+#: app/StringDummies.php:123
+msgid "Home ride is not relevant"
+msgstr "הנסיעה חזור אינה רלוונטית"
+
+#: app/StringDummies.php:124
+msgid "Usually leaves work at"
+msgstr "הנסיעה חזור יוצאת בסביבות"
 
 #: app/layouts/mail.php:29
 #, php-format
 msgid "This is an automatic mail from %s. Click <a href=\"%s\">here</a> if you do not want to get any more notifications from the site"
 msgstr "זהו דואר אוטומטי שנשלח מ%s. לחצו <a href=\"%s\"<כאן</a< על מנת שלא לקבל דיוור נוסף מהאתר"
 
-#: app/views/authFormLdap.php:1
-#, php-format
-msgid "Please use your <b>%s</b> credentials to login."
-msgstr "אנא השתמשו בפרטי ההזדהות של <b>%s</b> על מנת להיכנס."
+#: app/views/showInterestMail.php:24
+msgid "New Potential Rides From"
+msgstr "נסיעות פוטנציאליות חדשות מ"
 
-#: app/views/authFormLdap.php:3
-msgid "User"
-msgstr "משתמש"
+#: app/views/showInterestMail.php:25
+#, php-format
+msgid "%d new potential rides, matching the source and destination towns you specified, were found for you:"
+msgstr "נמצאו עבורך %d נסיעות חדשות, התואמות את המקור והיעד שציינת:"
+
+#: app/views/showInterestMail.php:30
+msgid "In"
+msgstr "הלוך"
+
+#: app/views/showInterestMail.php:31
+msgid "Out"
+msgstr "חזור"
+
+#: app/views/showInterestMail.php:54
+msgid "You got this mail since you asked to be notified about new potential rides. If you do not want to receive those mails any more, please go to \"My Profile\" page and change your preferences."
+msgstr "קיבלת דואר זה מכיוון שביקשת לקבל התראות עבור נסיעות חדשות המתאימות עבורך. כדי להפסיק לקבל התראות אלו, ניתן לשנות את העדפותיך בדף /\"הפרופיל שלי/\"."
 
 #: app/views/registrationMail.php:6
 #, php-format
@@ -885,19 +916,6 @@ msgstr "כל עוד לא תבקשו בפירוש, לעולם לא תקבלו ד�
 msgid "Thanks"
 msgstr "תודה"
 
-#: app/views/showInterestMail.php:24
-msgid "New Potential Rides From"
-msgstr "נסיעות פוטנציאליות חדשות מ"
-
-#: app/views/showInterestMail.php:25
-#, php-format
-msgid "%d new potential rides, matching the source and destination towns you specified, were found for you:"
-msgstr "נמצאו עבורך %d נסיעות חדשות, התואמות את המקור והיעד שציינת:"
-
-#: app/views/showInterestMail.php:54
-msgid "You got this mail since you asked to be notified about new potential rides. If you do not want to receive those mails any more, please go to \"My Profile\" page and change your preferences."
-msgstr "קיבלת דואר זה מכיוון שביקשת לקבל התראות עבור נסיעות חדשות המתאימות עבורך. כדי להפסיק לקבל התראות אלו, ניתן לשנות את העדפותיך בדף /\"הפרופיל שלי/\"."
-
 #: app/views/View_Header.php:23
 msgid "Close"
 msgstr "סגירה"
@@ -911,42 +929,74 @@ msgstr " הצטרפת בהצלחה."
 msgid "You can always update or delete your account by browsing to %s"
 msgstr "תוכלו לערוך או למחוק את חשבונכם בכל רגע באמצעות גלישה אל %s"
 
+#: app/views/authFormLdap.php:1
+#, php-format
+msgid "Please use your <b>%s</b> credentials to login."
+msgstr "אנא השתמשו בפרטי ההזדהות של <b>%s</b> על מנת להיכנס."
+
+#: app/views/authFormLdap.php:3
+msgid "User"
+msgstr "משתמש"
+
+#~ msgid "I'm"
+#~ msgstr "אני"
+
+#~ msgid "Israel"
+#~ msgstr "ישראל"
+
+#~ msgid "Sharing"
+#~ msgstr "חולק"
+
 #~ msgid "Okay, just a quick question."
 #~ msgstr "אני רק שאלה."
+
 #~ msgid "People looking for a ride"
 #~ msgstr "מחפשים נסיעה"
+
 #~ msgid "Thanks for showing interest!"
 #~ msgstr "תודה שהראית עניין!"
+
 #~ msgid "%d new rides were found for you:"
 #~ msgstr "%d נסיעות חדשות נמצאו עבורך:"
+
 #~ msgid "It differs"
 #~ msgstr "זה משתנה"
+
 #~ msgid "Question"
 #~ msgstr "שאלה"
+
 #~ msgid "Notify me about new rides"
 #~ msgstr "הודיעו לי על נסיעות חדשות"
+
 #~ msgid "What's this for?"
 #~ msgstr "מה זה?"
+
 #~ msgid ""
 #~ "This tries to serve as a match-making system for people who wants to "
 #~ "share rides together."
 #~ msgstr "מטרת היישום היא לשמש כמערכת התאמה בין אנשים המעוניינים לנסוע יחד."
+
 #~ msgid "Why should I join?"
 #~ msgstr "מדוע כדאי לי להצטרף?"
+
 #~ msgid ""
 #~ "Because it's greener. Because it might save you some money. Because it's "
 #~ "much more fun."
 #~ msgstr "כי זה ירוק יותר. כי זה עשוי לחסוך לך כסף. כי זה הרבה יותר כיף."
+
 #~ msgid "How can I delete/modify my account?"
 #~ msgstr "איך אפשר לערוך/לשנות את החשבון שלי?"
+
 #~ msgid ""
 #~ "Use the authentication link to authenticate yourself. Then, under \"My "
 #~ "Profile\", you can edit your settings, delete or de-activate your account."
 #~ msgstr ""
 #~ "השתמשו בקישור ההזדהות כי לזהות את עצמכם. לאחר מכן תוכלו לעדכן או למחוק את "
 #~ "פרטיכם בדף \"הפרופיל שלי\"."
+
 #~ msgid "What is the authentication link? Where can I find it?"
 #~ msgstr "מה זה \"קישור ההזדהות\"? איפה מוצאים אותו?"
+
 #~ msgid ""
 #~ "The authentication link used to identify you, instead of username and "
 #~ "password. You can find it in the mail you received right after the "
@@ -955,24 +1005,31 @@ msgstr "תוכלו לערוך או למחוק את חשבונכם בכל רגע 
 #~ "קישור ההזדהות משמש עבור זיהוי משתמשים, כתחליף למנגנון של שם משתמש וססמה. "
 #~ "ניתן למצוא אותו בדואר שנשלח אליכם עם ההרשמה. כדי להשתמש בו, פשוט הדביקו "
 #~ "אותו בחלון הכתובות של הדפדפן."
+
 #~ msgid "I lost the authentication link."
 #~ msgstr "איבדתי את קישור ההזדהות."
+
 #~ msgid "Use the \"Feedback\" page to ask for recovery."
 #~ msgstr "השתמשו בדף הפידבק על מנת לבקש אחזור."
+
 #~ msgid "Provide a new ride."
 #~ msgstr "העלו נסיעה חדשה."
+
 #~ msgid "Show me rides from"
 #~ msgstr "הצגת נסיעות מ..."
+
 #~ msgid ""
 #~ "I want to help, but I don't feel comfortable putting my personal details "
 #~ "here."
 #~ msgstr "אשמח להצטרף, אבל אני לא רוצה לשים פה את פרטיי האישיים."
+
 #~ msgid ""
 #~ "This is a company-wide site. No outer people can reach this page. If you "
 #~ "still insist, you can just use the search page without registering."
 #~ msgstr "האתר זמין עבור עובדי החברה בלבד, ואין אליו גישה מן העולם החיצון."
+
 #~ msgid "Please specify at least one way to contact"
 #~ msgstr "אנא פרטו לפחות דרך התקשרות אחת"
+
 #~ msgid "A string to be translated would go here"
 #~ msgstr "מחרוזת לתרגום"
-

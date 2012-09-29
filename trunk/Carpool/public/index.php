@@ -108,13 +108,13 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 		<table id="resultsTable" class="table table-striped">
 			<tr>
 				<th id="resultsWhat"></th>
-				<th id="resultsContact">Name</th>					
-				<th id="resultsFrom">From</th>
+				<th id="resultsContact"><?php echo _('Name'); ?></th>					
+				<th id="resultsFrom"><?php echo _('From'); ?></th>
 				<?php if ($displayDest): ?>
-				<th id="resultsTo">To</th>
+				<th id="resultsTo"><?php echo _('To'); ?></th>
 				<?php endif; ?>
-				<th id="resultsCommunication">Contact Details</th>
-				<th id="resultsComment">Comment</th>
+				<th id="resultsCommunication"><?php echo _('Contact Details'); ?></th>
+				<th id="resultsComment"><?php echo _('Comment'); ?></th>
 			</tr>
 		</table>
 		<p id="resultsMessage"></p>
@@ -130,14 +130,22 @@ View_Php_To_Js::putTranslations(
     array(
     	'Sorry, no results found.', 
     	'Sorry, something went wrong. Request could not be completed.',
-        'N/A',
-        'Differs',
         'Show interest',
         'Loading...',
         'Could not add ride',
         'Thanks for showing interest! You will notified about new rides.',
         'Providing',
-        'Looking'
+        'Looking',
+        'Email',
+        'Phone',
+        'Would like to join a ride',
+        'Offers a ride',
+        'Would like to share a ride',
+        'Arrival ride is not relevant',
+        'Usually leaves home at',
+        'Home ride is not relevant',
+        'Usually leaves work at',
+        'Last updated'
     )
 );
 echo View_Php_To_Js::render();
