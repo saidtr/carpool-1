@@ -4,8 +4,14 @@ class View_Header {
 
 	public static function render($header, $subHeader = null) {
 		$html = "<div id='header'>\n";
+		$needSpacing = ($header != null && $subHeader != null);
+		
 		if ($header != null) {
-			$html .= "<h1>$header</h1>\n";
+			$html .= "<h1";
+			if ($needSpacing === true) {
+				$html .= " class='withBottomMargin'";
+			}
+			$html .= ">$header</h1>\n";
 		}
 		if ($subHeader !== null) {
 			$html .= "<h3>$subHeader</h3>\n";
