@@ -183,6 +183,34 @@ class DatabaseHelper {
         }
     }
     
+    function getAllAvailableCities($region) {
+    	debug(__METHOD__ . "($region)");
+    	try {
+    		$rs = $this->_db->query('
+            	SELECT DISTINCT DISTINCT c.Id, c.Name AS Name
+            	FROM Ride r, Cities c
+            	WHERE (r.DestCityId = c.Id OR r.SrcCityId = c.Id) 
+            	AND c.Region = ' . $this->_db->quote($region) . '
+            	AND r.Region = ' . $this->_db->quote($region) . '
+            	ORDER BY Name');
+    			
+    		if ($rs) {
+    			$res = $rs->fetchAll(PDO::FETCH_ASSOC);
+    			// Apply translations
+    			foreach ($res as &$record) {
+    				$record['Name'] = _($record['Name']);
+    			}
+    		} else {
+    			// Return empty array
+    			$res = array();
+    		}
+    		return $res;
+    	} catch (PDOException $e) {
+    		logException($e);
+    		return false;
+    	}
+    }
+    
     function addContact($name, $phone, $email, $role, $identifier = null) {
     	debug(__METHOD__ . "($name, $phone, $email, $role)");
     	
