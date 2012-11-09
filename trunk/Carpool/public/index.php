@@ -7,11 +7,16 @@ $db = DatabaseHelper::getInstance();
 
 AuthHandler::putUserToken();
 
-$currentRegion = RegionManager::getInstance()->getCurrentRegionId();
-$availableDestCities = $db->getAvailableCities('Dest', $currentRegion);
-$availableSrcCities = $db->getAvailableCities('Src', $currentRegion);
-
 $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
+
+$currentRegion = RegionManager::getInstance()->getCurrentRegionId();
+if ($displayDest) {
+	$availableCities = $db->getAllAvailableCities($currentRegion);
+} else {
+	$availableCities = $db->getAvailableCities('Dest', $currentRegion);
+}
+$availableDestCities = &$availableCities;
+$availableSrcCities = &$availableCities;
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -20,6 +25,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 <link rel="stylesheet" type="text/css" href="css/reset-fonts.css">
 <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap_custom.min.css">
 <link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" type="text/css" href="css/index.css">
 <?php if (LocaleManager::getInstance()->isRtl()):?>
 <link rel="stylesheet" type="text/css" href="css/common_rtl.css">
 <?php endif;?>
@@ -28,7 +34,7 @@ $displayDest = (getConfiguration('mode.single.dest', 0) == 0);
 <body>
 <div id="bd">
 <?php echo View_Navbar::buildNavbar()?>
-<?php echo View_Header::render(null, _('The colleagues, listed below, may be able to provide a ride both to and from the listed locations'))?>
+<?php echo View_Header::render(_('Welcome To The Carpool'), _('The colleagues, listed below, may be able to provide a ride both to and from the listed locations'))?>
 <div id="content">
 	<div id="searchFormHolder">
 		<form id="searchForm" action="xhr/SearchRides.php">
