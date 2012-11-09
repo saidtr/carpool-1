@@ -76,34 +76,37 @@ function updateShowInterestText() {
 function buildComment(/* JSON */ ride) {
 	var elemStr = '';
 	
-	var rideTimesStr = false;
+	var rideTimesStr = '';
 	if (ride.TimeMorning && ride.TimeMorning != Constants.TIME_DIFFER) {
-		rideTimesStr = true;
 		if (ride.TimeMorning == Constants.TIME_IRRELAVANT) {
-			elemStr += _('Arrival ride is not relevant');
+			rideTimesStr += _('Arrival ride is not relevant');
 		} else {
-			elemStr += _('Usually leaves home at') + ' ' + formatTime(ride.TimeMorning);
+			rideTimesStr += _('Usually leaves home at') + ' ' + formatTime(ride.TimeMorning);
 		}
-		elemStr += '. ';
 	}
 	if (ride.TimeEvening && ride.TimeEvening != Constants.TIME_DIFFER) {
-		rideTimesStr = true;
-		if (ride.TimeMorning == Constants.TIME_IRRELAVANT) {
-			elemStr += _('Home ride is not relevant');
+		if (rideTimesStr !== '')
+			rideTimesStr += ' | ';
+		
+		if (ride.TimeEvening == Constants.TIME_IRRELAVANT) {
+			rideTimesStr += _('Home ride is not relevant');
 		} else {
-			elemStr += _('Usually leaves work at') + ' ' + formatTime(ride.TimeMorning);
+			rideTimesStr += _('Usually leaves work at') + ' ' + formatTime(ride.TimeEvening);
 		}
-		elemStr += '. ';
 	}
+	
+	if (rideTimesStr !== '')
+		elemStr += '<p class="commentRideTime">' + rideTimesStr + '</p>';
 	
 	elemStr += '<p>' + (ride.Comment ? htmlEnc(ride.Comment) : '&nbsp;') + '</p>';
 	
-	if (!rideTimesStr) 
+	// Put a blank line in between the comment and the last updated time
+	if (rideTimesStr === '') 
 		elemStr += '<p>&nbsp;</p>';
 	
 	if (ride.TimeUpdated) {
 		d = new Date(phpTimeToJsTime(ride.TimeUpdated));
-		elemStr += '<p><b>' + _('Last updated') + ':</b> ' + d.toLocaleDateString() + '</p>';
+		elemStr += '<p class="commentLastUpdated">' + _('Last updated') + ': ' + d.toLocaleDateString() + '</p>';
 	}
 	
 	return elemStr;
@@ -168,6 +171,9 @@ function doFilter() {
 		if (destId != Constants.LOCATION_DONT_CARE)            	
 		    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
 	}
+	
+	// "Want to": sharing is counted as both "looking" and "providing",
+	// but it's possible to specifically search for "sharing".
 	var wantTo = $('#wantTo').val();
 	var statuses = [ wantTo ];
 	if (wantTo != Constants.STATUS_SHARING) {
