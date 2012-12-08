@@ -163,14 +163,40 @@ function buildSearchResults(/* JSON */ data) {
 function doFilter() {
 	var filter = new Filter();
 	var srcId = $('#srcCity').val();
-	if (srcId != Constants.LOCATION_DONT_CARE)
-		filter.addCriteria(new FilterCriteria('SrcCityId', srcId, filterEquals));
+	var destEnabled = (Constants.DISPLAY_DEST === '1');
+	var destId = Constants.LOCATION_DONT_CARE;
 	
-	if (Constants.DISPLAY_DEST === '1') {
-		var destId = $('#destCity').val();
-		if (destId != Constants.LOCATION_DONT_CARE)            	
-		    filter.addCriteria(new FilterCriteria('DestCityId', destId, filterEquals));
-	}
+	var filterBySrc = false, filterByDest = false;
+	
+	if (srcId != Constants.LOCATION_DONT_CARE) 
+		filterBySrc = true;
+	
+	if (destEnabled) {
+		destId = $('#destCity').val();
+		if (destId != Constants.LOCATION_DONT_CARE) {
+			destId = $('#destCity').val();
+			filterByDest = true;
+		}
+	}	
+		
+	if (filterBySrc && filterByDest) {
+		// Search by both source and destination. Both A->B and B->A
+		// are considered a match		
+		filter.addCriteria(new FilterCriteriaByRecord(function(ride) {
+			return ((ride.SrcCityId == srcId && ride.DestCityId == destId) ||
+					(ride.SrcCityId == destId && ride.DestCityId == srcId));	
+		}));
+			
+	} else if (filterBySrc || filterByDest) {
+		// Search is by either source or destination. Since trips
+		// are considered roundtrips, either way will do		
+		var target = srcId;
+		if (filterByDest)
+			target = destId;
+		filter.addCriteria(new FilterCriteriaByRecord(function(ride) {
+			return (ride.SrcCityId == target || (destEnabled && ride.DestCityId == target)); 			
+		}));
+	} 
 	
 	// "Want to": sharing is counted as both "looking" and "providing",
 	// but it's possible to specifically search for "sharing".
@@ -180,12 +206,13 @@ function doFilter() {
 		statuses.push(Constants.STATUS_SHARING);
 	}
 	if (wantTo != Constants.STATUS_DONT_CARE)
-		filter.addCriteria(new FilterCriteria('Status', statuses, filterInArray));
+		filter.addCriteria(new FilterCriteriaByKey('Status', statuses, filterInArray));
 
 	buildSearchResults(filter.filter(searchResults, true));
 	
-	updateShowInterestText();
+	updateShowInterestText();	
 }
+
 
 function doSearchAsYouType() {
 	var filter = new Filter();
@@ -223,7 +250,7 @@ $(document).ready(function() {
 			doFilter();
 			$("#wantTo").change(doFilter);
 			if (Constants.DISPLAY_DEST === '1') {
-				$("#destCity").change(doFilter);
+				$("#destCity").change(doFilter2);
 			}
 			$("#srcCity").change(doFilter);
 		} else {
