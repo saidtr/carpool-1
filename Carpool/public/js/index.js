@@ -250,7 +250,7 @@ $(document).ready(function() {
 			doFilter();
 			$("#wantTo").change(doFilter);
 			if (Constants.DISPLAY_DEST === '1') {
-				$("#destCity").change(doFilter2);
+				$("#destCity").change(doFilter);
 			}
 			$("#srcCity").change(doFilter);
 		} else {
