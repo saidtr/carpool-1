@@ -1,0 +1,57 @@
+[global]
+app.name           = Carpool
+default.domain     = 
+domain             = 
+; Path to the basic path folder. Must start with "/", and mustn't end with "/"
+public.path        = /
+default.locale     = 1
+mail.addr          = 
+mail.display       = Carpool Support
+
+[feedback]
+; Feedback properties
+feedback.mail      = 
+feedback.to.name   = 
+feedback.from      = 
+feedback.from.name = Carpool Feedback
+
+[logging]
+; Log level: 0 - no logging, 4 - very verbose. Recommended for production: 2
+log.level          = 2
+; Log file. Use "~" as reference to BASE_PATH
+log.file           = "~/carpool.log"
+
+[database]
+; For SQLite database:
+database.dsn       = sqlite:%DATAPATH%/data.sq3
+; For MySQL database:
+;database.dsn      = "mysql:host=localhost;dbname=carpool"
+database.user      =
+database.pass      =
+; Required for MySQL
+;database.init      = "SET NAMES UTF8"
+
+[settings]
+; Send notification mail immediately on user join or update
+notify.immediate   = 0
+; Display branding bar on top of page
+branding.enable    =
+; If enabled, there would be only single destination, and users cannot choose
+; destination of a ride
+mode.single.dest   = 0
+; If enabled, all email addresses must be of the configured domain
+mode.domain.users  = 0
+
+[authentication]
+; Authentication mode: 1 - Use token (default), 2 - Use LDAP, 3 - Use password
+auth.mode          = 1
+; For password authenticaion - password salt
+auth.pass.salt     = 
+; For LDAP based authentication - LDAP domain
+auth.ldap.domain   = 
+auth.ldap.port     = 
+; Used for adding a prefix to user names when authenticating, e.g. ADCOMP\User1
+auth.ldap.domain.name = 
+
+[localization]
+default.region     =

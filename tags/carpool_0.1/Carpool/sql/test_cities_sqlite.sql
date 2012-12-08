@@ -1,0 +1,9 @@
+INSERT INTO Cities(Id,Name,Region) VALUES(1, "City 1.1", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(2, "City 1.2", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(3, "City 1.3", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(4, "City 1.4", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(5, "City 1.5", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(6, "City 1.6", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(7, "City 1.7", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(8, "City 1.8", 1);
+INSERT INTO Cities(Id,Name,Region) VALUES(9, "City 2.1", 2);

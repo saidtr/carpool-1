@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="Carpool" default="dist" basedir=".">
+	<property name="conf.dir" value="conf" />
+	<property name="data.dir" value="data" />
+	<property name="dev.dist.dir" value="dist" />
+	<property name="sql.src.dir" value="sql" />
+	<property file="${conf.dir}/ftp.properties"/>
+	<property file="${conf.dir}/ant.properties"/>
+	
+	<path id="sqlite.classpath">
+		<pathelement location="${sqlite.jdbc.path}" />
+	</path>
+
+	<target name="dist.init">
+		<!-- Make distribution directory -->
+		<mkdir dir="${dev.dist.dir}" />
+		<mkdir dir="${dev.dist.dir}/${data.dir}" />
+		<mkdir dir="${dev.dist.dir}/${conf.dir}" />
+	</target>	
+
+	<target name="clean">
+		<!-- Delete the distribution directory -->
+	    <delete dir="${dev.dist.dir}"/>
+	</target>
+
+	<target name="dist" depends="dist.init" 
+		description="Create the distribution directory">
+		<!-- Copy all files to the distribution directory -->
+		<copy todir="${dev.dist.dir}" overwrite="true">
+			<fileset dir=".">
+				<include name="app/**" />
+				<include name="public/**" />
+				<include name="lang/**" />
+				<include name="scripts/**" />
+				<!-- 
+				  env.php contains domain-related configuration and
+				  should stay the same in most cases.
+				-->
+				<exclude name="public/env.php" />
+				<exclude name="**/*test.php" />
+				<exclude name="**/.htaccess" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- 
+		Currently the SQLite JDBC and Ant are not playing nice. 
+		Script works but we're getting lots of error messages and the build fails
+	-->
+	<target name="rebuild.db" depends="dist.init">
+		<sql 
+			driver="org.sqlite.JDBC" 
+			url="jdbc:sqlite:${dev.dist.dir}/data/data.sq3"
+			userid="" 
+			password=""
+			onerror="continue">
+			<classpath refid="sqlite.classpath" />
+			<fileset dir="${sql.src.dir}">
+				<include name="create.sql" />
+				<include name="israel_cities.sql" />
+			</fileset>
+		</sql>
+	</target>
+	
+	<target name="ftp.read.pass">
+		<input message="Enter FTP password: " addproperty="ftp.pass" />
+	</target>
+		
+	<target name="ftp.dist" depends="ftp.read.pass, dist">
+		<ftp 
+			password="${ftp.pass}" 
+			server="${ftp.server}" 
+			userid="${ftp.user}"
+			depends="yes"
+			remotedir="${ftp.app.dir}/app"
+			passive="yes" 
+			verbose="yes">
+			<fileset dir="${dev.dist.dir}/app" />
+		</ftp>
+		<ftp 
+			password="${ftp.pass}" 
+			server="${ftp.server}" 
+			userid="${ftp.user}"
+			depends="yes"
+			remotedir="${ftp.app.dir}/lang"
+			passive="yes" 
+			verbose="yes">
+			<fileset dir="${dev.dist.dir}/lang" />
+		</ftp>
+		<ftp 
+			password="${ftp.pass}" 
+			server="${ftp.server}" 
+			userid="${ftp.user}"
+			depends="yes"
+			remotedir="${ftp.public.dir}"
+			passive="yes" 
+			verbose="yes">
+			<fileset dir="${dev.dist.dir}/public" />
+		</ftp>
+		<ftp 
+			password="${ftp.pass}" 
+			server="${ftp.server}" 
+			userid="${ftp.user}"
+			depends="yes"
+			remotedir="${ftp.app.dir}/${conf.dir}"
+			passive="yes" 
+			verbose="yes">
+			<fileset dir="${dev.dist.dir}/${conf.dir}" />
+		</ftp>
+		<!-- Now, clean up -->
+		<antcall target="clean"></antcall>
+	</target>
+	
+	<target name="clean.db" depends="ftp.read.pass, dist.init">
+		<!-- Overwrites the database on the remote site -->
+		<input message="All data is going to be deleted from DB. continue (yes/no)?"
+			validargs="yes,no" addproperty="do.clean.db" />
+		<condition property="do.abort">
+			<equals arg1="no" arg2="${do.delete}" />
+		</condition>
+		<fail if="do.abort">Build aborted by user.</fail>	
+		<ftp 
+			password="${ftp.pass}" 
+			server="${ftp.server}" 
+			userid="${ftp.user}"
+			depends="yes"
+			remotedir="${ftp.app.dir}/data"
+			verbose="yes">
+			<fileset dir="${dev.dist.dir}/data" />
+		</ftp>		
+	</target>
+
+</project>
