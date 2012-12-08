@@ -1,8 +1,14 @@
 
-function FilterCriteria(key, value, filterFunc) {
+function FilterCriteriaByKey(key, value, filterFunc) {
 	this.key = key;
 	this.value = value;
 	this.filterFunc = filterFunc;	
+	this.type = 'FilterCriteriaByKey';
+}
+
+function FilterCriteriaByRecord(filterFunc) {
+	this.filterFunc = filterFunc;
+	this.type = 'FilterCriteriaByRecord';
 }
 
 function filterEquals(a, b) { 
@@ -53,20 +59,31 @@ Filter.prototype.filter = function (/* Array */ data, /* Boolean */ mustMatchAll
 		var passedCriteria = mustMatchAll;
 		var record = data[r];
 		
+		// Run all filters on the current record.
+		// There are two supported types of filters:
+		// - By record - this is a flexible filter, allowing the caller to provide any
+		//   callback that gets the whole record as argument
+		// - By key - filter by a specific key
 		for (k in this.criteria) {
-			var keys;
-			if (typeof this.criteria[k].key === 'string')
-				keys = [ this.criteria[k].key ];
-			else
-				keys = this.criteria[k].key;
-			var val = this.criteria[k].value;
 			
-			for (key in keys) {
+			if (this.criteria[k].type === 'FilterCriteriaByRecord') {
+				
 				if (mustMatchAll)
-					passedCriteria &= this.criteria[k].filterFunc(record[keys[key]], val);
+					passedCriteria &= this.criteria[k].filterFunc(record);
 				else
-					passedCriteria |= this.criteria[k].filterFunc(record[keys[key]], val);
-			}
+					passedCriteria |= this.criteria[k].filterFunc(record);
+				
+			} else if (this.criteria[k].type === 'FilterCriteriaByKey') {
+
+				var key = this.criteria[k].key;
+				var val = this.criteria[k].value;
+				
+				if (mustMatchAll)
+					passedCriteria &= this.criteria[k].filterFunc(record[key], val);
+				else
+					passedCriteria |= this.criteria[k].filterFunc(record[key], val);
+				
+			} 
 			
 			// No need to keep looking if we already not there
 			if (passedCriteria === !mustMatchAll)

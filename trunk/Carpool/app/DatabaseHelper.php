@@ -187,7 +187,7 @@ class DatabaseHelper {
     	debug(__METHOD__ . "($region)");
     	try {
     		$rs = $this->_db->query('
-            	SELECT DISTINCT DISTINCT c.Id, c.Name AS Name
+            	SELECT DISTINCT c.Id, c.Name AS Name
             	FROM Ride r, Cities c
             	WHERE (r.DestCityId = c.Id OR r.SrcCityId = c.Id) 
             	AND c.Region = ' . $this->_db->quote($region) . '
