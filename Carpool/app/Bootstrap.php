@@ -80,15 +80,22 @@ set_exception_handler('uncaughtExceptionHandler');
 // Simple auto loading:
 //   View classes (name starts with View) - look in app/views
 //   Standard classes - look in app/
-function __autoload($className) {
+function carpool_autoload($className) {
 	if (strncmp($className, 'View_', 5) === 0) {
 		require_once APP_PATH . '/views/' . $className . '.php';
+		return true;
 	} elseif (strncmp($className, 'Service_', 8) === 0) {
 		require_once APP_PATH . '/services/' . $className . '.php';
-	} else {
+		return true;
+	} elseif (file_exists(APP_PATH . '/' . $className . '.php')) {
     	require_once APP_PATH . '/' . $className . '.php';
+    	return true;
 	}
+	
+	return false;
 }
+
+spl_autoload_register('carpool_autoload', true);
 
 // Global configuration
 $globalConf = parse_ini_file(CONF_PATH . '/' . CONF_FILE, false);
@@ -135,7 +142,7 @@ function debug($str) {
     global $logger;
     $logger->doLog(Logger::LOG_DEBUG, $str);
 }
- 
+
 function info($str) {
     global $logger;
     $logger->doLog(Logger::LOG_INFO, $str);
